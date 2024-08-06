@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="InfoSystem.FormTextBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:InfoSystem"
+             mc:Ignorable="d" 
+             d:DesignHeight="40" d:DesignWidth="250">
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="17"/>
+            <RowDefinition Height="23"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" x:Name="tbFieldName" 
+            Text="{Binding FieldName}" VerticalAlignment="Center" Margin="5,0,0,0"
+            FontSize="14" FontWeight="Light" Foreground="DarkSlateGray"/>
+
+        <TextBox Grid.Row="1" x:Name="inpValue" VerticalAlignment="Top"
+                 FontSize="16" FontWeight="Normal" Background="Transparent"
+                 TextChanged="inpValue_TextChanged"/>
+        <TextBlock Grid.Row="1" x:Name="tbPlaceHolder" Text="---" VerticalAlignment="Top" Margin="5,0,0,0"
+                   FontSize="16" FontWeight="Light" Foreground="DarkSlateGray"
+                   Panel.ZIndex="-1"/>
+        <Button Grid.Row="1" x:Name="btnClear" Width="30" HorizontalAlignment="Right"
+                Content="X" Foreground="IndianRed" Background="Transparent" BorderThickness="0"
+                Click="btnClear_Click"/>
+    </Grid>
+</UserControl>

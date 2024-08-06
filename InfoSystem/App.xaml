@@ -1,0 +1,22 @@
+﻿<Application x:Class="InfoSystem.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:InfoSystem"
+             StartupUri="MainApp.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/MenuButtonStyle.xaml"/>
+                <ResourceDictionary Source="Styles/TitleBarButtonStyle.xaml"/>
+                <ResourceDictionary Source="Styles/Colours.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type local:PatientsViewModel}">
+                <local:PatientsView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type local:MedicineViewModel}">
+                <local:MedicineView/>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
