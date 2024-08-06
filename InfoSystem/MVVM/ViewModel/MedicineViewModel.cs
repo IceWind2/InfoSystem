@@ -8,7 +8,8 @@ namespace InfoSystem
 
         public MedicineViewModel()
         {
-            Medicine = new ObservableCollection<Medicine>();
+            var context = new InfoContext();
+            Medicine = new ObservableCollection<Medicine>(context.Medicine);
         }
 
         private Medicine selectedMedicine;

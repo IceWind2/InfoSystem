@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 namespace InfoSystem
@@ -7,8 +9,6 @@ namespace InfoSystem
     {
         public MainApp()
         {
-            // init database
-
             InitializeComponent();
         }
 

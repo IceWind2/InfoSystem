@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InfoSystem"
         mc:Ignorable="d"
-        Height="450" Width="800"
+        Height="800" Width="1200"
         WindowStartupLocation="CenterScreen"
-        WindowState="Maximized"
+        WindowState="Normal"
         BorderThickness="8"
         WindowStyle="None"
         ResizeMode="CanResize"
@@ -22,7 +22,7 @@
         <local:MainViewModel/>
     </Window.DataContext>
     
-    <Border Background="#F5EDED" UseLayoutRounding="True">
+    <Border Background="{StaticResource primaryColourBrush}" UseLayoutRounding="True">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
@@ -50,9 +50,9 @@
                     <ColumnDefinition Width="80*"/>
                 </Grid.ColumnDefinitions>
 
-                <local:MenuPanel Grid.Column="0" Background="#E2DAD6"/>
+                <local:MenuPanel Grid.Column="0" Background="Transparent"/>
 
-                <Rectangle Grid.Column="1" Fill="#E2DAD6"/>
+                <Rectangle Grid.Column="1" Fill="Transparent"/>
 
                 <ContentControl Grid.Column="2"
                                 Content="{Binding CurrentView}"/>

@@ -1,9 +1,16 @@
-﻿namespace InfoSystem
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace InfoSystem
 {
+    [Table("Medicine")]
     internal class Medicine
     {
-        public int Id { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id {  get; set; }
 
+        [Required]
         public string Name { get; set; }
     }
 }
