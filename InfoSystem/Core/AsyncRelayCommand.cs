@@ -1,18 +1,42 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace InfoSystem
 {
-    internal class AsyncRelayCommand : RelayCommand
+    internal class AsyncRelayCommand : ICommand
     {
-        public AsyncRelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
-            : base(execute, canExecute)
+        protected Func<object, Task> _execute;
+        protected Func<object, bool> _canExecute;
+
+        public AsyncRelayCommand(Func<object, Task> execute, Func<object, bool> canExecute = null)
         {
+            _execute = execute;
+            _canExecute = canExecute;
         }
 
-        public override void Execute(object? parameter)
+        public event EventHandler? CanExecuteChanged
         {
-            Task.Run(() => base.Execute(parameter));
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+
+        public virtual bool CanExecute(object? parameter)
+        {
+            return _canExecute == null || _canExecute(parameter);
+        }
+
+        public async void Execute(object? parameter)
+        {
+            try
+            {
+                await _execute(parameter);
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.Message);
+            }
         }
     }
 }

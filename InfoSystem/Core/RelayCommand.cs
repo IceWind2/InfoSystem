@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace InfoSystem
 {
-    class RelayCommand : ICommand
+    internal class RelayCommand : ICommand
     {
-        private Action<object> _execute;
-        private Func<object, bool> _canExecute;
+        protected Action<object> _execute;
+        protected Func<object, bool> _canExecute;
 
         public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
         {
@@ -27,7 +28,14 @@ namespace InfoSystem
 
         public virtual void Execute(object? parameter)
         {
-            _execute(parameter);
+            try
+            {
+                _execute(parameter);
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.Message);
+            }
         }
     }
 }

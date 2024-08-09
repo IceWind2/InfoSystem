@@ -12,26 +12,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Border Grid.Row="0"
-                Background="{StaticResource primaryCompColourBrush}"
-                CornerRadius="0,0,15,15">
-
-            <StackPanel Background="Transparent"
-                        FlowDirection="LeftToRight" Orientation="Horizontal"
-                        Margin="20,0,0,0">
-
-                <Button Content="➕"
-                        Style="{StaticResource ToolbarButtonStyle}"
-                        Command="{Binding AddCommand}"/>
-                
-                <Button Content=" 📝"
-                        Style="{StaticResource ToolbarButtonStyle}"/>
-                
-                <Button Content="⃠"
-                        Style="{StaticResource ToolbarButtonStyle}"
-                        Command="{Binding RemoveCommand}"/>
-            </StackPanel>
-        </Border>
+        <local:Toolbar Grid.Row="0"/>
 
         <DataGrid Grid.Row="1"
                   VerticalAlignment="Stretch"

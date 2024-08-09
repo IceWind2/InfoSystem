@@ -13,13 +13,19 @@
     <Compile Update="MVVM\View\Components\FormTextBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="MVVM\View\Sections\MedicineView.xaml.cs">
+    <Compile Update="MVVM\View\DataViews\MedicineView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="MVVM\View\Sections\PatientsView.xaml.cs">
+    <Compile Update="MVVM\View\Modals\NewPatientModal.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MVVM\View\DataViews\PatientsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="MVVM\View\Sections\MenuPanel.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MVVM\View\Sections\Toolbar.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -33,13 +39,19 @@
     <Page Update="MVVM\View\Components\FormTextBox.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="MVVM\View\Sections\MedicineView.xaml">
+    <Page Update="MVVM\View\DataViews\MedicineView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="MVVM\View\Sections\PatientsView.xaml">
+    <Page Update="MVVM\View\Modals\NewPatientModal.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MVVM\View\DataViews\PatientsView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MVVM\View\Sections\MenuPanel.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MVVM\View\Sections\Toolbar.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Styles\Colours.xaml">

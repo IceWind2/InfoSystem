@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace InfoSystem
 {
@@ -6,7 +7,7 @@ namespace InfoSystem
     {
         public ObservableCollection<Medicine> Medicine { get; set; }
 
-        public MedicineViewModel()
+        public MedicineViewModel(Window mainWindow)
         {
             var context = new InfoContext();
             Medicine = new ObservableCollection<Medicine>(context.Medicine);

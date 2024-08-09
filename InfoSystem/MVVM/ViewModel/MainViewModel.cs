@@ -1,4 +1,6 @@
-﻿namespace InfoSystem
+﻿using System.Windows;
+
+namespace InfoSystem
 {
     internal class MainViewModel : ObservableObject
     {
@@ -24,10 +26,10 @@
         public PatientsViewModel PatientsVM { get; set; }
         public MedicineViewModel MedicineVM { get; set; }
 
-        public MainViewModel()
+        public MainViewModel(Window mainWindow)
         {
-            PatientsVM = new PatientsViewModel();
-            MedicineVM = new MedicineViewModel();
+            PatientsVM = new PatientsViewModel(mainWindow);
+            MedicineVM = new MedicineViewModel(mainWindow);
 
             PatientsViewCommand = new RelayCommand(o =>
             {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace InfoSystem
 {
@@ -10,24 +11,26 @@ namespace InfoSystem
         public AsyncRelayCommand EditCommand { get; set; }
         public AsyncRelayCommand RemoveCommand { get; set; }
 
-        public PatientsViewModel()
+        public PatientsViewModel(Window mainWindow)
         {
             var context = new InfoContext();
             Patients = new ObservableCollection<Patient>(context.Patients);
 
             AddCommand = new AsyncRelayCommand(async o =>
             {
-                var newPatient = new Patient()
-                {
-                    Name = "new new new",
-                    Age = 11
-                };
+                mainWindow.Opacity = 0.4;
+                var newPatientModal = new NewPatientModal(mainWindow);
+                newPatientModal.ShowDialog();
+                mainWindow.Opacity = 1;
 
-                await DatabaseManager.AddPatient(newPatient);
-                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                if (newPatientModal.Success)
                 {
-                    Patients.Add(newPatient);
-                });
+                    await DatabaseManager.AddPatient(newPatientModal.Result);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        Patients.Add(newPatientModal.Result);
+                    });
+                }
             });
 
             RemoveCommand = new AsyncRelayCommand(async o =>
@@ -38,7 +41,7 @@ namespace InfoSystem
                 }
 
                 await DatabaseManager.RemovePatient(SelectedPatient);
-                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                Application.Current.Dispatcher.Invoke(() =>
                 {
                     Patients.Remove(SelectedPatient);
                 });

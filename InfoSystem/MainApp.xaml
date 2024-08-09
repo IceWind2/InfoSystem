@@ -8,20 +8,16 @@
         Height="800" Width="1200"
         WindowStartupLocation="CenterScreen"
         WindowState="Normal"
-        BorderThickness="8"
+        BorderThickness="0"
         WindowStyle="None"
         ResizeMode="CanResize"
         Background="Transparent"
-        AllowsTransparency="True">
+        AllowsTransparency="False">
 
     <WindowChrome.WindowChrome>
         <WindowChrome ResizeBorderThickness="8" GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0"/>
     </WindowChrome.WindowChrome>
 
-    <Window.DataContext>
-        <local:MainViewModel/>
-    </Window.DataContext>
-    
     <Border Background="{StaticResource primaryColourBrush}" UseLayoutRounding="True">
         <Grid>
             <Grid.RowDefinitions>
