@@ -1,4 +1,4 @@
-﻿<Window x:Class="InfoSystem.NewPatientModal"
+﻿<Window x:Class="InfoSystem.NewMedicineModal"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,16 +9,16 @@
         WindowStartupLocation="CenterOwner"
         Background="Transparent"
         AllowsTransparency="True"
-        Title="NewPatientModal" Height="400" Width="400">
+        Title="NewMedicineModal" Height="200" Width="400">
 
     <WindowChrome.WindowChrome>
         <WindowChrome ResizeBorderThickness="8" GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0"/>
     </WindowChrome.WindowChrome>
 
     <Border Background="{StaticResource primaryCompColourBrush}"
-            BorderThickness="5" BorderBrush="{StaticResource contrastColourBrush}"
-            CornerRadius="20"
-            Padding="0,20,0,0">
+        BorderThickness="5" BorderBrush="{StaticResource contrastColourBrush}"
+        CornerRadius="20"
+        Padding="0,20,0,0">
         <Grid Background="Transparent">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -26,26 +26,24 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Vertical" Background="Transparent">
-                <local:FormTextBox x:Name="NameFieldBox" FieldName="ФИО" BorderColour="{StaticResource secondaryColourBrush}"/>
-                <local:FormTextBox x:Name="AgeFieldBox" FieldName="Возраст" BorderColour="{StaticResource secondaryColourBrush}"/>
-                <local:FormSelect x:Name="MedicineSelect" FieldName="Лекарство"/>
+                <local:FormTextBox x:Name="NameFieldBox" FieldName="Название" BorderColour="{StaticResource secondaryColourBrush}"/>
             </StackPanel>
 
             <StackPanel Grid.Row="1"
-                        Orientation="Horizontal" FlowDirection="LeftToRight"
-                        HorizontalAlignment="Right"
-                        Margin="0,0,10,0">
-                
+                    Orientation="Horizontal" FlowDirection="LeftToRight"
+                    HorizontalAlignment="Right"
+                    Margin="0,0,10,0">
+
                 <Button Style="{StaticResource ToolbarButtonStyle}"
-                        Width="80"
-                        Name="btnOk"
-                        Content="ОК"
-                        Click="btnOk_Click"/>
+                    Width="80"
+                    Name="btnOk"
+                    Content="ОК"
+                    Click="btnOk_Click"/>
                 <Button Style="{StaticResource ToolbarButtonStyle}"
-                        Width="80"
-                        Content="Отмена"
-                        Name="btnCansel"
-                        Click="btnCansel_Click"/>
+                    Width="80"
+                    Content="Отмена"
+                    Name="btnCansel"
+                    Click="btnCansel_Click"/>
             </StackPanel>
         </Grid>
     </Border>

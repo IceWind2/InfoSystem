@@ -5,17 +5,15 @@ using System.Windows.Media;
 
 namespace InfoSystem
 {
-    public partial class NewPatientModal : Window
+    public partial class NewMedicineModal : Window
     {
         public bool Success { get; set; }
-        internal Patient? Result { get; set; } = null;
+        internal Medicine? Result { get; set; } = null;
 
-        public NewPatientModal(Window parent)
+        public NewMedicineModal(Window parent)
         {
             Owner = parent;
             InitializeComponent();
-
-            MedicineSelect.ItemsList = DatabaseManager.Medicine;
 
             PreviewKeyDown += (s, e) =>
             {
@@ -46,11 +44,9 @@ namespace InfoSystem
                     return;
                 }
 
-                Result = new Patient()
+                Result = new Medicine()
                 {
                     Name = NameFieldBox.inpValue.Text,
-                    Age = int.Parse(AgeFieldBox.inpValue.Text),
-                    MedicineId = (MedicineSelect.SelectedItem as Medicine)?.Id
                 };
 
                 Success = true;
@@ -73,18 +69,8 @@ namespace InfoSystem
             }
             else
             {
-                errorMessage.AppendLine("ФИО должно быть заполнено.");
+                errorMessage.AppendLine("Название должно быть заполнено.");
                 NameFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[3]["errorColourBrush"] as Brush;
-            }
-
-            if (int.TryParse(AgeFieldBox.inpValue.Text, out var _))
-            {
-                AgeFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[3]["secondaryColourBrush"] as Brush;
-            }
-            else
-            {
-                errorMessage.AppendLine("Возраст должен быть числом.");
-                AgeFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[3]["errorColourBrush"] as Brush;
             }
 
             return errorMessage.ToString();

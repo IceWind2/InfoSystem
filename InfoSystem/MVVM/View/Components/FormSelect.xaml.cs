@@ -44,7 +44,7 @@ namespace InfoSystem
                 OnPropertyChanged();
             }
         }
-        public object SelectedItem { get; set; }
+        public object SelectedItem { get; set; } = null;
 
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)

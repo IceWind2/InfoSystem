@@ -8,13 +8,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Database\Tables\**" />
+    <EmbeddedResource Remove="Database\Tables\**" />
+    <None Remove="Database\Tables\**" />
+    <Page Remove="Database\Tables\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="MVVM\View\Components\FormSelect.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Database\Tables\" />
     <Folder Include="Styles\Fonts\" />
   </ItemGroup>
 

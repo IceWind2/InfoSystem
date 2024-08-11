@@ -17,7 +17,7 @@
                         <ControlTemplate TargetType="Button">
                             <Border Background="{TemplateBinding Background}">
                                 <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
+                                                  VerticalAlignment="Center"/>
                             </Border>
                         </ControlTemplate>
                     </Setter.Value>
@@ -47,13 +47,15 @@
                        Text="{Binding FieldName}" VerticalAlignment="Center" Margin="5,0,0,0"
                        FontSize="19" FontWeight="Light" Foreground="{StaticResource contrastColourBrush}"/>
 
-            <TextBox Grid.Row="1" x:Name="inpValue" VerticalAlignment="Center" Height="40"
-                     FontSize="22" FontWeight="Normal" Background="Transparent" Foreground="{StaticResource contrastColourBrush}"
-                     BorderThickness="1.5" BorderBrush="{StaticResource secondaryColourBrush}"
+            <TextBox Grid.Row="1" x:Name="inpValue" VerticalAlignment="Center" Height="40" 
+                     FontSize="22" FontWeight="Normal"
+                     Background="Transparent" Foreground="{StaticResource contrastColourBrush}"
+                     BorderThickness="1.5" BorderBrush="{Binding BorderColour}"
                      TextChanged="inpValue_TextChanged"
                      Panel.ZIndex="0"/>
             <TextBlock Grid.Row="1" x:Name="tbPlaceHolder" Text="---" VerticalAlignment="Center" Margin="5,0,0,0"
-                       FontSize="22" FontWeight="Light" Foreground="{StaticResource contrastColourBrush}"
+                       FontSize="22" FontWeight="Light"
+                       Foreground="{StaticResource contrastColourBrush}"
                        Panel.ZIndex="-1"/>
             <Button Grid.Row="1" x:Name="btnClear" Width="30" Height="37" HorizontalAlignment="Right" VerticalAlignment="Center"
                     FontSize="16" Content="X" Foreground="IndianRed" BorderThickness="0"

@@ -25,10 +25,10 @@ namespace InfoSystem
 
                 if (newPatientModal.Success)
                 {
-                    await DatabaseManager.AddPatient(newPatientModal.Result);
+                    await DatabaseManager.AddPatient(newPatientModal.Result!);
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        Patients.Add(newPatientModal.Result);
+                        Patients.Add(newPatientModal.Result!);
                     });
                 }
             });

@@ -1,7 +1,8 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace InfoSystem
 {
@@ -13,10 +14,25 @@ namespace InfoSystem
             InitializeComponent();
         }
 
-        private string fieldName;
-
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        private Brush _borderColour;
+        public Brush BorderColour
+        {
+            get
+            {
+                return _borderColour;
+            }
+
+            set
+            {
+                _borderColour = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        private string fieldName;
         public string FieldName
         {
             get

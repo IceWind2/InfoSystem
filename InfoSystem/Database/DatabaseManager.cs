@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace InfoSystem
@@ -13,6 +14,24 @@ namespace InfoSystem
             return lastId ?? -1;
         }
 
+        public static IEnumerable<Patient> Patients
+        {
+            get
+            {
+                var context = new InfoContext();
+                return context.Patients.ToList();
+            }
+        }
+
+        public static IEnumerable<Medicine> Medicine
+        {
+            get
+            {
+                var context = new InfoContext();
+                return context.Medicine.ToList();
+            }
+        }
+
         public static Task AddPatient(Patient newPatient)
         {
             var context = new InfoContext();
@@ -24,6 +43,20 @@ namespace InfoSystem
         {
             var context = new InfoContext();
             context.Patients.Remove(patient);
+            return context.SaveChangesAsync();
+        }
+
+        public static Task AddMedicine(Medicine newMedicine)
+        {
+            var context = new InfoContext();
+            context.Medicine.Add(newMedicine);
+            return context.SaveChangesAsync();
+        }
+
+        public static Task RemoveMedicine(Medicine medicine)
+        {
+            var context = new InfoContext();
+            context.Medicine.Remove(medicine);
             return context.SaveChangesAsync();
         }
     }

@@ -6,6 +6,7 @@
     <SolidColorBrush x:Key="secondaryCompColourBrush" Color="#7FA1C3"/>
     <SolidColorBrush x:Key="secondaryHighlightColourBrush" Color="#9bbee0"/>
     <SolidColorBrush x:Key="contrastColourBrush" Color="#201E43"/>
+    <SolidColorBrush x:Key="errorColourBrush" Color="#B00020"/>
 
     <Color x:Key="primaryColour">#F5EDED</Color>
     <Color x:Key="primaryCompColour">#E2DAD6</Color>
@@ -13,4 +14,5 @@
     <Color x:Key="secondaryCompColour">#7FA1C3</Color>
     <Color x:Key="secondaryHighlightColour">#9bbee0</Color>
     <Color x:Key="contrastColour">#201E43</Color>
+    <Color x:Key="errorColour">#B00020</Color>
 </ResourceDictionary>
