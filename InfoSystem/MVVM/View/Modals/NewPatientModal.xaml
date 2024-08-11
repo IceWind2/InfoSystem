@@ -7,11 +7,46 @@
         mc:Ignorable="d"
         WindowStyle="None"
         WindowStartupLocation="CenterOwner"
+        Background="Transparent"
+        AllowsTransparency="True"
         Title="NewPatientModal" Height="600" Width="400">
-    
-    <StackPanel>
-        <TextBlock Text="qweqwe" FontSize="20"/>
 
-        <Button Name="btnTest" Content="we21121" Click="btnTest_Click"/>
-    </StackPanel>
+    <WindowChrome.WindowChrome>
+        <WindowChrome ResizeBorderThickness="8" GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0"/>
+    </WindowChrome.WindowChrome>
+
+    <Border Background="{StaticResource primaryCompColourBrush}"
+            BorderThickness="5" BorderBrush="{StaticResource contrastColourBrush}"
+            CornerRadius="20"
+            Padding="0,20,0,0">
+        <Grid Background="Transparent">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Vertical" Background="Transparent">
+                <local:FormTextBox FieldName="123"/>
+                <local:FormTextBox FieldName="qwe"/>
+                <local:FormSelect x:Name="test" FieldName="eee"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal" FlowDirection="LeftToRight"
+                        HorizontalAlignment="Right"
+                        Margin="0,0,10,0">
+                
+                <Button Style="{StaticResource ToolbarButtonStyle}"
+                        Width="80"
+                        Name="btnOk"
+                        Content="ОК"
+                        Click="btnOk_Click"/>
+                <Button Style="{StaticResource ToolbarButtonStyle}"
+                        Width="80"
+                        Content="Отмена"
+                        Name="btnCansel"
+                        Click="btnCansel_Click"/>
+            </StackPanel>
+        </Grid>
+    </Border>
 </Window>

@@ -5,25 +5,60 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InfoSystem"
              mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="250">
-    <Grid Background="White">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="17"/>
-            <RowDefinition Height="23"/>
-        </Grid.RowDefinitions>
+             d:DesignHeight="90" d:DesignWidth="250">
 
-        <TextBlock Grid.Row="0" x:Name="tbFieldName" 
-            Text="{Binding FieldName}" VerticalAlignment="Center" Margin="5,0,0,0"
-            FontSize="14" FontWeight="Light" Foreground="DarkSlateGray"/>
+    <UserControl.Resources>
+        <Style TargetType="{x:Type Button}"
+               x:Key="clearBtn">
 
-        <TextBox Grid.Row="1" x:Name="inpValue" VerticalAlignment="Top"
-                 FontSize="16" FontWeight="Normal" Background="Transparent"
-                 TextChanged="inpValue_TextChanged"/>
-        <TextBlock Grid.Row="1" x:Name="tbPlaceHolder" Text="---" VerticalAlignment="Top" Margin="5,0,0,0"
-                   FontSize="16" FontWeight="Light" Foreground="DarkSlateGray"
-                   Panel.ZIndex="-1"/>
-        <Button Grid.Row="1" x:Name="btnClear" Width="30" HorizontalAlignment="Right"
-                Content="X" Foreground="IndianRed" Background="Transparent" BorderThickness="0"
-                Click="btnClear_Click"/>
-    </Grid>
+            <Style.Setters>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+                <Setter Property="Background" Value="Transparent"/>
+            </Style.Setters>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource secondaryHighlightColourBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Border BorderThickness="0"
+            Background="Transparent"
+            Padding="0,10,0,10">
+        <Grid Background="{StaticResource primaryColourBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" x:Name="tbFieldName" 
+                       Text="{Binding FieldName}" VerticalAlignment="Center" Margin="5,0,0,0"
+                       FontSize="19" FontWeight="Light" Foreground="{StaticResource contrastColourBrush}"/>
+
+            <TextBox Grid.Row="1" x:Name="inpValue" VerticalAlignment="Center" Height="40"
+                     FontSize="22" FontWeight="Normal" Background="Transparent" Foreground="{StaticResource contrastColourBrush}"
+                     BorderThickness="1.5" BorderBrush="{StaticResource secondaryColourBrush}"
+                     TextChanged="inpValue_TextChanged"
+                     Panel.ZIndex="0"/>
+            <TextBlock Grid.Row="1" x:Name="tbPlaceHolder" Text="---" VerticalAlignment="Center" Margin="5,0,0,0"
+                       FontSize="22" FontWeight="Light" Foreground="{StaticResource contrastColourBrush}"
+                       Panel.ZIndex="-1"/>
+            <Button Grid.Row="1" x:Name="btnClear" Width="30" Height="37" HorizontalAlignment="Right" VerticalAlignment="Center"
+                    FontSize="16" Content="X" Foreground="IndianRed" BorderThickness="0"
+                    Style="{StaticResource clearBtn}" Click="btnClear_Click"
+                    Panel.ZIndex="1"/>
+        </Grid>
+    </Border>
 </UserControl>

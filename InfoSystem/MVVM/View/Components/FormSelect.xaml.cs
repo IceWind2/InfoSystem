@@ -1,7 +1,7 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Controls;
 
 namespace InfoSystem
 {
@@ -13,33 +13,39 @@ namespace InfoSystem
             InitializeComponent();
         }
 
-        private string fieldName;
-
         public event PropertyChangedEventHandler? PropertyChanged;
-
+        
+        private string _fieldName;
         public string FieldName
         {
             get
             {
-                return fieldName;
+                return _fieldName;
             }
 
             set
             {
-                fieldName = value;
+                _fieldName = value;
                 OnPropertyChanged();
             }
         }
 
-        private void btnClear_Click(object sender, RoutedEventArgs e)
+        private IEnumerable<object> _itemsList;
+        public IEnumerable<object> ItemsList
         {
-            
-        }
+            get
+            {
+                return _itemsList;
+            }
 
-        private void inpValue_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            
+            set
+            {
+                _itemsList = value;
+                OnPropertyChanged();
+            }
         }
+        public object SelectedItem { get; set; }
+
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
