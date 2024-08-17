@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InfoSystem
 {
-    [Table("Medicine")]
+    [Table("medicine")]
     internal class Medicine
     {
         [Key]
@@ -12,5 +13,8 @@ namespace InfoSystem
 
         [Required]
         public string Name { get; set; }
+
+        [InverseProperty("Medicine")]
+        public virtual ICollection<PatientMedicine> PatientMedicine{ get; set; }
     }
 }

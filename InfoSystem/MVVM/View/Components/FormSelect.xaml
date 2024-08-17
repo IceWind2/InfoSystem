@@ -5,7 +5,60 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InfoSystem"
              mc:Ignorable="d" 
-             d:DesignHeight="150" d:DesignWidth="250">
+             d:DesignHeight="200" d:DesignWidth="250">
+
+    <UserControl.Resources>
+        <Style TargetType="{x:Type ListBoxItem}"
+               x:Key="selectItem">
+            <Style.Setters>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <Border Background="{TemplateBinding Background}">
+                                <ContentPresenter/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+                <Setter Property="Background" Value="{StaticResource primaryColourBrush}"/>
+            </Style.Setters>
+
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource secondaryHighlightColourBrush}"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="{StaticResource secondaryCompColourBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="{x:Type ListBox}"
+               x:Key="selectLB">
+            <Style.Setters>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListBox}">
+                            <Border BorderBrush="{StaticResource secondaryColourBrush}"
+                                    BorderThickness="0,1.5,0,1.5"
+                                    Background="{TemplateBinding Background}">
+                                <ScrollViewer>
+                                    <ItemsPresenter/>
+                                </ScrollViewer>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+                <Setter Property="Background" Value="{StaticResource primaryColourBrush}"/>
+                <Setter Property="Foreground" Value="{StaticResource contrastColourBrush}"/>
+                <Setter Property="FontSize" Value="21"/>
+                <Setter Property="SelectionMode" Value="Multiple"/>
+                <Setter Property="Visibility" Value="Visible"/>
+            </Style.Setters>
+        </Style>
+    </UserControl.Resources>
 
     <Border BorderThickness="0"
             Background="Transparent"
@@ -14,20 +67,18 @@
         <Grid Background="{StaticResource primaryColourBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="100"/>
+                <RowDefinition Height="150"/>
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" x:Name="tbFieldName" 
                        Text="{Binding FieldName}" VerticalAlignment="Center" Margin="5,0,0,0"
                        FontSize="19" FontWeight="Light" Foreground="{StaticResource contrastColourBrush}"/>
 
-            <ScrollViewer Grid.Row="1"
->
-                <ListBox x:Name="lvSelect"
-                     Visibility="Visible" SelectionMode="Multiple"
-                     FontSize="21" Foreground="{StaticResource contrastColourBrush}"
-                     ItemsSource="{Binding ItemsList}" DisplayMemberPath="Name" SelectedItem="{Binding SelectedItem}"/>
-            </ScrollViewer>
+            <ListBox Grid.Row="1"
+                     x:Name="lvSelect"
+                     Style="{StaticResource selectLB}"
+                     ItemContainerStyle="{StaticResource selectItem}"
+                     ItemsSource="{Binding ItemsList}" DisplayMemberPath="Name"/>
         </Grid>
     </Border>
 </UserControl>

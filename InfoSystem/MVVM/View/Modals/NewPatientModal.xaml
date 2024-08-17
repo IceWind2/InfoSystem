@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterOwner"
         Background="Transparent"
         AllowsTransparency="True"
-        Title="NewPatientModal" Height="400" Width="400">
+        Title="NewPatientModal" Height="450" Width="400">
 
     <WindowChrome.WindowChrome>
         <WindowChrome ResizeBorderThickness="8" GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0"/>

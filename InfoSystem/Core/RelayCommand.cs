@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Windows;
 using System.Windows.Input;
 
 namespace InfoSystem
@@ -34,7 +34,7 @@ namespace InfoSystem
             }
             catch (Exception ex)
             {
-                Trace.TraceError(ex.Message);
+                MessageBox.Show($"{ex.Message}\n{ex.InnerException}", "Ошибка выполнения команды", MessageBoxButton.OK);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Media;
@@ -50,7 +51,7 @@ namespace InfoSystem
                 {
                     Name = NameFieldBox.inpValue.Text,
                     Age = int.Parse(AgeFieldBox.inpValue.Text),
-                    MedicineId = (MedicineSelect.SelectedItem as Medicine)?.Id
+                    PatientMedicine = MedicineSelect.SelectedItems.Select(ms => new PatientMedicine { MedicineId = ((Medicine)ms).Id }).ToList()
                 };
 
                 Success = true;

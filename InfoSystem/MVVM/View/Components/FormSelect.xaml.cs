@@ -44,8 +44,14 @@ namespace InfoSystem
                 OnPropertyChanged();
             }
         }
-        public object SelectedItem { get; set; } = null;
 
+        public IEnumerable<object> SelectedItems
+        {
+            get
+            {
+                return (IEnumerable<object>)lvSelect.SelectedItems;
+            }
+        }
 
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

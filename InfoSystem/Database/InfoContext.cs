@@ -14,7 +14,7 @@ namespace InfoSystem
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseSqlite($"Data Source={DbPath}");
-
+        
         public static void InitDatabase()
         {
             var context = new InfoContext();
