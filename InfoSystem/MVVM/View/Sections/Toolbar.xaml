@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:local="clr-namespace:InfoSystem"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="800">
@@ -16,16 +17,17 @@
                     FlowDirection="LeftToRight" Orientation="Horizontal"
                     Margin="20,0,0,0">
 
-            <Button Content="➕"
-                    Style="{StaticResource ToolbarButtonStyle}"
-                    Command="{Binding AddCommand}"/>
+            <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding AddCommand}">
+                <Icon:PackIconFontAwesome Kind="PlusSolid"/>
+            </Button>
 
-            <Button Content=" 📝"
-                    Style="{StaticResource ToolbarButtonStyle}"/>
+            <Button Style="{StaticResource ToolbarButtonStyle}">
+                <Icon:PackIconFontAwesome Kind="PenToSquareSolid"/>
+            </Button>
 
-            <Button Content="⃠"
-                    Style="{StaticResource ToolbarButtonStyle}"
-                    Command="{Binding RemoveCommand}"/>
+            <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding RemoveCommand}">
+                <Icon:PackIconFontAwesome Kind="TrashCanSolid"/>
+            </Button>
         </StackPanel>
     </Border>
 </UserControl>
