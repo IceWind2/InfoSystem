@@ -65,12 +65,12 @@ namespace InfoSystem
 
             if (!string.IsNullOrEmpty(NameFieldBox.inpValue.Text))
             {
-                NameFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[3]["secondaryColourBrush"] as Brush;
+                NameFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["secondaryColourBrush"] as Brush;
             }
             else
             {
                 errorMessage.AppendLine("Название должно быть заполнено.");
-                NameFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[3]["errorColourBrush"] as Brush;
+                NameFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["errorColourBrush"] as Brush;
             }
 
             return errorMessage.ToString();

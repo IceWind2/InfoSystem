@@ -66,11 +66,5 @@
     <Page Update="Styles\MenuButtonStyle.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Styles\TitleBarButtonStyle.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Styles\ToolbarButtonStyle.xaml">
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
 </Project>

@@ -70,22 +70,22 @@ namespace InfoSystem
 
             if (!string.IsNullOrEmpty(NameFieldBox.inpValue.Text))
             {
-                NameFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[3]["secondaryColourBrush"] as Brush;
+                NameFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["secondaryColourBrush"] as Brush;
             }
             else
             {
                 errorMessage.AppendLine("ФИО должно быть заполнено.");
-                NameFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[3]["errorColourBrush"] as Brush;
+                NameFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["errorColourBrush"] as Brush;
             }
 
             if (int.TryParse(AgeFieldBox.inpValue.Text, out var _))
             {
-                AgeFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[3]["secondaryColourBrush"] as Brush;
+                AgeFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["secondaryColourBrush"] as Brush;
             }
             else
             {
                 errorMessage.AppendLine("Возраст должен быть числом.");
-                AgeFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[3]["errorColourBrush"] as Brush;
+                AgeFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["errorColourBrush"] as Brush;
             }
 
             return errorMessage.ToString();

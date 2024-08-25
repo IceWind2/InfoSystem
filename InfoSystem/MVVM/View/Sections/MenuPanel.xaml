@@ -4,23 +4,51 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InfoSystem"
+             xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="175">
 
-    <Border BorderBrush="{StaticResource secondaryColourBrush}" BorderThickness="0,0,3,0" CornerRadius="0, 30, 0, 0"
+    <Border BorderBrush="{StaticResource secondaryColourBrush}" BorderThickness="0,0,3,0" CornerRadius="0, 40, 0, 0"
             Background="{StaticResource secondaryCompColourBrush}"
-            Padding="0,30,0,0">
+            Padding="0,0,0,0">
 
         <StackPanel Background="Transparent"
                     Width="175">
-            <RadioButton Content="Пациенты"
-                         Style="{StaticResource MenuButtonStyle}"
-                         IsChecked="True"
-                         Command="{Binding PatientsViewCommand}"/>
 
-            <RadioButton Content="Лекарства"
-                         Style="{StaticResource MenuButtonStyle}"
-                         Command="{Binding MedicineViewCommand}"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+                <TextBlock Text="InfoSystem" Foreground="{StaticResource primaryColourBrush}" Background="Transparent"
+                            TextAlignment="Center" VerticalAlignment="Bottom" FontSize="26" Margin="0,0,5,0"/>
+                <Icon:PackIconFontAwesome Kind="GlobeSolid" VerticalAlignment="Center" Height="23" Width="23"
+                                          Foreground="{StaticResource primaryColourBrush}"/>
+            </StackPanel>
+
+            <Separator Margin="20,15,20,15" Height="1" Background="{StaticResource secondaryColourBrush}">
+                <Separator.RenderTransform>
+                    <ScaleTransform ScaleY="1.5"/>
+                </Separator.RenderTransform>
+            </Separator>
+
+            <RadioButton Style="{StaticResource MenuButtonStyle}" Command="{Binding PatientsViewCommand}"
+                         IsChecked="True">
+                <StackPanel Orientation="Horizontal">
+                    <Icon:PackIconFontAwesome Kind="UserSolid" Style="{StaticResource MenuButtonIconStyle}"/>
+                    <TextBlock Text="Пациенты" Style="{StaticResource MenuButtonTextStyle}"/>
+                </StackPanel>
+            </RadioButton>
+
+            <RadioButton Style="{StaticResource MenuButtonStyle}" Command="{Binding MedicineViewCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <Icon:PackIconFontAwesome Kind="PillsSolid" Style="{StaticResource MenuButtonIconStyle}"/>
+                    <TextBlock Text="Лекарства" Style="{StaticResource MenuButtonTextStyle}"/>
+                </StackPanel>
+            </RadioButton>
+
+            <RadioButton Style="{StaticResource MenuButtonStyle}" >
+                <StackPanel Orientation="Horizontal">
+                    <Icon:PackIconFontAwesome Kind="VirusSolid" Style="{StaticResource MenuButtonIconStyle}"/>
+                    <TextBlock Text="Диагнозы" Style="{StaticResource MenuButtonTextStyle}"/>
+                </StackPanel>
+            </RadioButton>
         </StackPanel>
     </Border>
 </UserControl>
