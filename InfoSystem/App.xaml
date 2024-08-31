@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="Styles/MenuButtonStyle.xaml"/>
                 <ResourceDictionary Source="Styles/TitleBarButtonStyle.xaml"/>
                 <ResourceDictionary Source="Styles/ToolbarButtonStyle.xaml"/>
+                <ResourceDictionary Source="Styles/DataGridStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type local:PatientsViewModel}">

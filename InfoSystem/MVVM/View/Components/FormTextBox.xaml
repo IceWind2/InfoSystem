@@ -45,10 +45,10 @@
 
             <TextBlock Grid.Row="0" x:Name="tbFieldName" 
                        Text="{Binding FieldName}" VerticalAlignment="Center" Margin="5,0,0,0"
-                       FontSize="19" FontWeight="Light" Foreground="{StaticResource contrastColourBrush}"/>
+                       FontSize="20" FontWeight="Normal" Foreground="{StaticResource contrastColourBrush}"/>
 
             <TextBox Grid.Row="1" x:Name="inpValue" VerticalAlignment="Center" Height="40" 
-                     FontSize="22" FontWeight="Normal"
+                     FontSize="22" FontWeight="SemiBold"
                      Background="Transparent" Foreground="{StaticResource contrastColourBrush}"
                      BorderThickness="0,1.5,0,1.5" BorderBrush="{Binding BorderColour}"
                      TextChanged="inpValue_TextChanged"

@@ -72,7 +72,7 @@
 
             <TextBlock Grid.Row="0" x:Name="tbFieldName" 
                        Text="{Binding FieldName}" VerticalAlignment="Center" Margin="5,0,0,0"
-                       FontSize="19" FontWeight="Light" Foreground="{StaticResource contrastColourBrush}"/>
+                       FontSize="20" FontWeight="Normal" Foreground="{StaticResource contrastColourBrush}"/>
 
             <ListBox Grid.Row="1"
                      x:Name="lvSelect"

@@ -15,9 +15,20 @@
 
         <local:Toolbar Grid.Row="0"/>
 
-        <DataGrid Grid.Row="1"
-                  VerticalAlignment="Stretch" Margin="0,20,0,0"
-                  ItemsSource="{Binding Patients}" SelectedItem="{Binding SelectedPatient}">
+        <DataGrid RowStyle="{DynamicResource DataGridRowStyle}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}" CellStyle="{DynamicResource DataGridCellStyle}" Style="{DynamicResource DataGridStyle}"
+                  Grid.Row="1"
+                  VerticalAlignment="Stretch"
+                  Margin="0,20,10,0"
+                  ItemsSource="{Binding Patients}" SelectedItem="{Binding SelectedPatient}"
+                  MouseLeftButtonDown="DataGrid_MouseLeftButtonDown">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="#" IsReadOnly="True" CanUserResize="False" Width="50" Binding="{Binding Path=Id}"/>
+
+                <DataGridTextColumn Header="ФИО" IsReadOnly="True" CanUserResize="False" Width="75*" Binding="{Binding Path=Name}"/>
+
+                <DataGridTextColumn Header="Возраст" IsReadOnly="True" CanUserResize="False" Width="25*" Binding="{Binding Path=Age}"/>
+            </DataGrid.Columns>
         </DataGrid>
     </Grid>
 </UserControl>
