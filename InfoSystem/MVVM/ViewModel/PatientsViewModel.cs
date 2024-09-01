@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace InfoSystem
@@ -14,7 +15,7 @@ namespace InfoSystem
         public PatientsViewModel(Window mainWindow)
         {
             var context = new InfoContext();
-            Patients = new ObservableCollection<Patient>(context.Patients);
+            Patients = new ObservableCollection<Patient>(context.Patients.Include(p => p.PatientMedicine)!.ThenInclude(pm => pm.Medicine));
 
             AddCommand = new AsyncRelayCommand(async o =>
             {

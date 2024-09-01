@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace InfoSystem
 {
@@ -32,11 +33,14 @@ namespace InfoSystem
             }
         }
 
-        public static Task AddPatient(Patient newPatient)
+        public static async Task AddPatient(Patient newPatient)
         {
             var context = new InfoContext();
             context.Patients.Add(newPatient);
-            return context.SaveChangesAsync();
+            await context.SaveChangesAsync();
+            context.Entry(newPatient).Collection(p => p.PatientMedicine).Query()
+                .Include(pm => pm.Medicine)
+                .Load();
         }
 
         public static Task RemovePatient(Patient patient)
