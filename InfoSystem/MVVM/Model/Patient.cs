@@ -22,7 +22,7 @@ namespace InfoSystem
         {
             get
             {
-                return string.Join(", ", PatientMedicine!.Select(pm => pm.Medicine!.Name));
+                return string.Join(", ", PatientMedicine!.Select(pm => pm.Medicine!.Name).Order());
             }
         }
 

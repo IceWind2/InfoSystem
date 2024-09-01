@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InfoSystem"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="250">
+             d:DesignHeight="180" d:DesignWidth="250">
 
     <UserControl.Resources>
         <Style TargetType="{x:Type ListBoxItem}"
@@ -14,7 +14,8 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="ListBoxItem">
-                            <Border Background="{TemplateBinding Background}">
+                            <Border Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}">
                                 <ContentPresenter/>
                             </Border>
                         </ControlTemplate>
@@ -22,6 +23,7 @@
                 </Setter>
 
                 <Setter Property="Background" Value="{StaticResource primaryColourBrush}"/>
+                <Setter Property="Padding" Value="8 0"/>
             </Style.Setters>
 
             <Style.Triggers>
@@ -42,7 +44,8 @@
                         <ControlTemplate TargetType="{x:Type ListBox}">
                             <Border BorderBrush="{StaticResource secondaryColourBrush}"
                                     BorderThickness="0,1.5,0,1.5"
-                                    Background="{TemplateBinding Background}">
+                                    Background="{TemplateBinding Background}"
+                                    VerticalAlignment="Stretch">
                                 <ScrollViewer>
                                     <ItemsPresenter/>
                                 </ScrollViewer>
@@ -52,7 +55,7 @@
                 </Setter>
 
                 <Setter Property="Background" Value="{StaticResource primaryColourBrush}"/>
-                <Setter Property="Foreground" Value="{StaticResource contrastColourBrush}"/>
+                <Setter Property="Foreground" Value="{StaticResource darkTextColourBrush}"/>
                 <Setter Property="FontSize" Value="21"/>
                 <Setter Property="SelectionMode" Value="Multiple"/>
                 <Setter Property="Visibility" Value="Visible"/>
@@ -62,17 +65,17 @@
 
     <Border BorderThickness="0"
             Background="Transparent"
-            Padding="0,10,0,10">
+            Padding="0">
 
         <Grid Background="{StaticResource primaryColourBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
-                <RowDefinition Height="150"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" x:Name="tbFieldName" 
-                       Text="{Binding FieldName}" VerticalAlignment="Center" Margin="5,0,0,0"
-                       FontSize="20" FontWeight="Normal" Foreground="{StaticResource contrastColourBrush}"/>
+                       Text="{Binding FieldName}" VerticalAlignment="Center" Padding="5,0,0,0"
+                       FontSize="20" FontWeight="Normal" Foreground="{StaticResource darkTextColourBrush}"/>
 
             <ListBox Grid.Row="1"
                      x:Name="lvSelect"

@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterOwner"
         Background="Transparent"
         AllowsTransparency="True"
-        Title="NewMedicineModal" Height="200" Width="400">
+        Title="NewMedicineModal" Height="150" Width="400">
 
     <WindowChrome.WindowChrome>
         <WindowChrome ResizeBorderThickness="8" GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0"/>
@@ -22,7 +22,7 @@
         <Grid Background="Transparent">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Vertical" Background="Transparent">
@@ -34,12 +34,12 @@
                     HorizontalAlignment="Right"
                     Margin="0,0,10,0">
 
-                <Button Style="{StaticResource ToolbarButtonStyle}"
+                <Button Style="{StaticResource ToolbarButtonStyle}" Margin="5 5"
                     Width="80"
                     Name="btnOk"
                     Content="ОК"
                     Click="btnOk_Click"/>
-                <Button Style="{StaticResource ToolbarButtonStyle}"
+                <Button Style="{StaticResource ToolbarButtonStyle}" Margin="5 5"
                     Width="80"
                     Content="Отмена"
                     Name="btnCansel"

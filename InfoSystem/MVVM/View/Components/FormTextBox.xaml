@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InfoSystem"
              mc:Ignorable="d" 
-             d:DesignHeight="90" d:DesignWidth="250">
+             d:DesignHeight="70" d:DesignWidth="250">
 
     <UserControl.Resources>
         <Style TargetType="{x:Type Button}"
@@ -32,11 +32,50 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="BorderBrush" Value="{StaticResource secondaryColourBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource secondaryCompColourBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource secondaryCompColourBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
+                        <Condition Property="IsSelectionActive" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
 
     <Border BorderThickness="0"
             Background="Transparent"
-            Padding="0,10,0,10">
+            Padding="0">
         <Grid Background="{StaticResource primaryColourBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
@@ -44,23 +83,25 @@
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" x:Name="tbFieldName" 
-                       Text="{Binding FieldName}" VerticalAlignment="Center" Margin="5,0,0,0"
-                       FontSize="20" FontWeight="Normal" Foreground="{StaticResource contrastColourBrush}"/>
+                       Text="{Binding FieldName}" VerticalAlignment="Center" Padding="5,0,0,0"
+                       FontSize="20" FontWeight="Normal" Foreground="{StaticResource darkTextColourBrush}"/>
 
-            <TextBox Grid.Row="1" x:Name="inpValue" VerticalAlignment="Center" Height="40" 
-                     FontSize="22" FontWeight="SemiBold"
-                     Background="Transparent" Foreground="{StaticResource contrastColourBrush}"
+            <TextBox Style="{StaticResource TextBoxStyle}" Grid.Row="1" x:Name="inpValue" VerticalAlignment="Center" Height="40" 
+                     FontSize="22" FontWeight="SemiBold" Padding="8,0,30,0"
+                     Background="Transparent" Foreground="{StaticResource darkTextColourBrush}"
                      BorderThickness="0,1.5,0,1.5" BorderBrush="{Binding BorderColour}"
                      TextChanged="inpValue_TextChanged"
                      Panel.ZIndex="0"/>
-            <TextBlock Grid.Row="1" x:Name="tbPlaceHolder" Text="---" VerticalAlignment="Center" Margin="5,0,0,0"
-                       FontSize="22" FontWeight="Light"
-                       Foreground="{StaticResource contrastColourBrush}"
-                       Panel.ZIndex="-1"/>
+            
             <Button Grid.Row="1" x:Name="btnClear" Width="30" Height="37" HorizontalAlignment="Right" VerticalAlignment="Center"
                     FontSize="16" Content="X" Foreground="IndianRed" BorderThickness="0"
                     Style="{StaticResource clearBtn}" Click="btnClear_Click"
                     Panel.ZIndex="1"/>
+
+            <TextBlock Grid.Row="1" x:Name="tbPlaceHolder" Text="---" VerticalAlignment="Center" Padding="10,0,0,0"
+                       FontSize="22" FontWeight="Light"
+                       Foreground="{StaticResource darkTextColourBrush}"
+                       Panel.ZIndex="-1"/>
         </Grid>
     </Border>
 </UserControl>

@@ -1,18 +1,25 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <SolidColorBrush x:Key="primaryColourBrush" Color="#F5EDED"/>
-    <SolidColorBrush x:Key="primaryCompColourBrush" Color="#E2DAD6"/>
-    <SolidColorBrush x:Key="secondaryColourBrush" Color="#6482AD"/>
-    <SolidColorBrush x:Key="secondaryCompColourBrush" Color="#7FA1C3"/>
-    <SolidColorBrush x:Key="secondaryHighlightColourBrush" Color="#9bbee0"/>
-    <SolidColorBrush x:Key="contrastColourBrush" Color="#201E43"/>
+
+    <SolidColorBrush x:Key="primaryColourBrush" Color="#F1F0E8"/>
+    <SolidColorBrush x:Key="primaryCompColourBrush" Color="#D8E4E2"/>
+    <SolidColorBrush x:Key="secondaryColourBrush" Color="#A3B6BC"/>
+    <SolidColorBrush x:Key="secondaryCompColourBrush" Color="#B3C8CF"/>
+    <SolidColorBrush x:Key="secondaryHighlightColourBrush" Color="#BED7DC"/>
+    <SolidColorBrush x:Key="contrastColourBrush" Color="#89A1A9"/>
     <SolidColorBrush x:Key="errorColourBrush" Color="#B00020"/>
 
-    <Color x:Key="primaryColour">#F5EDED</Color>
-    <Color x:Key="primaryCompColour">#E2DAD6</Color>
-    <Color x:Key="secondaryColour">#6482AD</Color>
-    <Color x:Key="secondaryCompColour">#7FA1C3</Color>
-    <Color x:Key="secondaryHighlightColour">#9bbee0</Color>
-    <Color x:Key="contrastColour">#201E43</Color>
+    <SolidColorBrush x:Key="lightTextColourBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="darkTextColourBrush" Color="#0d1b2a"/>
+
+    <Color x:Key="primaryColour">#F1F0E8</Color>
+    <Color x:Key="primaryCompColour">#D8E4E2</Color>
+    <Color x:Key="secondaryColour">#A3B6BC</Color>
+    <Color x:Key="secondaryCompColour">#B3C8CF</Color>
+    <Color x:Key="secondaryHighlightColour">#BED7DC</Color>
+    <Color x:Key="contrastColour">#89A1A9</Color>
     <Color x:Key="errorColour">#B00020</Color>
+
+    <Color x:Key="lightTextColour">#FFFFFF</Color>
+    <Color x:Key="darkTextColour">#0D1B2A</Color>
 </ResourceDictionary>

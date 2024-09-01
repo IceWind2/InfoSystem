@@ -22,26 +22,26 @@
         <Grid Background="Transparent">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Vertical" Background="Transparent">
-                <local:FormTextBox x:Name="NameFieldBox" FieldName="ФИО" BorderColour="{StaticResource secondaryColourBrush}"/>
-                <local:FormTextBox x:Name="AgeFieldBox" FieldName="Возраст" BorderColour="{StaticResource secondaryColourBrush}"/>
-                <local:FormSelect x:Name="MedicineSelect" FieldName="Лекарство"/>
+                <local:FormTextBox x:Name="NameFieldBox" FieldName="ФИО" BorderColour="{StaticResource secondaryColourBrush}" Margin="0 10"/>
+                <local:FormTextBox x:Name="AgeFieldBox" FieldName="Возраст" BorderColour="{StaticResource secondaryColourBrush}" Margin="0 10"/>
+                <local:FormSelect x:Name="MedicineSelect" FieldName="Лекарство" Margin="0 10 0 0" MaxHeight="180"/>
             </StackPanel>
 
             <StackPanel Grid.Row="1"
                         Orientation="Horizontal" FlowDirection="LeftToRight"
                         HorizontalAlignment="Right"
-                        Margin="0,0,10,0">
+                        Margin="0,0,0,0">
                 
-                <Button Style="{StaticResource ToolbarButtonStyle}"
+                <Button Style="{StaticResource ToolbarButtonStyle}" Margin="5 5"
                         Width="80"
                         Name="btnOk"
                         Content="ОК"
                         Click="btnOk_Click"/>
-                <Button Style="{StaticResource ToolbarButtonStyle}"
+                <Button Style="{StaticResource ToolbarButtonStyle}" Margin="5 5"
                         Width="80"
                         Content="Отмена"
                         Name="btnCansel"

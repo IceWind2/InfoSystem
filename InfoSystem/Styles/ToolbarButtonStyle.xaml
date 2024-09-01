@@ -20,14 +20,14 @@
             <Setter Property="Width" Value="40"/>
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="Background" Value="{DynamicResource primaryColourBrush}"/>
-            <Setter Property="Foreground" Value="{DynamicResource contrastColourBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource darkTextColourBrush}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Margin" Value="5,0,5,0"/>
         </Style.Setters>
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource secondaryCompColourBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource secondaryHighlightColourBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>

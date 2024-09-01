@@ -16,13 +16,13 @@
                     Width="175">
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
-                <TextBlock Text="InfoSystem" Foreground="{StaticResource primaryColourBrush}" Background="Transparent"
+                <TextBlock Text="InfoSystem" Foreground="{StaticResource darkTextColourBrush}" Background="Transparent"
                             TextAlignment="Center" VerticalAlignment="Bottom" FontSize="26" Margin="0,0,5,0"/>
                 <Icon:PackIconFontAwesome Kind="GlobeSolid" VerticalAlignment="Center" Height="23" Width="23"
-                                          Foreground="{StaticResource primaryColourBrush}"/>
+                                          Foreground="{StaticResource darkTextColourBrush}"/>
             </StackPanel>
 
-            <Separator Margin="20,15,20,15" Height="1" Background="{StaticResource secondaryColourBrush}">
+            <Separator Margin="20,15,20,15" Height="1" Background="{StaticResource contrastColourBrush}">
                 <Separator.RenderTransform>
                     <ScaleTransform ScaleY="1.5"/>
                 </Separator.RenderTransform>

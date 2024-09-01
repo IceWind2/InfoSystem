@@ -25,10 +25,10 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource secondaryColourBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource secondaryHighlightColourBrush}"/>
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Background" Value="{DynamicResource secondaryHighlightColourBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource secondaryColourBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -36,13 +36,13 @@
     <Style x:Key="MenuButtonTextStyle" TargetType="TextBlock">
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="FontFamily" Value="Fonts/#Roboto"/>
-        <Setter Property="Foreground" Value="{StaticResource contrastColourBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource darkTextColourBrush}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
     <Style x:Key="MenuButtonIconStyle" TargetType="Icon:PackIconFontAwesome">
-        <Setter Property="Foreground" Value="{StaticResource contrastColourBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource darkTextColourBrush}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Height" Value="20"/>
         <Setter Property="Width" Value="20"/>
