@@ -17,11 +17,15 @@
                     FlowDirection="LeftToRight" Orientation="Horizontal"
                     Margin="20,0,0,0">
 
+            <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding RefreshCommand}">
+                <Icon:PackIconFontAwesome Kind="ArrowsRotateSolid"/>
+            </Button>
+            
             <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding AddCommand}">
                 <Icon:PackIconFontAwesome Kind="PlusSolid"/>
             </Button>
 
-            <Button Style="{StaticResource ToolbarButtonStyle}">
+            <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding EditCommand}">
                 <Icon:PackIconFontAwesome Kind="PenToSquareSolid"/>
             </Button>
 

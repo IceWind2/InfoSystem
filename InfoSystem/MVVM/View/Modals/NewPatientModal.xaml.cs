@@ -16,7 +16,7 @@ namespace InfoSystem
             Owner = parent;
             InitializeComponent();
 
-            MedicineSelect.ItemsList = DatabaseManager.Medicine;
+            MedicineSelect.ItemsList = DatabaseManager.Medicine.OrderBy(m => m.Name);
 
             PreviewKeyDown += (s, e) =>
             {
@@ -26,6 +26,14 @@ namespace InfoSystem
                     Close();
                 }
             };
+        }
+
+        internal void SetData(Patient patient)
+        {
+            NameFieldBox.inpValue.Text = patient.Name;
+            AgeFieldBox.inpValue.Text = patient.Age.ToString();
+            var medicineIds = patient.PatientMedicine!.Select(pm => pm.MedicineId).ToHashSet();
+            MedicineSelect.SelectedItems = MedicineSelect.ItemsList.Where(m => medicineIds.Contains(((Medicine)m).Id));
         }
 
         private void btnCansel_Click(object sender, RoutedEventArgs e)

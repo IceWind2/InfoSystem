@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InfoSystem
@@ -15,6 +16,7 @@ namespace InfoSystem
 
         [ForeignKey("Medicine")]
         public int MedicineId { get; set; }
+        [DeleteBehavior(DeleteBehavior.Restrict)]
         public virtual Medicine? Medicine { get; set; }
     }
 }

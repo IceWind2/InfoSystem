@@ -14,7 +14,13 @@ namespace InfoSystem
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseSqlite($"Data Source={DbPath}");
-        
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PatientMedicine>()
+                .HasIndex(pm => new { pm.PatientId, pm.MedicineId })
+                .IsUnique();
+        }
         public static void InitDatabase()
         {
             var context = new InfoContext();

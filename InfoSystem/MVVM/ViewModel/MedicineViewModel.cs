@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace InfoSystem
@@ -7,6 +8,7 @@ namespace InfoSystem
     {
         public ObservableCollection<Medicine> Medicine { get; set; }
 
+        public RelayCommand RefreshCommand { get; set; }
         public AsyncRelayCommand AddCommand { get; set; }
         public AsyncRelayCommand EditCommand { get; set; }
         public AsyncRelayCommand RemoveCommand { get; set; }
@@ -14,7 +16,12 @@ namespace InfoSystem
         public MedicineViewModel(Window mainWindow)
         {
             var context = new InfoContext();
-            Medicine = new ObservableCollection<Medicine>(context.Medicine);
+            Medicine = new ObservableCollection<Medicine>(context.Medicine.AsNoTracking());
+
+            RefreshCommand = new RelayCommand(o =>
+            {
+                ((MainViewModel)mainWindow.DataContext).UpdateView();
+            });
 
             AddCommand = new AsyncRelayCommand(async o =>
             {
@@ -33,6 +40,30 @@ namespace InfoSystem
                 }
             });
 
+            EditCommand = new AsyncRelayCommand(async o =>
+            {
+                if (SelectedMedicine == null)
+                {
+                    return;
+                }
+
+                mainWindow.Opacity = 0.4;
+                var newMedicineModal = new NewMedicineModal(mainWindow);
+                newMedicineModal.SetData(SelectedMedicine);
+                newMedicineModal.ShowDialog();
+                mainWindow.Opacity = 1;
+
+                if (newMedicineModal.Success)
+                {
+                    newMedicineModal.Result!.Id = SelectedMedicine.Id;
+                    await DatabaseManager.UpdateMedicine(newMedicineModal.Result!);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        Medicine[Medicine.IndexOf(SelectedMedicine)] = newMedicineModal.Result!;
+                    });
+                }
+            });
+
             RemoveCommand = new AsyncRelayCommand(async o =>
             {
                 if (SelectedMedicine == null)
@@ -46,6 +77,12 @@ namespace InfoSystem
                     Medicine.Remove(SelectedMedicine);
                 });
             });
+        }
+
+        public void UpdateData()
+        {
+            var context = new InfoContext();
+            Medicine = new ObservableCollection<Medicine>(context.Medicine.AsNoTracking());
         }
 
         private Medicine selectedMedicine;

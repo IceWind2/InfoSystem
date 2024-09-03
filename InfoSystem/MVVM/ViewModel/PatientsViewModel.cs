@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 
 namespace InfoSystem
@@ -8,6 +9,7 @@ namespace InfoSystem
     {
         public ObservableCollection<Patient> Patients { get; set; }
 
+        public RelayCommand RefreshCommand { get; set; }
         public AsyncRelayCommand AddCommand { get; set; }
         public AsyncRelayCommand EditCommand { get; set; }
         public AsyncRelayCommand RemoveCommand { get; set; }
@@ -15,7 +17,12 @@ namespace InfoSystem
         public PatientsViewModel(Window mainWindow)
         {
             var context = new InfoContext();
-            Patients = new ObservableCollection<Patient>(context.Patients.Include(p => p.PatientMedicine)!.ThenInclude(pm => pm.Medicine));
+            Patients = new ObservableCollection<Patient>(context.Patients.AsNoTracking().Include(p => p.PatientMedicine)!.ThenInclude(pm => pm.Medicine).OrderBy(p => p.Id));
+
+            RefreshCommand = new RelayCommand(o =>
+            {
+                ((MainViewModel)mainWindow.DataContext).UpdateView();
+            });
 
             AddCommand = new AsyncRelayCommand(async o =>
             {
@@ -34,6 +41,30 @@ namespace InfoSystem
                 }
             });
 
+            EditCommand = new AsyncRelayCommand(async o =>
+            {
+                if (SelectedPatient == null)
+                {
+                    return;
+                }
+
+                mainWindow.Opacity = 0.4;
+                var newPatientModal = new NewPatientModal(mainWindow);
+                newPatientModal.SetData(SelectedPatient);
+                newPatientModal.ShowDialog();
+                mainWindow.Opacity = 1;
+
+                if (newPatientModal.Success)
+                {
+                    newPatientModal.Result!.Id = SelectedPatient.Id;
+                    await DatabaseManager.UpdatePatient(newPatientModal.Result!);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        Patients[Patients.IndexOf(SelectedPatient)] = newPatientModal.Result!;
+                    });
+                }
+            });
+
             RemoveCommand = new AsyncRelayCommand(async o =>
             {
                 if (SelectedPatient == null)
@@ -47,6 +78,12 @@ namespace InfoSystem
                     Patients.Remove(SelectedPatient);
                 });
             });
+        }
+
+        public void UpdateData()
+        {
+            var context = new InfoContext();
+            Patients = new ObservableCollection<Patient>(context.Patients.AsNoTracking().Include(p => p.PatientMedicine)!.ThenInclude(pm => pm.Medicine).OrderBy(p => p.Id));
         }
 
         private Patient selectedPatient;

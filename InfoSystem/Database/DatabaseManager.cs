@@ -38,7 +38,25 @@ namespace InfoSystem
             var context = new InfoContext();
             context.Patients.Add(newPatient);
             await context.SaveChangesAsync();
-            context.Entry(newPatient).Collection(p => p.PatientMedicine).Query()
+            context.Entry(newPatient).Collection(p => p.PatientMedicine)
+                .Query()
+                .Include(pm => pm.Medicine)
+                .Load();
+        }
+
+        public static async Task UpdatePatient(Patient patient)
+        {
+            var context = new InfoContext();
+            
+            var dbPatient = context.Patients.Include(p => p.PatientMedicine).Single(p => p.Id == patient.Id);
+            dbPatient.PatientMedicine = patient.PatientMedicine;
+            dbPatient.Age = patient.Age;
+            dbPatient.Name = patient.Name;
+
+            await context.SaveChangesAsync();
+            patient = dbPatient;
+            context.Entry(patient).Collection(p => p.PatientMedicine)
+                .Query()
                 .Include(pm => pm.Medicine)
                 .Load();
         }
@@ -54,6 +72,13 @@ namespace InfoSystem
         {
             var context = new InfoContext();
             context.Medicine.Add(newMedicine);
+            return context.SaveChangesAsync();
+        }
+
+        public static Task UpdateMedicine(Medicine medicine)
+        {
+            var context = new InfoContext();
+            context.Medicine.Update(medicine);
             return context.SaveChangesAsync();
         }
 

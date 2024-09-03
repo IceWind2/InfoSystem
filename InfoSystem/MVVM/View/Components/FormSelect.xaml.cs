@@ -14,7 +14,7 @@ namespace InfoSystem
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        
+
         private string _fieldName;
         public string FieldName
         {
@@ -50,6 +50,14 @@ namespace InfoSystem
             get
             {
                 return (IEnumerable<object>)lvSelect.SelectedItems;
+            }
+
+            set
+            {
+                foreach (object item in value)
+                {
+                    lvSelect.SelectedItems.Add(item);
+                }
             }
         }
 

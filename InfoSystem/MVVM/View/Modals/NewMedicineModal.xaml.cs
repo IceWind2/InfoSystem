@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Media;
@@ -23,6 +24,11 @@ namespace InfoSystem
                     Close();
                 }
             };
+        }
+
+        internal void SetData(Medicine medicine)
+        {
+            NameFieldBox.inpValue.Text = medicine.Name;
         }
 
         private void btnCansel_Click(object sender, RoutedEventArgs e)
