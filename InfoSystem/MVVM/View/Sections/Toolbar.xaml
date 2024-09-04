@@ -9,13 +9,14 @@
              d:DesignHeight="40" d:DesignWidth="800">
     
     <Border Grid.Row="0"
-            Background="{StaticResource primaryCompColourBrush}"
+            Background="{StaticResource secondaryHighlightColourBrush}"
             CornerRadius="0,0,15,15"
             Height="40">
 
         <StackPanel Background="Transparent"
                     FlowDirection="LeftToRight" Orientation="Horizontal"
-                    Margin="20,0,0,0">
+                    Margin="20,0,0,0"
+                    MaxHeight="40">
 
             <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding RefreshCommand}">
                 <Icon:PackIconFontAwesome Kind="ArrowsRotateSolid"/>
@@ -32,6 +33,17 @@
             <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding RemoveCommand}">
                 <Icon:PackIconFontAwesome Kind="TrashCanSolid"/>
             </Button>
+
+            <Separator Margin="10, 7, 20, 7" Background="{StaticResource contrastColourBrush}">
+                <Separator.RenderTransform>
+                    <ScaleTransform ScaleX="1.5"/>
+                </Separator.RenderTransform>
+                <Separator.LayoutTransform>
+                    <RotateTransform Angle="90"/>
+                </Separator.LayoutTransform>
+            </Separator>
+
+            <local:SearchBox x:Name="ToolbarSearchBox" Padding="0 7" Width="200"/>
         </StackPanel>
     </Border>
 </UserControl>

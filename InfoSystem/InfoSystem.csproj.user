@@ -13,6 +13,9 @@
     <Compile Update="MVVM\View\Components\FormTextBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="MVVM\View\Components\SearchBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="MVVM\View\DataViews\MedicineView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -40,6 +43,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MVVM\View\Components\FormTextBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MVVM\View\Components\SearchBox.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MVVM\View\DataViews\MedicineView.xaml">

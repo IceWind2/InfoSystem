@@ -1,13 +1,27 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
+using System.Windows.Data;
 
 namespace InfoSystem
 {
     internal class MedicineViewModel : ObservableObject
     {
-        public ObservableCollection<Medicine> Medicine { get; set; }
+        private string _filter = "";
+        private ObservableCollection<Medicine> _medicine;
+        private ICollectionView _medicineView;
+        public ObservableCollection<Medicine> Medicine
+        {
+            get
+            {
+                _medicineView = CollectionViewSource.GetDefaultView(_medicine);
+                _medicineView.Filter = (x) => ((Medicine)x).Name.Contains(_filter);
+                return _medicine;
+            }
+        }
 
+        public RelayCommand SearchCommand { get; set; }
         public RelayCommand RefreshCommand { get; set; }
         public AsyncRelayCommand AddCommand { get; set; }
         public AsyncRelayCommand EditCommand { get; set; }
@@ -16,7 +30,13 @@ namespace InfoSystem
         public MedicineViewModel(Window mainWindow)
         {
             var context = new InfoContext();
-            Medicine = new ObservableCollection<Medicine>(context.Medicine.AsNoTracking());
+            _medicine = new ObservableCollection<Medicine>(context.Medicine.AsNoTracking());
+
+            SearchCommand = new RelayCommand(o =>
+            {
+                _filter = (string)Application.Current.Properties["SearchBoxFilter"]!;
+                _medicineView!.Refresh();
+            });
 
             RefreshCommand = new RelayCommand(o =>
             {
@@ -82,7 +102,7 @@ namespace InfoSystem
         public void UpdateData()
         {
             var context = new InfoContext();
-            Medicine = new ObservableCollection<Medicine>(context.Medicine.AsNoTracking());
+            _medicine = new ObservableCollection<Medicine>(context.Medicine.AsNoTracking());
         }
 
         private Medicine selectedMedicine;

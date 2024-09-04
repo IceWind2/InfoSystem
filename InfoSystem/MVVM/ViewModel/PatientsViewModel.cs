@@ -1,14 +1,28 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Data;
 
 namespace InfoSystem
 {
     internal class PatientsViewModel : ObservableObject
     {
-        public ObservableCollection<Patient> Patients { get; set; }
+        private string _filter = "";
+        private ObservableCollection<Patient> _patients;
+        private ICollectionView _patientsView;
+        public ObservableCollection<Patient> Patients
+        {
+            get
+            {
+                _patientsView = CollectionViewSource.GetDefaultView(_patients);
+                _patientsView.Filter = (x) => ((Patient)x).Name.Contains(_filter);
+                return _patients;
+            }
+        }
 
+        public RelayCommand SearchCommand { get; set; }
         public RelayCommand RefreshCommand { get; set; }
         public AsyncRelayCommand AddCommand { get; set; }
         public AsyncRelayCommand EditCommand { get; set; }
@@ -17,7 +31,13 @@ namespace InfoSystem
         public PatientsViewModel(Window mainWindow)
         {
             var context = new InfoContext();
-            Patients = new ObservableCollection<Patient>(context.Patients.AsNoTracking().Include(p => p.PatientMedicine)!.ThenInclude(pm => pm.Medicine).OrderBy(p => p.Id));
+            _patients = new ObservableCollection<Patient>(context.Patients.AsNoTracking().Include(p => p.PatientMedicine)!.ThenInclude(pm => pm.Medicine).OrderBy(p => p.Id));
+
+            SearchCommand = new RelayCommand(o =>
+            {
+                _filter = (string)Application.Current.Properties["SearchBoxFilter"]!;
+                _patientsView!.Refresh();
+            });
 
             RefreshCommand = new RelayCommand(o =>
             {
@@ -83,7 +103,7 @@ namespace InfoSystem
         public void UpdateData()
         {
             var context = new InfoContext();
-            Patients = new ObservableCollection<Patient>(context.Patients.AsNoTracking().Include(p => p.PatientMedicine)!.ThenInclude(pm => pm.Medicine).OrderBy(p => p.Id));
+            _patients = new ObservableCollection<Patient>(context.Patients.AsNoTracking().Include(p => p.PatientMedicine)!.ThenInclude(pm => pm.Medicine).OrderBy(p => p.Id));
         }
 
         private Patient selectedPatient;
