@@ -17,9 +17,9 @@ namespace InfoSystem
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<PatientMedicine>()
-                .HasIndex(pm => new { pm.PatientId, pm.MedicineId })
-                .IsUnique();
+            modelBuilder.Entity<Patient>()
+                .HasMany(p => p.Medicine)
+                .WithMany(m => m.Patients);
         }
         public static void InitDatabase()
         {

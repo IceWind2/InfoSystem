@@ -9,7 +9,7 @@ namespace InfoSystem
     public partial class NewPatientModal : Window
     {
         public bool Success { get; set; }
-        internal Patient? Result { get; set; } = null;
+        internal CreatePatientDTO? Result { get; set; } = null;
 
         public NewPatientModal(Window parent)
         {
@@ -32,7 +32,7 @@ namespace InfoSystem
         {
             NameFieldBox.inpValue.Text = patient.Name;
             AgeFieldBox.inpValue.Text = patient.Age.ToString();
-            var medicineIds = patient.PatientMedicine!.Select(pm => pm.MedicineId).ToHashSet();
+            var medicineIds = patient.Medicine!.Select(m => m.Id).ToHashSet();
             MedicineSelect.SelectedItems = MedicineSelect.ItemsList.Where(m => medicineIds.Contains(((Medicine)m).Id));
         }
 
@@ -55,11 +55,11 @@ namespace InfoSystem
                     return;
                 }
 
-                Result = new Patient()
+                Result = new CreatePatientDTO()
                 {
                     Name = NameFieldBox.inpValue.Text,
                     Age = int.Parse(AgeFieldBox.inpValue.Text),
-                    PatientMedicine = MedicineSelect.SelectedItems.Select(ms => new PatientMedicine { MedicineId = ((Medicine)ms).Id }).ToList()
+                    MedicineIds = MedicineSelect.SelectedItems.Select(ms => ((Medicine)ms).Id).ToHashSet()
                 };
 
                 Success = true;

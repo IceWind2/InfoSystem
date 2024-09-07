@@ -18,15 +18,14 @@ namespace InfoSystem
         public int Age { get; set; }
 
         [NotMapped]
-        public string Medicine
+        public string MedicineView
         {
             get
             {
-                return string.Join(", ", PatientMedicine!.Select(pm => pm.Medicine!.Name).Order());
+                return string.Join(", ", Medicine!.Select(m => m.Name).Order());
             }
         }
 
-        [InverseProperty("Patient")]
-        public virtual ICollection<PatientMedicine>? PatientMedicine { get; set; }
+        public virtual ICollection<Medicine>? Medicine { get; set; }
     }
 }

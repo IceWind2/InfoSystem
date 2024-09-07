@@ -20,7 +20,7 @@ namespace InfoSystem
             get
             {
                 var context = new InfoContext();
-                return context.Patients.ToList();
+                return context.Patients.AsNoTracking().ToList();
             }
         }
 
@@ -29,36 +29,38 @@ namespace InfoSystem
             get
             {
                 var context = new InfoContext();
-                return context.Medicine.ToList();
+                return context.Medicine.AsNoTracking().ToList();
             }
         }
 
-        public static async Task AddPatient(Patient newPatient)
+        public static async Task<Patient> AddPatient(CreatePatientDTO createPatient)
         {
             var context = new InfoContext();
-            context.Patients.Add(newPatient);
+            var patient = new Patient
+            {
+                Id = createPatient.Id,
+                Name = createPatient.Name,
+                Age = createPatient.Age,
+                Medicine = [.. context.Medicine.Where(m => createPatient.MedicineIds.Contains(m.Id))],
+            };
+
+            context.Patients.Add(patient);
             await context.SaveChangesAsync();
-            context.Entry(newPatient).Collection(p => p.PatientMedicine)
-                .Query()
-                .Include(pm => pm.Medicine)
-                .Load();
+
+            return patient;
         }
 
-        public static async Task UpdatePatient(Patient patient)
+        public static async Task<Patient> UpdatePatient(CreatePatientDTO updatePatient)
         {
             var context = new InfoContext();
-            
-            var dbPatient = context.Patients.Include(p => p.PatientMedicine).Single(p => p.Id == patient.Id);
-            dbPatient.PatientMedicine = patient.PatientMedicine;
-            dbPatient.Age = patient.Age;
-            dbPatient.Name = patient.Name;
+            var patient = context.Patients.Include(p => p.Medicine).Single(p => p.Id == updatePatient.Id);
+            patient.Name = updatePatient.Name;
+            patient.Age = updatePatient.Age;
+            patient.Medicine = [.. context.Medicine.Where(m => updatePatient.MedicineIds.Contains(m.Id))];
 
             await context.SaveChangesAsync();
-            patient = dbPatient;
-            context.Entry(patient).Collection(p => p.PatientMedicine)
-                .Query()
-                .Include(pm => pm.Medicine)
-                .Load();
+            
+            return patient;
         }
 
         public static Task RemovePatient(Patient patient)

@@ -1,19 +1,17 @@
-﻿using System.Collections.Generic;
+﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InfoSystem
 {
-    [Table("medicine")]
-    internal class Medicine
+    [Table("locations")]
+    internal class Location
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id {  get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string Name { get; set; }
-
-        public virtual ICollection<Patient>? Patients{ get; set; }
     }
 }

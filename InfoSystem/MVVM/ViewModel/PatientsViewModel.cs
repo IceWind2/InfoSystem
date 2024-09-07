@@ -31,7 +31,7 @@ namespace InfoSystem
         public PatientsViewModel(Window mainWindow)
         {
             var context = new InfoContext();
-            _patients = new ObservableCollection<Patient>(context.Patients.AsNoTracking().Include(p => p.PatientMedicine)!.ThenInclude(pm => pm.Medicine).OrderBy(p => p.Id));
+            _patients = new ObservableCollection<Patient>(context.Patients.AsNoTracking().Include(p => p.Medicine).OrderBy(p => p.Id));
 
             SearchCommand = new RelayCommand(o =>
             {
@@ -53,10 +53,10 @@ namespace InfoSystem
 
                 if (newPatientModal.Success)
                 {
-                    await DatabaseManager.AddPatient(newPatientModal.Result!);
+                    var newPatient = await DatabaseManager.AddPatient(newPatientModal.Result!);
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        Patients.Add(newPatientModal.Result!);
+                        Patients.Add(newPatient);
                     });
                 }
             });
@@ -68,6 +68,7 @@ namespace InfoSystem
                     return;
                 }
 
+                var currentSelectedPatient = SelectedPatient;
                 mainWindow.Opacity = 0.4;
                 var newPatientModal = new NewPatientModal(mainWindow);
                 newPatientModal.SetData(SelectedPatient);
@@ -76,11 +77,11 @@ namespace InfoSystem
 
                 if (newPatientModal.Success)
                 {
-                    newPatientModal.Result!.Id = SelectedPatient.Id;
-                    await DatabaseManager.UpdatePatient(newPatientModal.Result!);
+                    newPatientModal.Result!.Id = currentSelectedPatient.Id;
+                    var newPatient = await DatabaseManager.UpdatePatient(newPatientModal.Result!);
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        Patients[Patients.IndexOf(SelectedPatient)] = newPatientModal.Result!;
+                        Patients[Patients.IndexOf(currentSelectedPatient)] = newPatient;
                     });
                 }
             });
@@ -103,7 +104,7 @@ namespace InfoSystem
         public void UpdateData()
         {
             var context = new InfoContext();
-            _patients = new ObservableCollection<Patient>(context.Patients.AsNoTracking().Include(p => p.PatientMedicine)!.ThenInclude(pm => pm.Medicine).OrderBy(p => p.Id));
+            _patients = new ObservableCollection<Patient>(context.Patients.AsNoTracking().Include(p => p.Medicine).OrderBy(p => p.Id));
         }
 
         private Patient selectedPatient;
