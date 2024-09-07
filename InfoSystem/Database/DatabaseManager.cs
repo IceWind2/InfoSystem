@@ -32,16 +32,25 @@ namespace InfoSystem
                 return context.Medicine.AsNoTracking().ToList();
             }
         }
+        public static IEnumerable<Location> Locations
+        {
+            get
+            {
+                var context = new InfoContext();
+                return context.Locations.AsNoTracking().ToList();
+            }
+        }
 
         public static async Task<Patient> AddPatient(CreatePatientDTO createPatient)
         {
             var context = new InfoContext();
             var patient = new Patient
             {
-                Id = createPatient.Id,
                 Name = createPatient.Name,
-                Age = createPatient.Age,
+                BirthDate = createPatient.BirthDate,
+                Gender = createPatient.Gender,
                 Medicine = [.. context.Medicine.Where(m => createPatient.MedicineIds.Contains(m.Id))],
+                Location = context.Locations.First(l => l.Id == createPatient.LocationId)
             };
 
             context.Patients.Add(patient);
@@ -53,9 +62,12 @@ namespace InfoSystem
         public static async Task<Patient> UpdatePatient(CreatePatientDTO updatePatient)
         {
             var context = new InfoContext();
+
             var patient = context.Patients.Include(p => p.Medicine).Single(p => p.Id == updatePatient.Id);
             patient.Name = updatePatient.Name;
-            patient.Age = updatePatient.Age;
+            patient.BirthDate = updatePatient.BirthDate;
+            patient.Gender = updatePatient.Gender;
+            patient.Location = context.Locations.First(l => l.Id == updatePatient.LocationId);
             patient.Medicine = [.. context.Medicine.Where(m => updatePatient.MedicineIds.Contains(m.Id))];
 
             await context.SaveChangesAsync();

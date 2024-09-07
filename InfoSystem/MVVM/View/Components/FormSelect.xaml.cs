@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace InfoSystem
 {
@@ -14,6 +15,21 @@ namespace InfoSystem
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        private Brush _borderColour;
+        public Brush BorderColour
+        {
+            get
+            {
+                return _borderColour;
+            }
+
+            set
+            {
+                _borderColour = value;
+                OnPropertyChanged();
+            }
+        }
 
         private string _fieldName;
         public string FieldName
@@ -29,6 +45,8 @@ namespace InfoSystem
                 OnPropertyChanged();
             }
         }
+
+        public bool SingleSelect { get; set; } = false;
 
         private IEnumerable<object> _itemsList;
         public IEnumerable<object> ItemsList

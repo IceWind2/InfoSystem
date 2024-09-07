@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace InfoSystem
 {
@@ -8,8 +9,11 @@ namespace InfoSystem
 
         public string Name { get; set; }
 
-        public int Age { get; set; }
+        public DateTime BirthDate{ get; set; }
 
+        public string Gender { get; set; }
+
+        public int LocationId { get; set; }
 
         public HashSet<int> MedicineIds { get; set; }
     }

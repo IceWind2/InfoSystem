@@ -43,10 +43,17 @@
                 </StackPanel>
             </RadioButton>
 
-            <RadioButton Style="{StaticResource MenuButtonStyle}" >
+            <RadioButton Style="{StaticResource MenuButtonStyle}" Command="{Binding DiagnosisViewCommand}">
                 <StackPanel Orientation="Horizontal">
                     <Icon:PackIconFontAwesome Kind="VirusSolid" Style="{StaticResource MenuButtonIconStyle}"/>
                     <TextBlock Text="Диагнозы" Style="{StaticResource MenuButtonTextStyle}"/>
+                </StackPanel>
+            </RadioButton>
+
+            <RadioButton Style="{StaticResource MenuButtonStyle}" Command="{Binding LocationsViewCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <Icon:PackIconFontAwesome Kind="HouseChimneySolid" Style="{StaticResource MenuButtonIconStyle}"/>
+                    <TextBlock Text="Адрес" Style="{StaticResource MenuButtonTextStyle}"/>
                 </StackPanel>
             </RadioButton>
         </StackPanel>

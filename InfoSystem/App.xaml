@@ -19,6 +19,12 @@
             <DataTemplate DataType="{x:Type local:MedicineViewModel}">
                 <local:MedicineView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type local:DiagnosisViewModel}">
+                <local:DiagnosisView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type local:LocationsViewModel}">
+                <local:LocationsView/>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

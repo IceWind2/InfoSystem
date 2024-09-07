@@ -31,7 +31,10 @@ namespace InfoSystem
         public PatientsViewModel(Window mainWindow)
         {
             var context = new InfoContext();
-            _patients = new ObservableCollection<Patient>(context.Patients.AsNoTracking().Include(p => p.Medicine).OrderBy(p => p.Id));
+            _patients = new ObservableCollection<Patient>(context.Patients.AsNoTracking()
+                                                                          .Include(p => p.Medicine)
+                                                                          .Include(p => p.Location)
+                                                                          .OrderBy(p => p.Id));
 
             SearchCommand = new RelayCommand(o =>
             {
@@ -104,7 +107,10 @@ namespace InfoSystem
         public void UpdateData()
         {
             var context = new InfoContext();
-            _patients = new ObservableCollection<Patient>(context.Patients.AsNoTracking().Include(p => p.Medicine).OrderBy(p => p.Id));
+            _patients = new ObservableCollection<Patient>(context.Patients.AsNoTracking()
+                                                                          .Include(p => p.Medicine)
+                                                                          .Include(p => p.Location)
+                                                                          .OrderBy(p => p.Id));
         }
 
         private Patient selectedPatient;

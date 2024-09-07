@@ -2,9 +2,9 @@
 
 namespace InfoSystem
 {
-    public partial class MenuPanel : UserControl
+    public partial class DiagnosisView : UserControl
     {
-        public MenuPanel()
+        public DiagnosisView()
         {
             InitializeComponent();
         }

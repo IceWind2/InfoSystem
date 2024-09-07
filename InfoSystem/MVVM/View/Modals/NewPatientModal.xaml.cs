@@ -17,6 +17,7 @@ namespace InfoSystem
             InitializeComponent();
 
             MedicineSelect.ItemsList = DatabaseManager.Medicine.OrderBy(m => m.Name);
+            LocationSelect.ItemsList = DatabaseManager.Locations.OrderBy(m => m.Name);
 
             PreviewKeyDown += (s, e) =>
             {
@@ -31,9 +32,11 @@ namespace InfoSystem
         internal void SetData(Patient patient)
         {
             NameFieldBox.inpValue.Text = patient.Name;
-            AgeFieldBox.inpValue.Text = patient.Age.ToString();
+            BirthDateFieldBox.inpValue.Text = patient.BirthDate.Date.ToShortDateString();
+            GenderFieldBox.inpValue.Text = patient.Gender;
             var medicineIds = patient.Medicine!.Select(m => m.Id).ToHashSet();
             MedicineSelect.SelectedItems = MedicineSelect.ItemsList.Where(m => medicineIds.Contains(((Medicine)m).Id));
+            LocationSelect.SelectedItems = LocationSelect.ItemsList.Where(l => ((Location)l).Id == patient.LocationId);
         }
 
         private void btnCansel_Click(object sender, RoutedEventArgs e)
@@ -58,8 +61,10 @@ namespace InfoSystem
                 Result = new CreatePatientDTO()
                 {
                     Name = NameFieldBox.inpValue.Text,
-                    Age = int.Parse(AgeFieldBox.inpValue.Text),
-                    MedicineIds = MedicineSelect.SelectedItems.Select(ms => ((Medicine)ms).Id).ToHashSet()
+                    BirthDate = DateTime.Parse(BirthDateFieldBox.inpValue.Text),
+                    Gender = GenderFieldBox.inpValue.Text.ToUpper(),
+                    MedicineIds = MedicineSelect.SelectedItems.Select(ms => ((Medicine)ms).Id).ToHashSet(),
+                    LocationId = ((Location)LocationSelect.SelectedItems.First()).Id
                 };
 
                 Success = true;
@@ -86,14 +91,35 @@ namespace InfoSystem
                 NameFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["errorColourBrush"] as Brush;
             }
 
-            if (int.TryParse(AgeFieldBox.inpValue.Text, out var _))
+            if (DateTime.TryParse(BirthDateFieldBox.inpValue.Text, out var _))
             {
-                AgeFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["secondaryColourBrush"] as Brush;
+                BirthDateFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["secondaryColourBrush"] as Brush;
             }
             else
             {
-                errorMessage.AppendLine("Возраст должен быть числом.");
-                AgeFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["errorColourBrush"] as Brush;
+                errorMessage.AppendLine("Неверный формат даты.");
+                BirthDateFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["errorColourBrush"] as Brush;
+            }
+
+            if (GenderFieldBox.inpValue.Text.Equals("М", StringComparison.CurrentCultureIgnoreCase) ||
+                GenderFieldBox.inpValue.Text.Equals("Ж", StringComparison.CurrentCultureIgnoreCase))
+            {
+                GenderFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["secondaryColourBrush"] as Brush;
+            }
+            else
+            {
+                errorMessage.AppendLine("Пол должен быть указан как М или Ж.");
+                GenderFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["errorColourBrush"] as Brush;
+            }
+
+            if (LocationSelect.SelectedItems.Any())
+            {
+                LocationSelect.BorderColour = Application.Current.Resources.MergedDictionaries[0]["secondaryColourBrush"] as Brush;
+            }
+            else
+            {
+                errorMessage.AppendLine("Необходимо выбрать адрес.");
+                LocationSelect.BorderColour = Application.Current.Resources.MergedDictionaries[0]["errorColourBrush"] as Brush;
             }
 
             return errorMessage.ToString();

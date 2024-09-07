@@ -16,6 +16,12 @@
     <Compile Update="MVVM\View\Components\SearchBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="MVVM\View\DataViews\DiagnosisView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MVVM\View\DataViews\LocationsView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="MVVM\View\DataViews\MedicineView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -46,6 +52,12 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MVVM\View\Components\SearchBox.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MVVM\View\DataViews\DiagnosisView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MVVM\View\DataViews\LocationsView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MVVM\View\DataViews\MedicineView.xaml">
