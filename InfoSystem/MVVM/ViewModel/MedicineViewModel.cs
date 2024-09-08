@@ -67,19 +67,20 @@ namespace InfoSystem
                     return;
                 }
 
+                var currentSelectedMedicine = SelectedMedicine;
                 mainWindow.Opacity = 0.4;
                 var newMedicineModal = new NewMedicineModal(mainWindow);
-                newMedicineModal.SetData(SelectedMedicine);
+                newMedicineModal.SetData(currentSelectedMedicine);
                 newMedicineModal.ShowDialog();
                 mainWindow.Opacity = 1;
 
                 if (newMedicineModal.Success)
                 {
-                    newMedicineModal.Result!.Id = SelectedMedicine.Id;
+                    newMedicineModal.Result!.Id = currentSelectedMedicine.Id;
                     await DatabaseManager.UpdateMedicine(newMedicineModal.Result!);
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        Medicine[Medicine.IndexOf(SelectedMedicine)] = newMedicineModal.Result!;
+                        Medicine[Medicine.IndexOf(currentSelectedMedicine)] = newMedicineModal.Result!;
                     });
                 }
             });

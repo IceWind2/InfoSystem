@@ -74,7 +74,7 @@ namespace InfoSystem
                 var currentSelectedPatient = SelectedPatient;
                 mainWindow.Opacity = 0.4;
                 var newPatientModal = new NewPatientModal(mainWindow);
-                newPatientModal.SetData(SelectedPatient);
+                newPatientModal.SetData(currentSelectedPatient);
                 newPatientModal.ShowDialog();
                 mainWindow.Opacity = 1;
 

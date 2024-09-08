@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterOwner"
         Background="Transparent"
         AllowsTransparency="True"
-        Title="NewPatientModal" Height="740" Width="400">
+        Title="NewPatientModal" Height="920" Width="400">
 
     <WindowChrome.WindowChrome>
         <WindowChrome ResizeBorderThickness="8" GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0"/>
@@ -29,6 +29,7 @@
                 <local:FormTextBox x:Name="NameFieldBox" FieldName="ФИО" BorderColour="{StaticResource secondaryColourBrush}" Margin="0 10"/>
                 <local:FormTextBox x:Name="BirthDateFieldBox" FieldName="Дата рождения" BorderColour="{StaticResource secondaryColourBrush}" Margin="0 10"/>
                 <local:FormTextBox x:Name="GenderFieldBox" FieldName="Пол" BorderColour="{StaticResource secondaryColourBrush}" Margin="0 10"/>
+                <local:FormSelect x:Name="DiagnosisSelect" SingleSelect="True" FieldName="Диагноз" BorderColour="{StaticResource secondaryColourBrush}" Margin="0 10" MaxHeight="180"/>
                 <local:FormSelect x:Name="MedicineSelect" FieldName="Лекарство" BorderColour="{StaticResource secondaryColourBrush}" Margin="0 10" MaxHeight="180"/>
                 <local:FormSelect x:Name="LocationSelect" SingleSelect="True" FieldName="Адрес" BorderColour="{StaticResource secondaryColourBrush}" Margin="0 10 0 0" MaxHeight="180"/>
             </StackPanel>

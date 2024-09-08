@@ -37,6 +37,11 @@ namespace InfoSystem
         [DeleteBehavior(DeleteBehavior.Restrict)]
         public Location? Location { get; set; }
 
+        [ForeignKey("Diagnosis")]
+        public int DiagnosisId { get; set; }
+        [DeleteBehavior(DeleteBehavior.Restrict)]
+        public Diagnosis? Diagnosis { get; set; }
+
         [NotMapped]
         public string MedicineView
         {

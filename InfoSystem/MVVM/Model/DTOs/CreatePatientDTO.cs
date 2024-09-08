@@ -15,6 +15,8 @@ namespace InfoSystem
 
         public int LocationId { get; set; }
 
+        public int DiagnosisId { get; set; }
+
         public HashSet<int> MedicineIds { get; set; }
     }
 }

@@ -18,6 +18,7 @@ namespace InfoSystem
 
             MedicineSelect.ItemsList = DatabaseManager.Medicine.OrderBy(m => m.Name);
             LocationSelect.ItemsList = DatabaseManager.Locations.OrderBy(m => m.Name);
+            DiagnosisSelect.ItemsList = DatabaseManager.Diagnoses.OrderBy(m => m.Name);
 
             PreviewKeyDown += (s, e) =>
             {
@@ -37,6 +38,7 @@ namespace InfoSystem
             var medicineIds = patient.Medicine!.Select(m => m.Id).ToHashSet();
             MedicineSelect.SelectedItems = MedicineSelect.ItemsList.Where(m => medicineIds.Contains(((Medicine)m).Id));
             LocationSelect.SelectedItems = LocationSelect.ItemsList.Where(l => ((Location)l).Id == patient.LocationId);
+            DiagnosisSelect.SelectedItems = DiagnosisSelect.ItemsList.Where(l => ((Diagnosis)l).Id == patient.DiagnosisId);
         }
 
         private void btnCansel_Click(object sender, RoutedEventArgs e)
@@ -64,7 +66,8 @@ namespace InfoSystem
                     BirthDate = DateTime.Parse(BirthDateFieldBox.inpValue.Text),
                     Gender = GenderFieldBox.inpValue.Text.ToUpper(),
                     MedicineIds = MedicineSelect.SelectedItems.Select(ms => ((Medicine)ms).Id).ToHashSet(),
-                    LocationId = ((Location)LocationSelect.SelectedItems.First()).Id
+                    LocationId = ((Location)LocationSelect.SelectedItems.First()).Id,
+                    DiagnosisId = ((Diagnosis)DiagnosisSelect.SelectedItems.First()).Id
                 };
 
                 Success = true;

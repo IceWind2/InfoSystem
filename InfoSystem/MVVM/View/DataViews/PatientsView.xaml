@@ -25,15 +25,17 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="#" IsReadOnly="True" CanUserResize="False" Width="50" Binding="{Binding Path=Id}"/>
 
-                <DataGridTextColumn Header="ФИО" IsReadOnly="True" CanUserResize="False" Width="30*" Binding="{Binding Path=Name}"/>
+                <DataGridTextColumn Header="ФИО" IsReadOnly="True" CanUserResize="False" Width="25*" Binding="{Binding Path=Name}"/>
 
                 <DataGridTextColumn Header="Пол" IsReadOnly="True" CanUserResize="False" Width="55" Binding="{Binding Path=Gender}"/>
 
                 <DataGridTextColumn Header="Возраст" IsReadOnly="True" CanUserResize="False" Width="85" Binding="{Binding Path=Age}"/>
 
-                <DataGridTextColumn Header="Лекарства" IsReadOnly="True" CanUserResize="False" Width="35*" Binding="{Binding Path=MedicineView}"/>
+                <DataGridTextColumn Header="Диагноз" IsReadOnly="True" CanUserResize="False" Width="25*" Binding="{Binding Path=Diagnosis.Name}"/>
+                
+                <DataGridTextColumn Header="Лекарства" IsReadOnly="True" CanUserResize="False" Width="25*" Binding="{Binding Path=MedicineView}"/>
 
-                <DataGridTextColumn Header="Адрес" IsReadOnly="True" CanUserResize="False" Width="35*" Binding="{Binding Path=Location.Name}"/>
+                <DataGridTextColumn Header="Адрес" IsReadOnly="True" CanUserResize="False" Width="25*" Binding="{Binding Path=Location.Name}"/>
 
             </DataGrid.Columns>
         </DataGrid>

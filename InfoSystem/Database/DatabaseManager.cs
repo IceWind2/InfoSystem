@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace InfoSystem
 {
@@ -41,6 +42,15 @@ namespace InfoSystem
             }
         }
 
+        public static IEnumerable<Diagnosis> Diagnoses
+        {
+            get
+            {
+                var context = new InfoContext();
+                return context.Diagnoses.AsNoTracking().ToList();
+            }
+        }
+
         public static async Task<Patient> AddPatient(CreatePatientDTO createPatient)
         {
             var context = new InfoContext();
@@ -50,7 +60,8 @@ namespace InfoSystem
                 BirthDate = createPatient.BirthDate,
                 Gender = createPatient.Gender,
                 Medicine = [.. context.Medicine.Where(m => createPatient.MedicineIds.Contains(m.Id))],
-                Location = context.Locations.First(l => l.Id == createPatient.LocationId)
+                Location = context.Locations.First(l => l.Id == createPatient.LocationId),
+                Diagnosis = context.Diagnoses.First(d => d.Id == createPatient.DiagnosisId)
             };
 
             context.Patients.Add(patient);
@@ -69,9 +80,10 @@ namespace InfoSystem
             patient.Gender = updatePatient.Gender;
             patient.Location = context.Locations.First(l => l.Id == updatePatient.LocationId);
             patient.Medicine = [.. context.Medicine.Where(m => updatePatient.MedicineIds.Contains(m.Id))];
+            patient.Diagnosis = context.Diagnoses.First(d => d.Id == updatePatient.DiagnosisId);
 
             await context.SaveChangesAsync();
-            
+
             return patient;
         }
 
@@ -101,6 +113,60 @@ namespace InfoSystem
             var context = new InfoContext();
             context.Medicine.Remove(medicine);
             return context.SaveChangesAsync();
+        }
+
+        public static Task AddLocation(Location newLocation)
+        {
+            var context = new InfoContext();
+            context.Locations.Add(newLocation);
+            return context.SaveChangesAsync();
+        }
+
+        public static Task UpdateLocation(Location location)
+        {
+            var context = new InfoContext();
+            context.Locations.Update(location);
+            return context.SaveChangesAsync();
+        }
+
+        public static async Task<bool> TryRemoveLocation(Location location)
+        {
+            var context = new InfoContext();
+            if (context.Patients.Select(p => p.LocationId).Contains(location.Id))
+            {
+                return false;
+            }
+
+            context.Locations.Remove(location);
+            await context.SaveChangesAsync();
+            return true;
+        }
+
+        public static Task AddDiagnosis(Diagnosis newDiagnosis)
+        {
+            var context = new InfoContext();
+            context.Diagnoses.Add(newDiagnosis);
+            return context.SaveChangesAsync();
+        }
+
+        public static Task UpdateDiagnosis(Diagnosis diagnosis)
+        {
+            var context = new InfoContext();
+            context.Diagnoses.Update(diagnosis);
+            return context.SaveChangesAsync();
+        }
+
+        public static async Task<bool> RemoveDiagnosis(Diagnosis diagnosis)
+        {
+            var context = new InfoContext();
+            if (context.Patients.Select(p => p.DiagnosisId).Contains(diagnosis.Id))
+            {
+                return false;
+            }
+
+            context.Diagnoses.Remove(diagnosis);
+            await context.SaveChangesAsync();
+            return true;
         }
     }
 }

@@ -63,6 +63,12 @@
     <Page Update="MVVM\View\DataViews\MedicineView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="MVVM\View\Modals\NewDiagnosisModal.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MVVM\View\Modals\NewLocationModal.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MVVM\View\Modals\NewMedicineModal.xaml">
       <SubType>Designer</SubType>
     </Page>
