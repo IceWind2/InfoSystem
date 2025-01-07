@@ -53,7 +53,7 @@
             <RadioButton Style="{StaticResource MenuButtonStyle}" Command="{Binding LocationsViewCommand}">
                 <StackPanel Orientation="Horizontal">
                     <Icon:PackIconFontAwesome Kind="HouseChimneySolid" Style="{StaticResource MenuButtonIconStyle}"/>
-                    <TextBlock Text="Адрес" Style="{StaticResource MenuButtonTextStyle}"/>
+                    <TextBlock Text="Адреса" Style="{StaticResource MenuButtonTextStyle}"/>
                 </StackPanel>
             </RadioButton>
         </StackPanel>

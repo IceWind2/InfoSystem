@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace InfoSystem
 {
@@ -22,6 +23,7 @@ namespace InfoSystem
             }
         }
 
+        public RelayCommand HistoryCommand { get; set; }
         public RelayCommand SearchCommand { get; set; }
         public RelayCommand RefreshCommand { get; set; }
         public AsyncRelayCommand AddCommand { get; set; }
@@ -34,7 +36,19 @@ namespace InfoSystem
             _patients = new ObservableCollection<Patient>(context.Patients.AsNoTracking()
                                                                           .Include(p => p.Medicine)
                                                                           .Include(p => p.Location)
+                                                                          .Include(p => p.Diagnosis)
                                                                           .OrderBy(p => p.Id));
+
+            HistoryCommand = new RelayCommand(o =>
+            {
+                if (o is Patient patient)
+                {
+                    mainWindow.Opacity = 0.4;
+                    var newPatientModal = new HistoryModal(mainWindow, patient.Id);
+                    newPatientModal.ShowDialog();
+                    mainWindow.Opacity = 1;
+                }
+            });
 
             SearchCommand = new RelayCommand(o =>
             {

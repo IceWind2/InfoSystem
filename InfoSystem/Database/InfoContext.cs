@@ -8,6 +8,7 @@ namespace InfoSystem
         public DbSet<Medicine> Medicine {  get; set; }
         public DbSet<Location> Locations{  get; set; }
         public DbSet<Diagnosis> Diagnoses{  get; set; }
+        public DbSet<History> History{  get; set; }
 
         private const string DbPath = "infosystem.db";
         public InfoContext()

@@ -19,10 +19,16 @@
     <Compile Update="MVVM\View\DataViews\DiagnosisView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="MVVM\View\DataViews\HistoryView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="MVVM\View\DataViews\LocationsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="MVVM\View\DataViews\MedicineView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MVVM\View\Modals\HistoryModal.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="MVVM\View\Modals\NewMedicineModal.xaml.cs">
@@ -57,10 +63,16 @@
     <Page Update="MVVM\View\DataViews\DiagnosisView.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="MVVM\View\DataViews\HistoryView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MVVM\View\DataViews\LocationsView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MVVM\View\DataViews\MedicineView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MVVM\View\Modals\HistoryModal.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MVVM\View\Modals\NewDiagnosisModal.xaml">

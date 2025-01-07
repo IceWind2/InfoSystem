@@ -16,6 +16,15 @@ namespace InfoSystem
             return lastId ?? -1;
         }
 
+        public static Patient GetPatient(int patientId, InfoContext? infoContext = null)
+        {
+            infoContext ??= new InfoContext();
+            return infoContext.Patients.Include(p => p.Medicine)
+                                       .Include(p => p.Diagnosis)
+                                       .Include(p => p.Location)
+                                       .First(p => p.Id == patientId);
+        }
+
         public static IEnumerable<Patient> Patients
         {
             get
@@ -63,8 +72,16 @@ namespace InfoSystem
                 Location = context.Locations.First(l => l.Id == createPatient.LocationId),
                 Diagnosis = context.Diagnoses.First(d => d.Id == createPatient.DiagnosisId)
             };
-
             context.Patients.Add(patient);
+
+            var newPatientHistory = new History()
+            {
+                PatientId = patient.Id,
+                PatientData = patient.ToString(),
+                Timestamp = DateTime.UtcNow
+            };
+            context.History.Add(newPatientHistory);
+
             await context.SaveChangesAsync();
 
             return patient;
@@ -74,13 +91,21 @@ namespace InfoSystem
         {
             var context = new InfoContext();
 
-            var patient = context.Patients.Include(p => p.Medicine).Single(p => p.Id == updatePatient.Id);
+            var patient = GetPatient(updatePatient.Id, context);
             patient.Name = updatePatient.Name;
             patient.BirthDate = updatePatient.BirthDate;
             patient.Gender = updatePatient.Gender;
             patient.Location = context.Locations.First(l => l.Id == updatePatient.LocationId);
             patient.Medicine = [.. context.Medicine.Where(m => updatePatient.MedicineIds.Contains(m.Id))];
             patient.Diagnosis = context.Diagnoses.First(d => d.Id == updatePatient.DiagnosisId);
+
+            var newPatientHistory = new History()
+            {
+                PatientId = patient.Id,
+                PatientData = patient.ToString(),
+                Timestamp = DateTime.UtcNow
+            };
+            context.History.Add(newPatientHistory);
 
             await context.SaveChangesAsync();
 
