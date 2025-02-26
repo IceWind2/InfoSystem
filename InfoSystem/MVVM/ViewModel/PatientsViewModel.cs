@@ -13,13 +13,26 @@ namespace InfoSystem
         private string _filter = "";
         private ObservableCollection<Patient> _patients;
         private ICollectionView _patientsView;
+ 
+        private Patient selectedPatient;
+
         public ObservableCollection<Patient> Patients
         {
             get
             {
                 _patientsView = CollectionViewSource.GetDefaultView(_patients);
-                _patientsView.Filter = (x) => ((Patient)x).Name.Contains(_filter);
+                _patientsView.Filter = (x) => (x.ContainsFilter(_filter));
                 return _patients;
+            }
+        }
+
+        public Patient SelectedPatient
+        {
+            get { return selectedPatient; }
+            set
+            {
+                selectedPatient = value;
+                OnPropertyChanged();
             }
         }
 
@@ -125,17 +138,6 @@ namespace InfoSystem
                                                                           .Include(p => p.Medicine)
                                                                           .Include(p => p.Location)
                                                                           .OrderBy(p => p.Id));
-        }
-
-        private Patient selectedPatient;
-        public Patient SelectedPatient
-        {
-            get { return selectedPatient; }
-            set
-            {
-                selectedPatient = value;
-                OnPropertyChanged();
-            }
         }
     }
 }

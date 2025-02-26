@@ -16,7 +16,7 @@ namespace InfoSystem
             get
             {
                 _diagnosesView = CollectionViewSource.GetDefaultView(_diagnoses);
-                _diagnosesView.Filter = (x) => ((Diagnosis)x).Name.Contains(_filter);
+                _diagnosesView.Filter = (x) => (x.ContainsFilter(_filter));
                 return _diagnoses;
             }
         }

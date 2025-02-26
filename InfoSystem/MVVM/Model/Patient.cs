@@ -16,12 +16,15 @@ namespace InfoSystem
         public int Id { get; set; }
 
         [Required]
+        [FilterProperty]
         public string Name { get; set; }
+        [FilterProperty]
         public string Gender { get; set; }
 
         public DateTime BirthDate { get; set; }
         
         [NotMapped]
+        [FilterProperty]
         public int Age
         {
             get
@@ -36,14 +39,17 @@ namespace InfoSystem
         [ForeignKey("Location")]
         public int LocationId { get; set; }
         [DeleteBehavior(DeleteBehavior.Restrict)]
+        [FilterProperty]
         public Location? Location { get; set; }
 
         [ForeignKey("Diagnosis")]
         public int DiagnosisId { get; set; }
         [DeleteBehavior(DeleteBehavior.Restrict)]
+        [FilterProperty]
         public Diagnosis? Diagnosis { get; set; }
 
         [NotMapped]
+        [FilterProperty]
         public string MedicineView
         {
             get

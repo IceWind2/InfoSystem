@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InfoSystem
 {
-    [Table("History")]
+    [Table("history")]
     [PrimaryKey(nameof(PatientId), nameof(Timestamp))]
     internal class History
     {

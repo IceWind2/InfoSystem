@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Data;
 
 namespace InfoSystem
@@ -16,7 +14,7 @@ namespace InfoSystem
             get
             {
                 _historyView = CollectionViewSource.GetDefaultView(_history);
-                _historyView.Filter = (x) => ((History)x).PatientData.Contains(_filter);
+                _historyView.Filter = (x) => (x.ContainsFilter(_filter)); ;
                 return _history;
             }
         }
@@ -28,10 +26,7 @@ namespace InfoSystem
 
         public HistoryViewModel(int patientId)
         {
-            var context = new InfoContext();
-            _history = new ObservableCollection<History>(context.History.Where(h => h.PatientId == patientId)
-                                                                        .OrderByDescending(h => h.Timestamp)
-                                                                        .AsNoTracking());
+            _history = new ObservableCollection<History>(DatabaseManager.GetPatientHistory(patientId).GetAwaiter().GetResult());
         }
     }
 }

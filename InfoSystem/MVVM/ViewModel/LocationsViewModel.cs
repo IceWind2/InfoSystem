@@ -16,7 +16,7 @@ namespace InfoSystem
             get
             {
                 _locationsView = CollectionViewSource.GetDefaultView(_locations);
-                _locationsView.Filter = (x) => ((Location)x).Name.Contains(_filter);
+                _locationsView.Filter = (x) => (x.ContainsFilter(_filter));
                 return _locations;
             }
         }

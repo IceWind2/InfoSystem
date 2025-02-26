@@ -15,5 +15,10 @@ namespace InfoSystem
         public string Name { get; set; }
 
         public virtual ICollection<Patient>? Patients{ get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

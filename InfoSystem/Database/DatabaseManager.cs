@@ -74,6 +74,8 @@ namespace InfoSystem
             };
             context.Patients.Add(patient);
 
+            await context.SaveChangesAsync();
+
             var newPatientHistory = new History()
             {
                 PatientId = patient.Id,
@@ -192,6 +194,15 @@ namespace InfoSystem
             context.Diagnoses.Remove(diagnosis);
             await context.SaveChangesAsync();
             return true;
+        }
+
+        public static Task<List<History>> GetPatientHistory(int patientId)
+        {
+            var context = new InfoContext();
+            return context.History.Where(h => h.PatientId == patientId)
+                                  .OrderByDescending(h => h.Timestamp)
+                                  .AsNoTracking()
+                                  .ToListAsync();
         }
     }
 }
