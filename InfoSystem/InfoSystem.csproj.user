@@ -10,6 +10,9 @@
     <Compile Update="MainApp.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="MVVM\View\Components\FormRadio.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="MVVM\View\Components\FormTextBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -49,6 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="MainApp.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MVVM\View\Components\FormRadio.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MVVM\View\Components\FormSelect.xaml">

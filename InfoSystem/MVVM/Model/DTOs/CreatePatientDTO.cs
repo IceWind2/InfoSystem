@@ -11,7 +11,7 @@ namespace InfoSystem
 
         public DateTime BirthDate{ get; set; }
 
-        public string Gender { get; set; }
+        public Sex Sex { get; set; }
 
         public int LocationId { get; set; }
 

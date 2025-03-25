@@ -65,9 +65,9 @@ namespace InfoSystem
             var context = new InfoContext();
             var patient = new Patient
             {
-                Name = createPatient.Name,
+                Name = createPatient.Name.Trim(),
                 BirthDate = createPatient.BirthDate,
-                Gender = createPatient.Gender,
+                Sex = createPatient.Sex,
                 Medicine = [.. context.Medicine.Where(m => createPatient.MedicineIds.Contains(m.Id))],
                 Location = context.Locations.First(l => l.Id == createPatient.LocationId),
                 Diagnosis = context.Diagnoses.First(d => d.Id == createPatient.DiagnosisId)
@@ -96,7 +96,7 @@ namespace InfoSystem
             var patient = GetPatient(updatePatient.Id, context);
             patient.Name = updatePatient.Name;
             patient.BirthDate = updatePatient.BirthDate;
-            patient.Gender = updatePatient.Gender;
+            patient.Sex = updatePatient.Sex;
             patient.Location = context.Locations.First(l => l.Id == updatePatient.LocationId);
             patient.Medicine = [.. context.Medicine.Where(m => updatePatient.MedicineIds.Contains(m.Id))];
             patient.Diagnosis = context.Diagnoses.First(d => d.Id == updatePatient.DiagnosisId);
@@ -124,6 +124,7 @@ namespace InfoSystem
         public static Task AddMedicine(Medicine newMedicine)
         {
             var context = new InfoContext();
+            newMedicine.Name = newMedicine.Name.Trim();
             context.Medicine.Add(newMedicine);
             return context.SaveChangesAsync();
         }
@@ -131,6 +132,7 @@ namespace InfoSystem
         public static Task UpdateMedicine(Medicine medicine)
         {
             var context = new InfoContext();
+            medicine.Name = medicine.Name.Trim();
             context.Medicine.Update(medicine);
             return context.SaveChangesAsync();
         }
@@ -172,6 +174,7 @@ namespace InfoSystem
         public static Task AddDiagnosis(Diagnosis newDiagnosis)
         {
             var context = new InfoContext();
+            newDiagnosis.Name = newDiagnosis.Name.Trim();
             context.Diagnoses.Add(newDiagnosis);
             return context.SaveChangesAsync();
         }

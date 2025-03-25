@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace InfoSystem
@@ -19,6 +20,7 @@ namespace InfoSystem
             MedicineSelect.ItemsList = DatabaseManager.Medicine.OrderBy(m => m.Name);
             LocationSelect.ItemsList = DatabaseManager.Locations.OrderBy(m => m.Name);
             DiagnosisSelect.ItemsList = DatabaseManager.Diagnoses.OrderBy(m => m.Name);
+            FillSexFormRadio();
 
             PreviewKeyDown += (s, e) =>
             {
@@ -34,11 +36,11 @@ namespace InfoSystem
         {
             NameFieldBox.inpValue.Text = patient.Name;
             BirthDateFieldBox.inpValue.Text = patient.BirthDate.Date.ToShortDateString();
-            GenderFieldBox.inpValue.Text = patient.Gender;
             var medicineIds = patient.Medicine!.Select(m => m.Id).ToHashSet();
             MedicineSelect.SelectedItems = MedicineSelect.ItemsList.Where(m => medicineIds.Contains(((Medicine)m).Id));
             LocationSelect.SelectedItems = LocationSelect.ItemsList.Where(l => ((Location)l).Id == patient.LocationId);
             DiagnosisSelect.SelectedItems = DiagnosisSelect.ItemsList.Where(l => ((Diagnosis)l).Id == patient.DiagnosisId);
+            SexRadio.SelectValue(patient.Sex == Sex.Male ? "М" : "Ж");
         }
 
         private void btnCansel_Click(object sender, RoutedEventArgs e)
@@ -64,7 +66,7 @@ namespace InfoSystem
                 {
                     Name = NameFieldBox.inpValue.Text,
                     BirthDate = DateTime.Parse(BirthDateFieldBox.inpValue.Text),
-                    Gender = GenderFieldBox.inpValue.Text.ToUpper(),
+                    Sex = SexRadio.GetSelectedValue() == "М" ? Sex.Male : Sex.Female,
                     MedicineIds = MedicineSelect.SelectedItems.Select(ms => ((Medicine)ms).Id).ToHashSet(),
                     LocationId = ((Location)LocationSelect.SelectedItems.First()).Id,
                     DiagnosisId = ((Diagnosis)DiagnosisSelect.SelectedItems.First()).Id
@@ -104,15 +106,14 @@ namespace InfoSystem
                 BirthDateFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["errorColourBrush"] as Brush;
             }
 
-            if (GenderFieldBox.inpValue.Text.Equals("М", StringComparison.CurrentCultureIgnoreCase) ||
-                GenderFieldBox.inpValue.Text.Equals("Ж", StringComparison.CurrentCultureIgnoreCase))
+            if (SexRadio.GetSelectedValue() != null)
             {
-                GenderFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["secondaryColourBrush"] as Brush;
+                SexRadio.BorderColour = Application.Current.Resources.MergedDictionaries[0]["secondaryColourBrush"] as Brush;
             }
             else
             {
-                errorMessage.AppendLine("Пол должен быть указан как М или Ж.");
-                GenderFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["errorColourBrush"] as Brush;
+                errorMessage.AppendLine("Необходимо выбрать пол.");
+                SexRadio.BorderColour = Application.Current.Resources.MergedDictionaries[0]["errorColourBrush"] as Brush;
             }
 
             if (LocationSelect.SelectedItems.Any())
@@ -126,6 +127,22 @@ namespace InfoSystem
             }
 
             return errorMessage.ToString();
+        }
+
+        private void FillSexFormRadio()
+        {
+            SexRadio.spRadio.Children.Add(new RadioButton
+            {
+                Content = "М",
+                IsChecked = false,
+                GroupName = "Sex",
+            });
+            SexRadio.spRadio.Children.Add(new RadioButton
+            {
+                Content = "Ж",
+                IsChecked = false,
+                GroupName = "Sex"
+            });
         }
     }
 }

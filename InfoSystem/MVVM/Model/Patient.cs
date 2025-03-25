@@ -19,7 +19,20 @@ namespace InfoSystem
         [FilterProperty]
         public string Name { get; set; }
         [FilterProperty]
-        public string Gender { get; set; }
+        public Sex Sex { get; set; }
+        [NotMapped]
+        public string DisplaySex
+        {
+            get
+            {
+                return Sex switch
+                {
+                    Sex.Male => "М",
+                    Sex.Female => "Ж",
+                    _ => throw new ArgumentException("Invalid sex value.")
+                };
+            }
+        }
 
         public DateTime BirthDate { get; set; }
         
@@ -68,7 +81,7 @@ namespace InfoSystem
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendJoin(" | ", Name, Gender, Age, Diagnosis!.Name, MedicineView, Location!.Name);
+            sb.AppendJoin(" | ", Name, DisplaySex, Age, Diagnosis!.Name, MedicineView, Location!.Name);
             return sb.ToString();
         }
     }
