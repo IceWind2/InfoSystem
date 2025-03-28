@@ -35,8 +35,12 @@ namespace InfoSystem
                 OnPropertyChanged();
             }
         }
-
+        
+        // Context menu commands
         public RelayCommand HistoryCommand { get; set; }
+        public AsyncRelayCommand AddMedicineCommand {  get; set; }
+
+        // Generic commands
         public RelayCommand SearchCommand { get; set; }
         public RelayCommand RefreshCommand { get; set; }
         public AsyncRelayCommand AddCommand { get; set; }
@@ -46,11 +50,7 @@ namespace InfoSystem
         public PatientsViewModel(Window mainWindow)
         {
             var context = new InfoContext();
-            _patients = new ObservableCollection<Patient>(context.Patients.AsNoTracking()
-                                                                          .Include(p => p.Medicine)
-                                                                          .Include(p => p.Location)
-                                                                          .Include(p => p.Diagnosis)
-                                                                          .OrderBy(p => p.Id));
+            _patients = new ObservableCollection<Patient>(DatabaseManager.GetAllPatients());
 
             HistoryCommand = new RelayCommand(o =>
             {
@@ -60,6 +60,23 @@ namespace InfoSystem
                     var newPatientModal = new HistoryModal(mainWindow, patient.Id);
                     newPatientModal.ShowDialog();
                     mainWindow.Opacity = 1;
+                }
+            });
+
+            AddMedicineCommand = new AsyncRelayCommand(async o =>
+            {
+                if (o is Patient patient)
+                {
+                    mainWindow.Opacity = 0.4;
+                    var addMedicineModal = new AddMedicineModal(mainWindow, patient);
+                    addMedicineModal.ShowDialog();
+                    mainWindow.Opacity = 1;
+
+                    if (addMedicineModal.Success)
+                    {
+                        await DatabaseManager.AddPatientMedicine(addMedicineModal.Result!);
+                        ((MainViewModel)mainWindow.DataContext).UpdateView();
+                    }
                 }
             });
 
@@ -134,10 +151,7 @@ namespace InfoSystem
         public void UpdateData()
         {
             var context = new InfoContext();
-            _patients = new ObservableCollection<Patient>(context.Patients.AsNoTracking()
-                                                                          .Include(p => p.Medicine)
-                                                                          .Include(p => p.Location)
-                                                                          .OrderBy(p => p.Id));
+            _patients = new ObservableCollection<Patient>(DatabaseManager.GetAllPatients());
         }
     }
 }

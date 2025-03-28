@@ -7,7 +7,7 @@ namespace InfoSystem
 {
     [Table("history")]
     [PrimaryKey(nameof(PatientId), nameof(Timestamp))]
-    internal class History
+    public class History
     {
         [Required]
         public string PatientData {  get; set; }

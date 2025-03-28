@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace InfoSystem
 {
-    internal class CreatePatientDTO
+    internal sealed class CreatePatientDTO
     {
         public int Id { get; set; }
 
@@ -15,8 +14,6 @@ namespace InfoSystem
 
         public int LocationId { get; set; }
 
-        public int DiagnosisId { get; set; }
-
-        public HashSet<int> MedicineIds { get; set; }
+        public string Address { get; set; }
     }
 }

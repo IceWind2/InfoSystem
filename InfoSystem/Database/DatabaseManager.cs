@@ -8,56 +8,24 @@ namespace InfoSystem
 {
     internal static class DatabaseManager
     {
-        public static int LastPatientId()
+        #region Patients
+
+        public static IQueryable<Patient> GetAllPatients()
         {
             var context = new InfoContext();
-            var lastId = context.Patients.OrderByDescending(id => id).FirstOrDefault()?.Id;
-
-            return lastId ?? -1;
+            return context.Patients.AsNoTracking().Include(p => p.PatientMedicine!).ThenInclude(pm => pm.Medicine)
+                                                  .Include(p => p.Location)
+                                                  .Include(p => p.Diagnosis)
+                                                  .OrderBy(p => p.Id);
         }
 
         public static Patient GetPatient(int patientId, InfoContext? infoContext = null)
         {
             infoContext ??= new InfoContext();
-            return infoContext.Patients.Include(p => p.Medicine)
+            return infoContext.Patients.Include(p => p.PatientMedicine!).ThenInclude(pm => pm.Medicine)
                                        .Include(p => p.Diagnosis)
                                        .Include(p => p.Location)
                                        .First(p => p.Id == patientId);
-        }
-
-        public static IEnumerable<Patient> Patients
-        {
-            get
-            {
-                var context = new InfoContext();
-                return context.Patients.AsNoTracking().ToList();
-            }
-        }
-
-        public static IEnumerable<Medicine> Medicine
-        {
-            get
-            {
-                var context = new InfoContext();
-                return context.Medicine.AsNoTracking().ToList();
-            }
-        }
-        public static IEnumerable<Location> Locations
-        {
-            get
-            {
-                var context = new InfoContext();
-                return context.Locations.AsNoTracking().ToList();
-            }
-        }
-
-        public static IEnumerable<Diagnosis> Diagnoses
-        {
-            get
-            {
-                var context = new InfoContext();
-                return context.Diagnoses.AsNoTracking().ToList();
-            }
         }
 
         public static async Task<Patient> AddPatient(CreatePatientDTO createPatient)
@@ -68,9 +36,7 @@ namespace InfoSystem
                 Name = createPatient.Name.Trim(),
                 BirthDate = createPatient.BirthDate,
                 Sex = createPatient.Sex,
-                Medicine = [.. context.Medicine.Where(m => createPatient.MedicineIds.Contains(m.Id))],
-                Location = context.Locations.First(l => l.Id == createPatient.LocationId),
-                Diagnosis = context.Diagnoses.First(d => d.Id == createPatient.DiagnosisId)
+                LocationId = createPatient.LocationId
             };
             context.Patients.Add(patient);
 
@@ -98,8 +64,6 @@ namespace InfoSystem
             patient.BirthDate = updatePatient.BirthDate;
             patient.Sex = updatePatient.Sex;
             patient.Location = context.Locations.First(l => l.Id == updatePatient.LocationId);
-            patient.Medicine = [.. context.Medicine.Where(m => updatePatient.MedicineIds.Contains(m.Id))];
-            patient.Diagnosis = context.Diagnoses.First(d => d.Id == updatePatient.DiagnosisId);
 
             var newPatientHistory = new History()
             {
@@ -119,6 +83,32 @@ namespace InfoSystem
             var context = new InfoContext();
             context.Patients.Remove(patient);
             return context.SaveChangesAsync();
+        }
+
+        public static Task<List<History>> GetPatientHistory(int patientId)
+        {
+            var context = new InfoContext();
+            return context.History.Where(h => h.PatientId == patientId)
+                                  .OrderByDescending(h => h.Timestamp)
+                                  .AsNoTracking()
+                                  .ToListAsync();
+        }
+
+        public static Task AddPatientMedicine(PatientMedicine patientMedicine)
+        {   
+            var context = new InfoContext();
+            context.PatientsMedicine.Add(patientMedicine);
+            return context.SaveChangesAsync();
+        }
+
+        #endregion
+
+        #region Medicine
+
+        public static List<Medicine> GetAllMedicine()
+        {
+            var context = new InfoContext();
+            return context.Medicine.AsNoTracking().ToList();
         }
 
         public static Task AddMedicine(Medicine newMedicine)
@@ -142,6 +132,27 @@ namespace InfoSystem
             var context = new InfoContext();
             context.Medicine.Remove(medicine);
             return context.SaveChangesAsync();
+        }
+
+
+        #endregion
+
+        public static IEnumerable<Location> Locations
+        {
+            get
+            {
+                var context = new InfoContext();
+                return context.Locations.AsNoTracking().ToList();
+            }
+        }
+
+        public static IEnumerable<Diagnosis> Diagnoses
+        {
+            get
+            {
+                var context = new InfoContext();
+                return context.Diagnoses.AsNoTracking().ToList();
+            }
         }
 
         public static Task AddLocation(Location newLocation)
@@ -197,15 +208,6 @@ namespace InfoSystem
             context.Diagnoses.Remove(diagnosis);
             await context.SaveChangesAsync();
             return true;
-        }
-
-        public static Task<List<History>> GetPatientHistory(int patientId)
-        {
-            var context = new InfoContext();
-            return context.History.Where(h => h.PatientId == patientId)
-                                  .OrderByDescending(h => h.Timestamp)
-                                  .AsNoTracking()
-                                  .ToListAsync();
         }
     }
 }

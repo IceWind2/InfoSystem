@@ -30,6 +30,13 @@
                         <Icon:PackIconFontAwesome Kind="BookSolid" Width="15" Height="15"/>
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem Header="Добавить лекарство"
+                          Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.AddMedicineCommand}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.DataContext}">
+                    <MenuItem.Icon>
+                        <Icon:PackIconFontAwesome Kind="PillsSolid" Width="15" Height="15"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </ContextMenu>
             <Style x:Key="PatientRowStyle" TargetType="DataGridRow" BasedOn="{StaticResource DataGridRowStyle}">
                 <Setter Property="ContextMenu" Value="{StaticResource RowMenu}"/>

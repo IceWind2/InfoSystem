@@ -17,9 +17,7 @@ namespace InfoSystem
             Owner = parent;
             InitializeComponent();
 
-            MedicineSelect.ItemsList = DatabaseManager.Medicine.OrderBy(m => m.Name);
             LocationSelect.ItemsList = DatabaseManager.Locations.OrderBy(m => m.Name);
-            DiagnosisSelect.ItemsList = DatabaseManager.Diagnoses.OrderBy(m => m.Name);
             FillSexFormRadio();
 
             PreviewKeyDown += (s, e) =>
@@ -36,10 +34,7 @@ namespace InfoSystem
         {
             NameFieldBox.inpValue.Text = patient.Name;
             BirthDateFieldBox.inpValue.Text = patient.BirthDate.Date.ToShortDateString();
-            var medicineIds = patient.Medicine!.Select(m => m.Id).ToHashSet();
-            MedicineSelect.SelectedItems = MedicineSelect.ItemsList.Where(m => medicineIds.Contains(((Medicine)m).Id));
             LocationSelect.SelectedItems = LocationSelect.ItemsList.Where(l => ((Location)l).Id == patient.LocationId);
-            DiagnosisSelect.SelectedItems = DiagnosisSelect.ItemsList.Where(l => ((Diagnosis)l).Id == patient.DiagnosisId);
             SexRadio.SelectValue(patient.Sex == Sex.Male ? "М" : "Ж");
         }
 
@@ -67,9 +62,7 @@ namespace InfoSystem
                     Name = NameFieldBox.inpValue.Text,
                     BirthDate = DateTime.Parse(BirthDateFieldBox.inpValue.Text),
                     Sex = SexRadio.GetSelectedValue() == "М" ? Sex.Male : Sex.Female,
-                    MedicineIds = MedicineSelect.SelectedItems.Select(ms => ((Medicine)ms).Id).ToHashSet(),
                     LocationId = ((Location)LocationSelect.SelectedItems.First()).Id,
-                    DiagnosisId = ((Diagnosis)DiagnosisSelect.SelectedItems.First()).Id
                 };
 
                 Success = true;
@@ -92,7 +85,7 @@ namespace InfoSystem
             }
             else
             {
-                errorMessage.AppendLine("ФИО должно быть заполнено.");
+                errorMessage.AppendLine("Необходимо заполнить ФИО.");
                 NameFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["errorColourBrush"] as Brush;
             }
 
@@ -122,7 +115,7 @@ namespace InfoSystem
             }
             else
             {
-                errorMessage.AppendLine("Необходимо выбрать адрес.");
+                errorMessage.AppendLine("Необходимо выбрать район.");
                 LocationSelect.BorderColour = Application.Current.Resources.MergedDictionaries[0]["errorColourBrush"] as Brush;
             }
 

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace InfoSystem
 {
     [Table("medicine")]
-    internal class Medicine
+    public class Medicine
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

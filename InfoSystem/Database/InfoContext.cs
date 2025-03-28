@@ -5,6 +5,7 @@ namespace InfoSystem
     internal class InfoContext : DbContext
     {
         public DbSet<Patient> Patients { get; set; }
+        public DbSet<PatientMedicine> PatientsMedicine{ get; set; }
         public DbSet<Medicine> Medicine {  get; set; }
         public DbSet<Location> Locations{  get; set; }
         public DbSet<Diagnosis> Diagnoses{  get; set; }
@@ -20,10 +21,8 @@ namespace InfoSystem
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Patient>()
-                .HasMany(p => p.Medicine)
-                .WithMany(m => m.Patients);
         }
+
         public static void InitDatabase()
         {
             var context = new InfoContext();

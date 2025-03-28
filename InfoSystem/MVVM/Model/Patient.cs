@@ -9,7 +9,7 @@ using System.Text;
 namespace InfoSystem
 {
     [Table("patients")]
-    internal class Patient
+    public class Patient
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -50,24 +50,29 @@ namespace InfoSystem
         }
 
         [ForeignKey("Location")]
-        public int LocationId { get; set; }
+        public int? LocationId { get; set; }
         [DeleteBehavior(DeleteBehavior.Restrict)]
         [FilterProperty]
-        public Location? Location { get; set; }
+        public virtual Location? Location { get; set; }
 
         [ForeignKey("Diagnosis")]
-        public int DiagnosisId { get; set; }
+        public int? DiagnosisId { get; set; }
         [DeleteBehavior(DeleteBehavior.Restrict)]
         [FilterProperty]
-        public Diagnosis? Diagnosis { get; set; }
+        public virtual Diagnosis? Diagnosis { get; set; }
 
         [NotMapped]
         [FilterProperty]
-        public string MedicineView
+        public string? MedicineView
         {
             get
             {
-                var medicineList = string.Join(", ", Medicine!.Select(m => m.Name).Order());
+                if (PatientMedicine == null)
+                {
+                    return null;
+                }
+
+                var medicineList = string.Join(", ", PatientMedicine!.Select(pm => pm.Medicine!.Name).Order());
                 if (string.IsNullOrEmpty(medicineList))
                 {
                     medicineList = "---";
@@ -76,12 +81,12 @@ namespace InfoSystem
             }
         }
 
-        public virtual ICollection<Medicine>? Medicine { get; set; }
+        public virtual ICollection<PatientMedicine>? PatientMedicine { get; set; }
 
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendJoin(" | ", Name, DisplaySex, Age, Diagnosis!.Name, MedicineView, Location!.Name);
+            sb.AppendJoin(" | ", Name, DisplaySex, Age, Diagnosis?.Name, MedicineView, Location?.Name);
             return sb.ToString();
         }
     }

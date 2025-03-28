@@ -1,0 +1,51 @@
+﻿<Window x:Class="InfoSystem.AddMedicineModal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:InfoSystem"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        WindowStartupLocation="CenterOwner"
+        Background="Transparent"
+        AllowsTransparency="True"
+        Title="NewLocationModal" Height="350" Width="400">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome ResizeBorderThickness="8" GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0"/>
+    </WindowChrome.WindowChrome>
+
+    <Border Background="{StaticResource primaryCompColourBrush}"
+    BorderThickness="5" BorderBrush="{StaticResource contrastColourBrush}"
+    CornerRadius="20"
+    Padding="0,20,0,0">
+        <Grid Background="Transparent">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Vertical" Background="Transparent">
+                <local:FormSelect Grid.Row="0" SingleSelect="True" x:Name="MedicineSelect" FieldName="Лекарство" BorderColour="{StaticResource secondaryColourBrush}" Margin="0 10" MaxHeight="180"/>
+                <local:FormTextBox Grid.Row="1" x:Name="MedicineNoteBox" FieldName="Заметки" BorderColour="{StaticResource secondaryColourBrush}" Margin="0 10 0 0" Height="200"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2"
+                Orientation="Horizontal" FlowDirection="LeftToRight"
+                HorizontalAlignment="Right"
+                Margin="0,0,10,0">
+
+                <Button Style="{StaticResource ToolbarButtonStyle}" Margin="5 5"
+                Width="80"
+                Name="btnOk"
+                Content="ОК"
+                Click="btnOk_Click"/>
+                <Button Style="{StaticResource ToolbarButtonStyle}" Margin="5 5"
+                Width="80"
+                Content="Отмена"
+                Name="btnCansel"
+                Click="btnCansel_Click"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace InfoSystem
 {
     [Table("locations")]
-    internal class Location
+    public class Location
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
