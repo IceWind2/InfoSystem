@@ -6,21 +6,21 @@ using System.Windows.Media;
 
 namespace InfoSystem
 {
-    public partial class AddMedicineModal : Window
+    public partial class PatientMedicineModal : Window
     {
         public bool Success { get; set; }
         internal PatientMedicine? Result { get; set; } = null;
 
         private Patient _patient;
 
-        public AddMedicineModal(Window parent, Patient patient)
+        public PatientMedicineModal(Window parent, Patient patient, bool addMode)
         {
             Owner = parent;
             _patient = patient;
             InitializeComponent();
 
             var existingMedicine = patient.PatientMedicine!.Select(pm => pm.MedicineId);
-            MedicineSelect.ItemsList = DatabaseManager.GetAllMedicine().OrderBy(m => m.Name).Where(m => !existingMedicine.Contains(m.Id));
+            MedicineSelect.ItemsList = DatabaseManager.GetAllMedicine().OrderBy(m => m.Name).Where(m => existingMedicine.Contains(m.Id) != addMode);
 
             PreviewKeyDown += (s, e) =>
             {

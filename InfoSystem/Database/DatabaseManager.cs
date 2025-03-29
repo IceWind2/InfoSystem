@@ -95,9 +95,18 @@ namespace InfoSystem
         }
 
         public static Task AddPatientMedicine(PatientMedicine patientMedicine)
-        {   
+        {
+            // TODO: add to history
             var context = new InfoContext();
             context.PatientsMedicine.Add(patientMedicine);
+            return context.SaveChangesAsync();
+        }
+
+        public static Task RemovePatientMedicine(PatientMedicine patientMedicine)
+        {
+            // TODO: add to history
+            var context = new InfoContext();
+            context.PatientsMedicine.Remove(patientMedicine);
             return context.SaveChangesAsync();
         }
 

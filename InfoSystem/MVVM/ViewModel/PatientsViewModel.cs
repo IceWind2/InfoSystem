@@ -39,6 +39,7 @@ namespace InfoSystem
         // Context menu commands
         public RelayCommand HistoryCommand { get; set; }
         public AsyncRelayCommand AddMedicineCommand {  get; set; }
+        public AsyncRelayCommand RemoveMedicineCommand {  get; set; }
 
         // Generic commands
         public RelayCommand SearchCommand { get; set; }
@@ -68,13 +69,30 @@ namespace InfoSystem
                 if (o is Patient patient)
                 {
                     mainWindow.Opacity = 0.4;
-                    var addMedicineModal = new AddMedicineModal(mainWindow, patient);
+                    var addMedicineModal = new PatientMedicineModal(mainWindow, patient, true);
                     addMedicineModal.ShowDialog();
                     mainWindow.Opacity = 1;
 
                     if (addMedicineModal.Success)
                     {
                         await DatabaseManager.AddPatientMedicine(addMedicineModal.Result!);
+                        ((MainViewModel)mainWindow.DataContext).UpdateView();
+                    }
+                }
+            });
+
+            RemoveMedicineCommand = new AsyncRelayCommand(async o =>
+            {
+                if (o is Patient patient)
+                {
+                    mainWindow.Opacity = 0.4;
+                    var addMedicineModal = new PatientMedicineModal(mainWindow, patient, false);
+                    addMedicineModal.ShowDialog();
+                    mainWindow.Opacity = 1;
+
+                    if (addMedicineModal.Success)
+                    {
+                        await DatabaseManager.RemovePatientMedicine(addMedicineModal.Result!);
                         ((MainViewModel)mainWindow.DataContext).UpdateView();
                     }
                 }

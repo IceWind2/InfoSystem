@@ -31,7 +31,7 @@
     <Compile Update="MVVM\View\DataViews\MedicineView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="MVVM\View\Modals\AddMedicineModal.xaml.cs">
+    <Compile Update="MVVM\View\Modals\PatientMedicineModal.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="MVVM\View\Modals\HistoryModal.xaml.cs">
@@ -81,7 +81,7 @@
     <Page Update="MVVM\View\DataViews\MedicineView.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="MVVM\View\Modals\AddMedicineModal.xaml">
+    <Page Update="MVVM\View\Modals\PatientMedicineModal.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MVVM\View\Modals\HistoryModal.xaml">
