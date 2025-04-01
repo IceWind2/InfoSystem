@@ -42,11 +42,15 @@ namespace InfoSystem
 
             await context.SaveChangesAsync();
 
+            // Add enty to the history
+            await context.Entry(patient).Collection(p => p.PatientMedicine!).LoadAsync();
             var newPatientHistory = new History()
             {
                 PatientId = patient.Id,
                 PatientData = patient.ToString(),
-                Timestamp = DateTime.UtcNow
+                Timestamp = DateTime.UtcNow,
+                Note = createPatient.Note,
+                Change = HistoryChange.NewPatient
             };
             context.History.Add(newPatientHistory);
 
@@ -65,11 +69,14 @@ namespace InfoSystem
             patient.Sex = updatePatient.Sex;
             patient.Location = context.Locations.First(l => l.Id == updatePatient.LocationId);
 
+            // Add enty to the history
             var newPatientHistory = new History()
             {
                 PatientId = patient.Id,
                 PatientData = patient.ToString(),
-                Timestamp = DateTime.UtcNow
+                Timestamp = DateTime.UtcNow,
+                Note = updatePatient.Note,
+                Change = HistoryChange.PatientUpdate
             };
             context.History.Add(newPatientHistory);
 
@@ -94,20 +101,54 @@ namespace InfoSystem
                                   .ToListAsync();
         }
 
-        public static Task AddPatientMedicine(PatientMedicine patientMedicine)
+        public static async Task AddPatientMedicine(ChangePatientMedicineDTO patientMedicineDTO)
         {
-            // TODO: add to history
             var context = new InfoContext();
+            var patientMedicine = new PatientMedicine()
+            {
+                PatientId = patientMedicineDTO.PatientId,
+                MedicineId = patientMedicineDTO.MedicineId,
+                Prescription = patientMedicineDTO.Prescription
+            };
             context.PatientsMedicine.Add(patientMedicine);
-            return context.SaveChangesAsync();
+            await context.SaveChangesAsync();
+
+            Patient patient = await context.Patients.Include(p => p.PatientMedicine!).ThenInclude(pm => pm.Medicine)
+                                                    .FirstAsync(p => p.Id == patientMedicineDTO.PatientId);
+            var newPatientHistory = new History()
+            {
+                PatientId = patient.Id,
+                PatientData = patient.ToString(),
+                Timestamp = DateTime.UtcNow,
+                Note = patientMedicineDTO.Note,
+                Change = HistoryChange.MedicineAdded
+            };
+            context.History.Add(newPatientHistory);
+            await context.SaveChangesAsync();
         }
 
-        public static Task RemovePatientMedicine(PatientMedicine patientMedicine)
+        public static async Task RemovePatientMedicine(ChangePatientMedicineDTO patientMedicineDTO)
         {
-            // TODO: add to history
             var context = new InfoContext();
+            var patientMedicine = new PatientMedicine
+            {
+                PatientId = patientMedicineDTO.PatientId,
+                MedicineId = patientMedicineDTO.MedicineId
+            };
             context.PatientsMedicine.Remove(patientMedicine);
-            return context.SaveChangesAsync();
+
+            Patient patient = await context.Patients.Include(p => p.PatientMedicine!).ThenInclude(pm => pm.Medicine)
+                                                    .FirstAsync(p => p.Id == patientMedicineDTO.PatientId);
+            var newPatientHistory = new History()
+            {
+                PatientId = patient.Id,
+                PatientData = patient.ToString(),
+                Timestamp = DateTime.UtcNow,
+                Note = patientMedicineDTO.Note,
+                Change = HistoryChange.MedicineRemoved
+            };
+            context.History.Add(newPatientHistory);
+            await context.SaveChangesAsync();
         }
 
         #endregion

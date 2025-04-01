@@ -9,7 +9,7 @@ namespace InfoSystem
     public partial class PatientMedicineModal : Window
     {
         public bool Success { get; set; }
-        internal PatientMedicine? Result { get; set; } = null;
+        internal ChangePatientMedicineDTO? Result { get; set; } = null;
 
         private Patient _patient;
 
@@ -21,6 +21,11 @@ namespace InfoSystem
 
             var existingMedicine = patient.PatientMedicine!.Select(pm => pm.MedicineId);
             MedicineSelect.ItemsList = DatabaseManager.GetAllMedicine().OrderBy(m => m.Name).Where(m => existingMedicine.Contains(m.Id) != addMode);
+
+            if (!addMode)
+            {
+                PrescriptionField.Visibility = Visibility.Collapsed;
+            }
 
             PreviewKeyDown += (s, e) =>
             {
@@ -51,11 +56,12 @@ namespace InfoSystem
                     return;
                 }
 
-                Result = new PatientMedicine()
+                Result = new ChangePatientMedicineDTO()
                 {
                     PatientId = _patient.Id,
                     MedicineId = ((Medicine)MedicineSelect.SelectedItems.First()).Id,
-                    Prescription = MedicineNoteBox.inpValue.Text
+                    Prescription = PrescriptionField.inpValue.Text,
+                    Note = NoteField.inpValue.Text,
                 };
 
                 Success = true;

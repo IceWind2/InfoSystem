@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="InfoSystem.FormTextField"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:InfoSystem"
+             mc:Ignorable="d" 
+             d:DesignHeight="180" d:DesignWidth="250">
+
+    <Border BorderThickness="0"
+            Background="Transparent"
+            Padding="0">
+
+        <Grid Background="{StaticResource primaryColourBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" x:Name="tbFieldName" 
+                   Text="{Binding FieldName}" VerticalAlignment="Center" Padding="5,0,0,0"
+                   FontSize="20" FontWeight="Normal" Foreground="{StaticResource darkTextColourBrush}"/>
+
+            <TextBox Grid.Row="1" x:Name="inpValue" VerticalAlignment="Stretch"
+                     FontSize="22" FontWeight="SemiBold" Padding="5 0 5 1"
+                     Background="Transparent" Foreground="{StaticResource darkTextColourBrush}"
+                     BorderThickness="0,1.5,0,1.5" BorderBrush="{Binding BorderColour}"
+                     HorizontalScrollBarVisibility="Disabled"
+                     TextWrapping="Wrap"
+                     Panel.ZIndex="0"/>
+        </Grid>
+    </Border>
+</UserControl>

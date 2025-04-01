@@ -63,15 +63,10 @@ namespace InfoSystem
 
         [NotMapped]
         [FilterProperty]
-        public string? MedicineView
+        public string MedicineView
         {
             get
             {
-                if (PatientMedicine == null)
-                {
-                    return null;
-                }
-
                 var medicineList = string.Join(", ", PatientMedicine!.Select(pm => pm.Medicine!.Name).Order());
                 if (string.IsNullOrEmpty(medicineList))
                 {

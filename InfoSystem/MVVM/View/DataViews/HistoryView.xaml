@@ -14,9 +14,13 @@
               ItemsSource="{Binding History}">
 
         <DataGrid.Columns>
-            <DataGridTextColumn Header="Дата" IsReadOnly="True" CanUserResize="False" Width="20*" Binding="{Binding Path=LocalTime, StringFormat=HH:mm dd-MM-yyyy}"/>
+            <DataGridTextColumn Header="Дата" IsReadOnly="True" CanUserResize="False" Width="160" Binding="{Binding Path=LocalTime, StringFormat=HH:mm dd-MM-yyyy}"/>
 
-            <DataGridTextColumn Header="Информация" IsReadOnly="True" CanUserResize="False" Width="70*" Binding="{Binding Path=PatientData}"/>
+            <DataGridTextColumn Header="Информация" IsReadOnly="True" CanUserResize="False" Width="40*" Binding="{Binding Path=PatientData}"/>
+            
+            <DataGridTextColumn Header="Действие" IsReadOnly="True" CanUserResize="False" Width="200" Binding="{Binding Path=Change}"/>
+            
+            <DataGridTextColumn Header="Заметки" IsReadOnly="True" CanUserResize="False" Width="30*" Binding="{Binding Path=Note}"/>
         </DataGrid.Columns>
     </DataGrid>
 </UserControl>

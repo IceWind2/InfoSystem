@@ -63,6 +63,7 @@ namespace InfoSystem
                     BirthDate = DateTime.Parse(BirthDateFieldBox.inpValue.Text),
                     Sex = SexRadio.GetSelectedValue() == "М" ? Sex.Male : Sex.Female,
                     LocationId = ((Location)LocationSelect.SelectedItems.First()).Id,
+                    Note = NoteTextField.inpValue.Text,
                 };
 
                 Success = true;

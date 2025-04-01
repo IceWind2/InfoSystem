@@ -28,5 +28,10 @@ namespace InfoSystem
         [ForeignKey("Patient")]
         public int PatientId { get; set; }
         public Patient? Patient { get; set; }
+
+        [Required]
+        public string Change {  get; set; }
+
+        public string? Note { get; set; }
     }
 }
