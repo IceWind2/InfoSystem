@@ -42,17 +42,24 @@ namespace InfoSystem
                 LocationsVM = new LocationsViewModel(_mainWindow);
                 CurrentView = LocationsVM;
             }
+            if (CurrentView is ArchiveViewModel)
+            {
+                ArchiveVM = new ArchiveViewModel(_mainWindow);
+                CurrentView = ArchiveVM;
+            }
         }
 
         public RelayCommand PatientsViewCommand {  get; set; }
         public RelayCommand MedicineViewCommand {  get; set; }
         public RelayCommand DiagnosisViewCommand {  get; set; }
         public RelayCommand LocationsViewCommand {  get; set; }
+        public RelayCommand ArchiveViewCommand {  get; set; }
 
         public PatientsViewModel PatientsVM { get; set; }
         public MedicineViewModel MedicineVM { get; set; }
         public DiagnosisViewModel DiagnosisVM { get; set; }
         public LocationsViewModel LocationsVM { get; set; }
+        public ArchiveViewModel ArchiveVM { get; set; }
 
         private Window _mainWindow;
 
@@ -63,6 +70,7 @@ namespace InfoSystem
             MedicineVM = new MedicineViewModel(mainWindow);
             DiagnosisVM = new DiagnosisViewModel(mainWindow);
             LocationsVM = new LocationsViewModel(mainWindow);
+            ArchiveVM = new ArchiveViewModel(mainWindow);
 
             PatientsViewCommand = new RelayCommand(o =>
             {
@@ -76,15 +84,21 @@ namespace InfoSystem
             });
             DiagnosisViewCommand = new RelayCommand(o =>
             {
-                MedicineVM.UpdateData();
+                DiagnosisVM.UpdateData();
                 CurrentView = DiagnosisVM;
             });
             LocationsViewCommand = new RelayCommand(o =>
             {
-                MedicineVM.UpdateData();
+                LocationsVM.UpdateData();
                 CurrentView = LocationsVM;
             });
+            ArchiveViewCommand = new RelayCommand(o =>
+            {
+                ArchiveVM.UpdateData();
+                CurrentView = ArchiveVM;
+            });
 
+            // Deafult view
             CurrentView = PatientsVM;
         }
     }

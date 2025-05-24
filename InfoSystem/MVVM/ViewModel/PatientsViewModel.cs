@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Data;
-using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace InfoSystem
 {
@@ -50,7 +48,6 @@ namespace InfoSystem
 
         public PatientsViewModel(Window mainWindow)
         {
-            var context = new InfoContext();
             _patients = new ObservableCollection<Patient>(DatabaseManager.GetAllPatients());
 
             HistoryCommand = new RelayCommand(o =>
@@ -168,7 +165,7 @@ namespace InfoSystem
 
         public void UpdateData()
         {
-            var context = new InfoContext();
+            using var context = new InfoContext();
             _patients = new ObservableCollection<Patient>(DatabaseManager.GetAllPatients());
         }
     }

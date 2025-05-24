@@ -29,7 +29,7 @@ namespace InfoSystem
 
         public DiagnosisViewModel(Window mainWindow)
         {
-            var context = new InfoContext();
+            using var context = new InfoContext();
             _diagnoses = new ObservableCollection<Diagnosis>(context.Diagnoses.AsNoTracking());
 
             SearchCommand = new RelayCommand(o =>
@@ -107,7 +107,7 @@ namespace InfoSystem
 
         public void UpdateData()
         {
-            var context = new InfoContext();
+            using var context = new InfoContext();
             _diagnoses = new ObservableCollection<Diagnosis>(context.Diagnoses.AsNoTracking());
         }
 

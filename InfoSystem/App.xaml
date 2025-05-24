@@ -16,6 +16,9 @@
             <DataTemplate DataType="{x:Type local:PatientsViewModel}">
                 <local:PatientsView/>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type local:ArchiveViewModel}">
+                <local:ArchiveView/>
+            </DataTemplate>
             <DataTemplate DataType="{x:Type local:MedicineViewModel}">
                 <local:MedicineView/>
             </DataTemplate>

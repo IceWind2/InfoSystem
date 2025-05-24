@@ -5,11 +5,12 @@ namespace InfoSystem
     internal class InfoContext : DbContext
     {
         public DbSet<Patient> Patients { get; set; }
-        public DbSet<PatientMedicine> PatientsMedicine{ get; set; }
-        public DbSet<Medicine> Medicine {  get; set; }
-        public DbSet<Location> Locations{  get; set; }
-        public DbSet<Diagnosis> Diagnoses{  get; set; }
-        public DbSet<History> History{  get; set; }
+        public DbSet<PatientMedicine> PatientsMedicine { get; set; }
+        public DbSet<Medicine> Medicine { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Diagnosis> Diagnoses { get; set; }
+        public DbSet<History> History { get; set; }
+        public DbSet<ArchivedPatient> ArchivedPatients { get; set; }
 
         private const string DbPath = "infosystem.db";
         public InfoContext()
@@ -25,7 +26,7 @@ namespace InfoSystem
 
         public static void InitDatabase()
         {
-            var context = new InfoContext();
+            using var context = new InfoContext();
             context.Database.EnsureCreated();
         }
     }

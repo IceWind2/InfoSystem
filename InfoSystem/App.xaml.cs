@@ -9,6 +9,8 @@ namespace InfoSystem
             base.OnStartup(e);
 
             InfoContext.InitDatabase();
+
+            DatabaseManager.ArchivePatients();
         }
     }
 }

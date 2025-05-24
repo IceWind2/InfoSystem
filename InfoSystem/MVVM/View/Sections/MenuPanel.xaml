@@ -56,6 +56,13 @@
                     <TextBlock Text="Адреса" Style="{StaticResource MenuButtonTextStyle}"/>
                 </StackPanel>
             </RadioButton>
+
+            <RadioButton Style="{StaticResource MenuButtonStyle}" Command="{Binding ArchiveViewCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <Icon:PackIconFontAwesome Kind="AddressBookRegular" Style="{StaticResource MenuButtonIconStyle}"/>
+                    <TextBlock Text="Архив" Style="{StaticResource MenuButtonTextStyle}"/>
+                </StackPanel>
+            </RadioButton>
         </StackPanel>
     </Border>
 </UserControl>

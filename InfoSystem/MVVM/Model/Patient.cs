@@ -18,9 +18,9 @@ namespace InfoSystem
         [Required]
         [FilterProperty]
         public string Name { get; set; }
-        [FilterProperty]
-        public Sex Sex { get; set; }
+        
         [NotMapped]
+        [FilterProperty]
         public string DisplaySex
         {
             get
@@ -33,6 +33,7 @@ namespace InfoSystem
                 };
             }
         }
+        public Sex Sex { get; set; }
 
         public DateTime BirthDate { get; set; }
         
