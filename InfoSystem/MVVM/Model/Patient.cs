@@ -18,7 +18,7 @@ namespace InfoSystem
         [Required]
         [FilterProperty]
         public string Name { get; set; }
-        
+
         [NotMapped]
         [FilterProperty]
         public string DisplaySex
@@ -36,7 +36,7 @@ namespace InfoSystem
         public Sex Sex { get; set; }
 
         public DateTime BirthDate { get; set; }
-        
+
         [NotMapped]
         [FilterProperty]
         public int Age
@@ -63,7 +63,6 @@ namespace InfoSystem
         public virtual Diagnosis? Diagnosis { get; set; }
 
         [NotMapped]
-        [FilterProperty]
         public string MedicineView
         {
             get
@@ -78,6 +77,21 @@ namespace InfoSystem
         }
 
         public virtual ICollection<PatientMedicine>? PatientMedicine { get; set; }
+
+        [NotMapped]
+        [FilterProperty]
+        public string MedicineDetails
+        {
+            get
+            {
+                var sb = new StringBuilder();
+                foreach (var med in PatientMedicine!)
+                {
+                    sb.AppendLine($"{med.Medicine!.Name}  \u2014  {med.Prescription}");
+                }
+                return sb.ToString();
+            }
+        }
 
         public override string ToString()
         {

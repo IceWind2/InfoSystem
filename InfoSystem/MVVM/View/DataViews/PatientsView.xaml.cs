@@ -11,12 +11,12 @@ namespace InfoSystem
 
         private void DataGrid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (sender == null)
+            if (sender is not DataGrid grid)
             {
                 return;
             }
 
-            if (sender is DataGrid grid && grid.SelectedItems != null && grid.SelectedItems.Count == 1)
+            if (grid.SelectedItems != null && grid.SelectedItems.Count == 1)
             {
                 var dgr = grid.ItemContainerGenerator.ContainerFromItem(grid.SelectedItem) as DataGridRow;
                 if (!dgr!.IsMouseOver)

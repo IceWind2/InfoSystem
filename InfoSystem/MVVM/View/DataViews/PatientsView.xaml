@@ -54,6 +54,7 @@
 
         <DataGrid RowStyle="{StaticResource PatientRowStyle}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}" CellStyle="{DynamicResource DataGridCellStyle}" Style="{DynamicResource DataGridStyle}"
                   Grid.Row="1"
+                  RowDetailsVisibilityMode="VisibleWhenSelected"
                   VerticalAlignment="Stretch"
                   Margin="0,20,10,0"
                   ItemsSource="{Binding Patients}" SelectedItem="{Binding SelectedPatient}"
@@ -74,6 +75,12 @@
 
                 <DataGridTextColumn Header="Адрес" IsReadOnly="True" CanUserResize="False" Width="25*" Binding="{Binding Path=Location.Name}"/>
             </DataGrid.Columns>
+
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Path=MedicineDetails}" Padding="10 10 0 0"/>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
         </DataGrid>
     </Grid>
 </UserControl>
