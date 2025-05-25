@@ -11,15 +11,17 @@ namespace InfoSystem
         private string _filter = "";
         private ObservableCollection<Patient> _patients;
         private ICollectionView _patientsView;
- 
         private Patient selectedPatient;
 
+        public event Action<int> CountUpdated;
+        
         public ObservableCollection<Patient> Patients
         {
             get
             {
                 _patientsView = CollectionViewSource.GetDefaultView(_patients);
                 _patientsView.Filter = (x) => (x.ContainsFilter(_filter));
+                CountUpdated?.Invoke(((CollectionView)_patientsView).Count);
                 return _patients;
             }
         }
@@ -49,7 +51,7 @@ namespace InfoSystem
         public PatientsViewModel(Window mainWindow)
         {
             _patients = new ObservableCollection<Patient>(DatabaseManager.GetAllPatients());
-
+            
             HistoryCommand = new RelayCommand(o =>
             {
                 if (o is Patient patient)
@@ -99,6 +101,7 @@ namespace InfoSystem
             {
                 _filter = (string)Application.Current.Properties["SearchBoxFilter"]!;
                 _patientsView!.Refresh();
+                CountUpdated?.Invoke(((CollectionView)_patientsView).Count);
             });
 
             RefreshCommand = new RelayCommand(o =>

@@ -8,8 +8,8 @@ namespace InfoSystem
         {
             base.OnStartup(e);
 
+            // Startup database logic
             InfoContext.InitDatabase();
-
             DatabaseManager.ArchivePatients();
         }
     }

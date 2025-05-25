@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace InfoSystem
 {
@@ -7,6 +8,20 @@ namespace InfoSystem
         public PatientsView()
         {
             InitializeComponent();
+            DataContextChanged += OnContextChange;
+        }
+
+        private void OnContextChange(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue is PatientsViewModel newPvm)
+            {
+                newPvm.CountUpdated += ToolBar.UpdateCount;
+            }
+
+            if (e.OldValue is PatientsViewModel oldPvm)
+            {
+                oldPvm.CountUpdated -= ToolBar.UpdateCount;
+            }
         }
 
         private void DataGrid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

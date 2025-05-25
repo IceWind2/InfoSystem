@@ -18,7 +18,13 @@ namespace InfoSystem
 
             foreach ( var property in entityProperties )
             {
-                if (property.GetValue(entity)!.ToString()!.Contains(filter, StringComparison.InvariantCultureIgnoreCase))
+                string? propValue = property.GetValue(entity)?.ToString();
+                if (propValue == null)
+                {
+                    continue;
+                }
+
+                if (propValue.Contains(filter, StringComparison.InvariantCultureIgnoreCase))
                 {
                     return true;
                 }

@@ -50,7 +50,7 @@
             </Style>
         </Grid.Resources>
 
-        <local:Toolbar Grid.Row="0"/>
+        <local:Toolbar x:Name="ToolBar" Grid.Row="0"/>
 
         <DataGrid RowStyle="{StaticResource PatientRowStyle}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}" CellStyle="{DynamicResource DataGridCellStyle}" Style="{DynamicResource DataGridStyle}"
                   Grid.Row="1"

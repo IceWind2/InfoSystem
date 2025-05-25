@@ -44,6 +44,10 @@
             </Separator>
 
             <local:SearchBox x:Name="ToolbarSearchBox" Padding="0 7" Width="200"/>
+
+            <TextBlock x:Name="CounterBlock"
+                       Margin="20 0" VerticalAlignment="Center"
+                       FontSize="20" Foreground="{StaticResource darkTextColourBrush}" Text="Placeholder"/>
         </StackPanel>
     </Border>
 </UserControl>
