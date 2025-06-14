@@ -88,7 +88,7 @@
                      x:Name="lvSelect"
                      Style="{StaticResource selectLB}"
                      ItemContainerStyle="{StaticResource selectItem}"
-                     ItemsSource="{Binding ItemsList}" DisplayMemberPath="Name"
+                     ItemsSource="{Binding ItemsList}"
                      BorderBrush="{Binding BorderColour}"/>
         </Grid>
     </Border>

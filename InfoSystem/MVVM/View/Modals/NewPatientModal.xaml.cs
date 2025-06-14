@@ -17,7 +17,7 @@ namespace InfoSystem
             Owner = parent;
             InitializeComponent();
 
-            LocationSelect.ItemsList = DatabaseManager.Locations.OrderBy(m => m.Name);
+            LocationSelect.ItemsList = DatabaseManager.GetAllLocations();
             FillSexFormRadio();
 
             PreviewKeyDown += (s, e) =>

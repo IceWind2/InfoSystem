@@ -16,7 +16,7 @@ namespace InfoSystem
             var entityType = entity.GetType();
             var entityProperties = entity.GetType().GetProperties().Where(pr => pr.GetCustomAttribute<FilterProperty>() != null);
 
-            foreach ( var property in entityProperties )
+            foreach (var property in entityProperties)
             {
                 string? propValue = property.GetValue(entity)?.ToString();
                 if (propValue == null)
@@ -34,5 +34,6 @@ namespace InfoSystem
         }
     }
 
+    [AttributeUsage(AttributeTargets.Property)]
     public class FilterProperty : Attribute { }
 }

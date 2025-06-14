@@ -13,6 +13,9 @@
     <Compile Update="MVVM\View\Components\FormRadio.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="MVVM\View\Components\FormSelectBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="MVVM\View\Components\FormTextBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -53,6 +56,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="MVVM\View\Sections\MenuPanel.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="MVVM\View\Sections\PatientFilters.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="MVVM\View\Sections\Toolbar.xaml.cs">
@@ -115,6 +121,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MVVM\View\Sections\MenuPanel.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MVVM\View\Sections\PatientFilters.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MVVM\View\Sections\Toolbar.xaml">

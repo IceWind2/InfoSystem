@@ -15,12 +15,12 @@ namespace InfoSystem
         {
             if (e.NewValue is PatientsViewModel newPvm)
             {
-                newPvm.CountUpdated += ToolBar.UpdateCount;
+                newPvm.CountUpdated += Filters.UpdateCount;
             }
 
             if (e.OldValue is PatientsViewModel oldPvm)
             {
-                oldPvm.CountUpdated -= ToolBar.UpdateCount;
+                oldPvm.CountUpdated -= Filters.UpdateCount;
             }
         }
 

@@ -50,13 +50,16 @@
             </Style>
         </Grid.Resources>
 
-        <local:Toolbar x:Name="ToolBar" Grid.Row="0"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <local:Toolbar x:Name="ToolBar" Margin="0 0 100 0"/>
+            <local:PatientFilters x:Name="Filters"/>
+        </StackPanel>
 
         <DataGrid RowStyle="{StaticResource PatientRowStyle}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}" CellStyle="{DynamicResource DataGridCellStyle}" Style="{DynamicResource DataGridStyle}"
                   Grid.Row="1"
                   RowDetailsVisibilityMode="VisibleWhenSelected"
                   VerticalAlignment="Stretch"
-                  Margin="0,20,10,0"
+                  Margin="0,30,10,0"
                   ItemsSource="{Binding Patients}" SelectedItem="{Binding SelectedPatient}"
                   MouseLeftButtonDown="DataGrid_MouseLeftButtonDown">
 

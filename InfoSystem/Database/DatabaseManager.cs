@@ -223,17 +223,15 @@ namespace InfoSystem
             context.Medicine.Remove(medicine);
             return context.SaveChangesAsync();
         }
-
-
+        
         #endregion
 
-        public static IEnumerable<Location> Locations
+        public static List<Location> GetAllLocations()
         {
-            get
-            {
-                using var context = new InfoContext();
-                return context.Locations.AsNoTracking().ToList();
-            }
+            using var context = new InfoContext();
+            return context.Locations.AsNoTracking()
+                                    .OrderBy(l => l.Name)
+                                    .ToList();
         }
 
         public static IEnumerable<Diagnosis> Diagnoses

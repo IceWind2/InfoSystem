@@ -6,16 +6,16 @@
              xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:local="clr-namespace:InfoSystem"
              mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="800">
+             d:DesignHeight="40" d:DesignWidth="480">
     
     <Border Grid.Row="0"
             Background="{StaticResource secondaryHighlightColourBrush}"
             CornerRadius="0,0,15,15"
-            Height="40">
+            Height="40" Width="480">
 
         <StackPanel Background="Transparent"
                     FlowDirection="LeftToRight" Orientation="Horizontal"
-                    Margin="20,0,0,0"
+                    Margin="20 0"
                     MaxHeight="40">
 
             <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding RefreshCommand}">
@@ -44,10 +44,6 @@
             </Separator>
 
             <local:SearchBox x:Name="ToolbarSearchBox" Padding="0 7" Width="200"/>
-
-            <TextBlock x:Name="CounterBlock"
-                       Margin="20 0" VerticalAlignment="Center"
-                       FontSize="20" Foreground="{StaticResource darkTextColourBrush}" Text="Placeholder"/>
         </StackPanel>
     </Border>
 </UserControl>

@@ -36,12 +36,12 @@
             </Style>
         </Grid.Resources>
 
-        <local:Toolbar Grid.Row="0"/>
+        <local:Toolbar Grid.Row="0" HorizontalAlignment="Left"/>
 
         <DataGrid RowStyle="{StaticResource PatientRowStyle}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}" CellStyle="{DynamicResource DataGridCellStyle}" Style="{DynamicResource DataGridStyle}"
           Grid.Row="1"
           VerticalAlignment="Stretch"
-          Margin="0,20,10,0"
+          Margin="0,30,10,0"
           ItemsSource="{Binding Patients}" SelectedItem="{Binding SelectedPatient}"
           MouseLeftButtonDown="DataGrid_MouseLeftButtonDown">
 
