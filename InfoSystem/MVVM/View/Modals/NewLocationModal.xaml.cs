@@ -8,6 +8,7 @@ namespace InfoSystem
     public partial class NewLocationModal : Window
     {
         public bool Success { get; set; }
+        public bool Cancelled { get; set; }
         internal Location? Result { get; set; } = null;
 
         public NewLocationModal(Window parent)
@@ -19,7 +20,8 @@ namespace InfoSystem
             {
                 if (e.Key == System.Windows.Input.Key.Escape)
                 {
-                    Success = false;
+                    Success = true;
+                    Cancelled = true;
                     Close();
                 }
             };
@@ -32,7 +34,8 @@ namespace InfoSystem
 
         private void btnCansel_Click(object sender, RoutedEventArgs e)
         {
-            Success = false;
+            Success = true;
+            Cancelled = true;
             Close();
         }
 

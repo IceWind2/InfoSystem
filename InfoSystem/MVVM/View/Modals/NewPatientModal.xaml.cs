@@ -10,21 +10,24 @@ namespace InfoSystem
     public partial class NewPatientModal : Window
     {
         public bool Success { get; set; }
-        internal CreatePatientDTO? Result { get; set; } = null;
+        public bool Cancelled { get; set; }
+        internal CreateUpdatePatientDTO? Result { get; set; } = null;
 
         public NewPatientModal(Window parent)
         {
             Owner = parent;
             InitializeComponent();
 
-            LocationSelect.ItemsList = DatabaseManager.GetAllLocations();
+            using var context = InfoContext.CreateDbContext();
+            LocationSelect.ItemsList = context.GetAllEntities<Location>();
             FillSexFormRadio();
 
             PreviewKeyDown += (s, e) =>
             {
                 if (e.Key == System.Windows.Input.Key.Escape)
                 {
-                    Success = false;
+                    Success = true;
+                    Cancelled = true;
                     Close();
                 }
             };
@@ -40,7 +43,8 @@ namespace InfoSystem
 
         private void btnCansel_Click(object sender, RoutedEventArgs e)
         {
-            Success = false;
+            Success = true;
+            Cancelled = true;
             Close();
         }
 
@@ -57,7 +61,7 @@ namespace InfoSystem
                     return;
                 }
 
-                Result = new CreatePatientDTO()
+                Result = new CreateUpdatePatientDTO()
                 {
                     Name = NameFieldBox.inpValue.Text,
                     BirthDate = DateTime.Parse(BirthDateFieldBox.inpValue.Text),

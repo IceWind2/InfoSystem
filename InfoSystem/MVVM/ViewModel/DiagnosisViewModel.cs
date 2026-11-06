@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
@@ -10,7 +11,7 @@ namespace InfoSystem
     {
         private string _filter = "";
         private ObservableCollection<Diagnosis> _diagnoses;
-        private ICollectionView _diagnosesView;
+        private ICollectionView? _diagnosesView;
         public ObservableCollection<Diagnosis> Diagnoses
         {
             get
@@ -29,8 +30,8 @@ namespace InfoSystem
 
         public DiagnosisViewModel(Window mainWindow)
         {
-            using var context = new InfoContext();
-            _diagnoses = new ObservableCollection<Diagnosis>(context.Diagnoses.AsNoTracking());
+            using var context = InfoContext.CreateDbContext();
+            _diagnoses = new ObservableCollection<Diagnosis>(context.GetAllEntities<Diagnosis>());
 
             SearchCommand = new RelayCommand(o =>
             {
@@ -50,14 +51,20 @@ namespace InfoSystem
                 newDiagnosisModal.ShowDialog();
                 mainWindow.Opacity = 1;
 
-                if (newDiagnosisModal.Success)
+                if (!newDiagnosisModal.Success)
                 {
-                    await DatabaseManager.AddDiagnosis(newDiagnosisModal.Result!);
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        Diagnoses.Add(newDiagnosisModal.Result!);
-                    });
+                    MessageBox.Show($"При добавлении диагноза произошла ошибка", "Ошибка выполнения команды", MessageBoxButton.OK);
+                    return;
                 }
+
+                using var context = await InfoContext.CreateDbContextWithTransactionAsync();
+                context.AddEntity(newDiagnosisModal.Result!);
+                await context.CommitAsync();
+                
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Diagnoses.Add(newDiagnosisModal.Result!);
+                });
             });
 
             EditCommand = new AsyncRelayCommand(async o =>
@@ -74,15 +81,26 @@ namespace InfoSystem
                 newDiagnosisModal.ShowDialog();
                 mainWindow.Opacity = 1;
 
-                if (newDiagnosisModal.Success)
+                if (newDiagnosisModal.Cancelled)
                 {
-                    newDiagnosisModal.Result!.Id = currentSelectedDiagnosis.Id;
-                    await DatabaseManager.UpdateDiagnosis(newDiagnosisModal.Result!);
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        Diagnoses[Diagnoses.IndexOf(currentSelectedDiagnosis)] = newDiagnosisModal.Result!;
-                    });
+                    return;
                 }
+
+                if (!newDiagnosisModal.Success)
+                {
+                    MessageBox.Show($"При обновлении диагноза произошла ошибка", "Ошибка выполнения команды", MessageBoxButton.OK);
+                    return;
+                }
+
+                using var context = await InfoContext.CreateDbContextWithTransactionAsync();
+                newDiagnosisModal.Result!.Id = currentSelectedDiagnosis.Id;
+                context.UpdateEntity(newDiagnosisModal.Result!);
+                await context.CommitAsync();
+                
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Diagnoses[Diagnoses.IndexOf(currentSelectedDiagnosis)] = newDiagnosisModal.Result!;
+                });
             });
 
             RemoveCommand = new AsyncRelayCommand(async o =>
@@ -92,11 +110,30 @@ namespace InfoSystem
                     return;
                 }
 
-                if (!await DatabaseManager.RemoveDiagnosis(SelectedDiagnosis))
+                using var context = InfoContext.CreateDbContext();
+                var patientsWithDiagnosis = await context.Patients
+                    .Where(p => p.DiagnosisId == SelectedDiagnosis.Id)
+                    .ToListAsync();
+
+                if (patientsWithDiagnosis.Count > 0)
                 {
-                    MessageBox.Show("Невозможно удалить диагноз, так как он еще используется", "Ошибка удаления", MessageBoxButton.OK);
-                    return;
+                    var response = MessageBox.Show("Данный диагноз привязан к одному или нескольким пациентам, вы уверены, что хотите его удалить?", "Подтвердите действие", MessageBoxButton.YesNo);
+                    if (response == MessageBoxResult.No)
+                    {
+                        return;
+                    }
                 }
+
+                await context.BeginTransactionAsync();
+                context.RemoveEntity(SelectedDiagnosis);
+                await context.SaveChangesAsync();
+
+                foreach (var patient in patientsWithDiagnosis)
+                {
+                    context.PatientsQueries.WritePatientHistory(patient.Id, string.Empty, "Диагноз удален из системы");
+                }
+
+                await context.CommitAsync();
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -107,12 +144,12 @@ namespace InfoSystem
 
         public void UpdateData()
         {
-            using var context = new InfoContext();
-            _diagnoses = new ObservableCollection<Diagnosis>(context.Diagnoses.AsNoTracking());
+            using var context = InfoContext.CreateDbContext();
+            _diagnoses = new ObservableCollection<Diagnosis>(context.GetAllEntities<Diagnosis>());
         }
 
-        private Diagnosis _selectedDiagnosis;
-        public Diagnosis SelectedDiagnosis
+        private Diagnosis? _selectedDiagnosis;
+        public Diagnosis? SelectedDiagnosis
         {
             get { return _selectedDiagnosis; }
             set

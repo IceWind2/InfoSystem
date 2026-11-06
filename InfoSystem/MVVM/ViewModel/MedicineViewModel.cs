@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
@@ -10,7 +11,7 @@ namespace InfoSystem
     {
         private string _filter = "";
         private ObservableCollection<Medicine> _medicine;
-        private ICollectionView _medicineView;
+        private ICollectionView? _medicineView;
         public ObservableCollection<Medicine> Medicine
         {
             get
@@ -29,8 +30,8 @@ namespace InfoSystem
 
         public MedicineViewModel(Window mainWindow)
         {
-            using var context = new InfoContext();
-            _medicine = new ObservableCollection<Medicine>(context.Medicine.AsNoTracking());
+            using var context = InfoContext.CreateDbContext();
+            _medicine = new ObservableCollection<Medicine>(context.GetAllEntities<Medicine>());
 
             SearchCommand = new RelayCommand(o =>
             {
@@ -50,14 +51,20 @@ namespace InfoSystem
                 newMedicineModal.ShowDialog();
                 mainWindow.Opacity = 1;
 
-                if (newMedicineModal.Success)
+                if (!newMedicineModal.Success)
                 {
-                    await DatabaseManager.AddMedicine(newMedicineModal.Result!);
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        Medicine.Add(newMedicineModal.Result!);
-                    });
+                    MessageBox.Show($"При добавлении лекарства произошла ошибка", "Ошибка выполнения команды", MessageBoxButton.OK);
+                    return;
                 }
+
+                using var context = await InfoContext.CreateDbContextWithTransactionAsync();
+                context.AddEntity(newMedicineModal.Result!);
+                await context.CommitAsync();
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Medicine.Add(newMedicineModal.Result!);
+                });
             });
 
             EditCommand = new AsyncRelayCommand(async o =>
@@ -69,20 +76,31 @@ namespace InfoSystem
 
                 var currentSelectedMedicine = SelectedMedicine;
                 mainWindow.Opacity = 0.4;
-                var newMedicineModal = new NewMedicineModal(mainWindow);
-                newMedicineModal.SetData(currentSelectedMedicine);
-                newMedicineModal.ShowDialog();
+                var medicineModal = new NewMedicineModal(mainWindow);
+                medicineModal.SetData(currentSelectedMedicine);
+                medicineModal.ShowDialog();
                 mainWindow.Opacity = 1;
 
-                if (newMedicineModal.Success)
+                if (medicineModal.Cancelled)
                 {
-                    newMedicineModal.Result!.Id = currentSelectedMedicine.Id;
-                    await DatabaseManager.UpdateMedicine(newMedicineModal.Result!);
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        Medicine[Medicine.IndexOf(currentSelectedMedicine)] = newMedicineModal.Result!;
-                    });
+                    return;
                 }
+
+                if (!medicineModal.Success)
+                {
+                    MessageBox.Show($"При обновлении лекарства произошла ошибка", "Ошибка выполнения команды", MessageBoxButton.OK);
+                    return;
+                }
+
+                using var context = await InfoContext.CreateDbContextWithTransactionAsync();
+                medicineModal.Result!.Id = currentSelectedMedicine.Id;
+                context.UpdateEntity(medicineModal.Result!);
+                await context.CommitAsync();
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Medicine[Medicine.IndexOf(currentSelectedMedicine)] = medicineModal.Result!;
+                });
             });
 
             RemoveCommand = new AsyncRelayCommand(async o =>
@@ -92,7 +110,32 @@ namespace InfoSystem
                     return;
                 }
 
-                await DatabaseManager.RemoveMedicine(SelectedMedicine);
+                using var context = InfoContext.CreateDbContext();
+                var patientsWithMedicine = await context.Patients
+                    .Include(p => p.PatientMedicine)
+                    .Where(p => p.PatientMedicine.Select(pm => pm.MedicineId).Contains(SelectedMedicine.Id))
+                    .ToListAsync();
+
+                if (patientsWithMedicine.Count > 0)
+                {
+                    var response = MessageBox.Show("Данное лекарство привязано к одному или нескольким пациентам, вы уверены, что хотите его удалить?", "Подтвердите действие", MessageBoxButton.YesNo);
+                    if (response == MessageBoxResult.No)
+                    {
+                        return;
+                    }
+                }
+
+                await context.BeginTransactionAsync();
+                context.RemoveEntity(SelectedMedicine);
+                await context.SaveChangesAsync();
+
+                foreach (var patient in patientsWithMedicine)
+                {
+                    context.PatientsQueries.WritePatientHistory(patient.Id, string.Empty, $"Лекарство {SelectedMedicine.Name} удалено из системы");
+                }
+
+                await context.CommitAsync();
+
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     Medicine.Remove(SelectedMedicine);
@@ -102,12 +145,12 @@ namespace InfoSystem
 
         public void UpdateData()
         {
-            using var context = new InfoContext();
-            _medicine = new ObservableCollection<Medicine>(context.Medicine.AsNoTracking());
+            using var context = InfoContext.CreateDbContext();
+            _medicine = new ObservableCollection<Medicine>(context.GetAllEntities<Medicine>());
         }
 
-        private Medicine selectedMedicine;
-        public Medicine SelectedMedicine
+        private Medicine? selectedMedicine;
+        public Medicine? SelectedMedicine
         {
             get { return selectedMedicine; }
             set

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
@@ -10,7 +11,7 @@ namespace InfoSystem
     {
         private string _filter = "";
         private ObservableCollection<Location> _locations;
-        private ICollectionView _locationsView;
+        private ICollectionView? _locationsView;
         public ObservableCollection<Location> Locations
         {
             get
@@ -29,8 +30,8 @@ namespace InfoSystem
 
         public LocationsViewModel(Window mainWindow)
         {
-            using var context = new InfoContext();
-            _locations = new ObservableCollection<Location>(context.Locations.AsNoTracking());
+            using var context = InfoContext.CreateDbContext();
+            _locations = new ObservableCollection<Location>(context.GetAllEntities<Location>());
 
             SearchCommand = new RelayCommand(o =>
             {
@@ -50,14 +51,20 @@ namespace InfoSystem
                 newLocationModal.ShowDialog();
                 mainWindow.Opacity = 1;
 
-                if (newLocationModal.Success)
+                if (!newLocationModal.Success)
                 {
-                    await DatabaseManager.AddLocation(newLocationModal.Result!);
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        Locations.Add(newLocationModal.Result!);
-                    });
+                    MessageBox.Show($"При добавлении адреса произошла ошибка", "Ошибка выполнения команды", MessageBoxButton.OK);
+                    return;
                 }
+
+                using var context = await InfoContext.CreateDbContextWithTransactionAsync();
+                context.AddEntity(newLocationModal.Result!);
+                await context.CommitAsync();
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Locations.Add(newLocationModal.Result!);
+                });
             });
 
             EditCommand = new AsyncRelayCommand(async o =>
@@ -69,20 +76,31 @@ namespace InfoSystem
 
                 var currentSelectedLocation = SelectedLocation;
                 mainWindow.Opacity = 0.4;
-                var newLocationModal = new NewLocationModal(mainWindow);
-                newLocationModal.SetData(currentSelectedLocation);
-                newLocationModal.ShowDialog();
+                var locationModal = new NewLocationModal(mainWindow);
+                locationModal.SetData(currentSelectedLocation);
+                locationModal.ShowDialog();
                 mainWindow.Opacity = 1;
 
-                if (newLocationModal.Success)
+                if (locationModal.Cancelled)
                 {
-                    newLocationModal.Result!.Id = currentSelectedLocation.Id;
-                    await DatabaseManager.UpdateLocation(newLocationModal.Result!);
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        Locations[Locations.IndexOf(currentSelectedLocation)] = newLocationModal.Result!;
-                    });
+                    return;
                 }
+
+                if (!locationModal.Success)
+                {
+                    MessageBox.Show($"При обновлении адреса произошла ошибка", "Ошибка выполнения команды", MessageBoxButton.OK);
+                    return;
+                }
+
+                using var context = await InfoContext.CreateDbContextWithTransactionAsync();
+                locationModal.Result!.Id = currentSelectedLocation.Id;
+                context.UpdateEntity(locationModal.Result!);
+                await context.CommitAsync();
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Locations[Locations.IndexOf(currentSelectedLocation)] = locationModal.Result!;
+                });
             });
 
             RemoveCommand = new AsyncRelayCommand(async o =>
@@ -92,11 +110,30 @@ namespace InfoSystem
                     return;
                 }
 
-                if (!await DatabaseManager.TryRemoveLocation(SelectedLocation))
+                using var context = InfoContext.CreateDbContext();
+                var patientsWithLocation = await context.Patients
+                    .Where(p => p.LocationId == SelectedLocation.Id)
+                    .ToListAsync();
+
+                if (patientsWithLocation.Count > 0)
                 {
-                    MessageBox.Show("Невозможно удалить адрес, так как он еще используется", "Ошибка удаления", MessageBoxButton.OK);
-                    return;
+                    var response = MessageBox.Show("Данный адрес привязан к одному или нескольким пациентам, вы уверены, что хотите его удалить?", "Подтвердите действие", MessageBoxButton.YesNo);
+                    if (response == MessageBoxResult.No)
+                    {
+                        return;
+                    }
                 }
+
+                await context.BeginTransactionAsync();
+                context.RemoveEntity(SelectedLocation);
+                await context.SaveChangesAsync();
+
+                foreach (var patient in patientsWithLocation)
+                {
+                    context.PatientsQueries.WritePatientHistory(patient.Id, string.Empty, "Адрес удален из системы");
+                }
+
+                await context.CommitAsync();
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -107,12 +144,12 @@ namespace InfoSystem
 
         public void UpdateData()
         {
-            using var context = new InfoContext();
-            _locations = new ObservableCollection<Location>(context.Locations.AsNoTracking());
+            using var context = InfoContext.CreateDbContext();
+            _locations = new ObservableCollection<Location>(context.GetAllEntities<Location>());
         }
 
-        private Location _selectedLocation;
-        public Location SelectedLocation
+        private Location? _selectedLocation;
+        public Location? SelectedLocation
         {
             get { return _selectedLocation; }
             set

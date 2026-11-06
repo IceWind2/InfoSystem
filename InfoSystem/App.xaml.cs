@@ -10,7 +10,9 @@ namespace InfoSystem
 
             // Startup database logic
             InfoContext.InitDatabase();
-            DatabaseManager.ArchivePatients();
+            using var context = InfoContext.CreateDbContextWithTransactionAsync().GetAwaiter().GetResult();
+            context.PatientsQueries.ArchiveOldPatientsAsync().GetAwaiter().GetResult();
+            context.CommitAsync().GetAwaiter().GetResult();
         }
     }
 }

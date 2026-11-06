@@ -50,7 +50,8 @@ namespace InfoSystem
 
         public PatientsViewModel(Window mainWindow)
         {
-            _patients = new ObservableCollection<Patient>(DatabaseManager.GetAllPatients());
+            using var context = InfoContext.CreateDbContext();
+            _patients = new ObservableCollection<Patient>(context.PatientsQueries.GetPatientsListAsync().GetAwaiter().GetResult());
             
             HistoryCommand = new RelayCommand(o =>
             {
@@ -72,11 +73,17 @@ namespace InfoSystem
                     addMedicineModal.ShowDialog();
                     mainWindow.Opacity = 1;
 
-                    if (addMedicineModal.Success)
+                    if (!addMedicineModal.Success)
                     {
-                        await DatabaseManager.AddPatientMedicine(addMedicineModal.Result!);
-                        ((MainViewModel)mainWindow.DataContext).UpdateView();
+                        MessageBox.Show($"При добавлении лекарства к пациенту произошла ошибка", "Ошибка выполнения команды", MessageBoxButton.OK);
+                        return;
                     }
+
+                    using var context = await InfoContext.CreateDbContextWithTransactionAsync();
+                    context.PatientsQueries.AddPatientMedicine(addMedicineModal.Result!);
+                    await context.CommitAsync();
+
+                    ((MainViewModel)mainWindow.DataContext).UpdateView();
                 }
             });
 
@@ -85,15 +92,21 @@ namespace InfoSystem
                 if (o is Patient patient)
                 {
                     mainWindow.Opacity = 0.4;
-                    var addMedicineModal = new PatientMedicineModal(mainWindow, patient, false);
-                    addMedicineModal.ShowDialog();
+                    var removeMedicineModal = new PatientMedicineModal(mainWindow, patient, false);
+                    removeMedicineModal.ShowDialog();
                     mainWindow.Opacity = 1;
 
-                    if (addMedicineModal.Success)
+                    if (!removeMedicineModal.Success)
                     {
-                        await DatabaseManager.RemovePatientMedicine(addMedicineModal.Result!);
-                        ((MainViewModel)mainWindow.DataContext).UpdateView();
+                        MessageBox.Show($"При удалении лекарства у пациента произошла ошибка", "Ошибка выполнения команды", MessageBoxButton.OK);
+                        return;
                     }
+
+                    using var context = await InfoContext.CreateDbContextWithTransactionAsync();
+                    context.PatientsQueries.RemovePatientMedicine(removeMedicineModal.Result!);
+                    await context.CommitAsync();
+
+                    ((MainViewModel)mainWindow.DataContext).UpdateView();
                 }
             });
 
@@ -115,15 +128,30 @@ namespace InfoSystem
                 var newPatientModal = new NewPatientModal(mainWindow);
                 newPatientModal.ShowDialog();
                 mainWindow.Opacity = 1;
-
-                if (newPatientModal.Success)
+                
+                if (newPatientModal.Cancelled)
                 {
-                    var newPatient = await DatabaseManager.AddPatient(newPatientModal.Result!);
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        Patients.Add(newPatient);
-                    });
+                    return;
                 }
+
+                if (!newPatientModal.Success)
+                {
+                    MessageBox.Show($"При добавлении пациента произошла ошибка", "Ошибка выполнения команды", MessageBoxButton.OK);
+                    return;
+                }
+
+                using var context = await InfoContext.CreateDbContextWithTransactionAsync();
+                var newPatient = context.PatientsQueries.AddPatient(newPatientModal.Result!);
+                await context.SaveChangesAsync();
+                context.PatientsQueries.WritePatientHistory(newPatient.Id, string.Empty, HistoryChange.NewPatient);
+                await context.CommitAsync();
+
+                await context.Entry(newPatient).Collection(p => p.PatientMedicine).LoadAsync();
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Patients.Add(newPatient);
+                });
             });
 
             EditCommand = new AsyncRelayCommand(async o =>
@@ -135,20 +163,32 @@ namespace InfoSystem
 
                 var currentSelectedPatient = SelectedPatient;
                 mainWindow.Opacity = 0.4;
-                var newPatientModal = new NewPatientModal(mainWindow);
-                newPatientModal.SetData(currentSelectedPatient);
-                newPatientModal.ShowDialog();
+                var patientModal = new NewPatientModal(mainWindow);
+                patientModal.SetData(currentSelectedPatient);
+                patientModal.ShowDialog();
                 mainWindow.Opacity = 1;
 
-                if (newPatientModal.Success)
+                if (patientModal.Cancelled)
                 {
-                    newPatientModal.Result!.Id = currentSelectedPatient.Id;
-                    var newPatient = await DatabaseManager.UpdatePatient(newPatientModal.Result!);
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        Patients[Patients.IndexOf(currentSelectedPatient)] = newPatient;
-                    });
+                    return;
                 }
+
+                if (!patientModal.Success)
+                {
+                    MessageBox.Show($"При обновлении пациента произошла ошибка", "Ошибка выполнения команды", MessageBoxButton.OK);
+                    return;
+                }
+
+                using var context = await InfoContext.CreateDbContextWithTransactionAsync();
+                patientModal.Result!.Id = currentSelectedPatient.Id;
+                var updatedPatient = await context.PatientsQueries.UpdatePatientAsync(patientModal.Result!);
+                context.PatientsQueries.WritePatientHistory(updatedPatient.Id, "", HistoryChange.NewPatient); // note???
+                await context.CommitAsync();
+                    
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Patients[Patients.IndexOf(currentSelectedPatient)] = updatedPatient;
+                });
             });
 
             RemoveCommand = new AsyncRelayCommand(async o =>
@@ -158,7 +198,10 @@ namespace InfoSystem
                     return;
                 }
 
-                await DatabaseManager.RemovePatient(SelectedPatient);
+                using var context = await InfoContext.CreateDbContextWithTransactionAsync();
+                context.RemoveEntity(SelectedPatient);
+                await context.CommitAsync();
+
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     Patients.Remove(SelectedPatient);
@@ -168,8 +211,8 @@ namespace InfoSystem
 
         public void UpdateData()
         {
-            using var context = new InfoContext();
-            _patients = new ObservableCollection<Patient>(DatabaseManager.GetAllPatients());
+            using var context = InfoContext.CreateDbContext();
+            _patients = new ObservableCollection<Patient>(context.PatientsQueries.GetPatientsListAsync().GetAwaiter().GetResult());
         }
     }
 }

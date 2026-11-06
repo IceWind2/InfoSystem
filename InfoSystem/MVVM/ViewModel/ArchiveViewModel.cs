@@ -43,7 +43,8 @@ namespace InfoSystem
 
         public ArchiveViewModel(Window mainWindow)
         {
-            _patients = new ObservableCollection<ArchivedPatient>(DatabaseManager.GetAllArchivedPatients());
+            using var context = InfoContext.CreateDbContext();
+            _patients = new ObservableCollection<ArchivedPatient>(context.PatientsQueries.GetArchivedPatientsListAsync().GetAwaiter().GetResult());
 
             HistoryCommand = new RelayCommand(o =>
             {
@@ -71,8 +72,8 @@ namespace InfoSystem
 
         public void UpdateData()
         {
-            using var context = new InfoContext();
-            _patients = new ObservableCollection<ArchivedPatient>(DatabaseManager.GetAllArchivedPatients());
+            using var context = InfoContext.CreateDbContext();
+            _patients = new ObservableCollection<ArchivedPatient>(context.PatientsQueries.GetArchivedPatientsListAsync().GetAwaiter().GetResult());
         }
     }
 }

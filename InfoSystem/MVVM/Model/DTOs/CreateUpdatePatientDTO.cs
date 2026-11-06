@@ -2,7 +2,7 @@
 
 namespace InfoSystem
 {
-    internal sealed class CreatePatientDTO
+    internal sealed class CreateUpdatePatientDTO
     {
         public int Id { get; set; }
 

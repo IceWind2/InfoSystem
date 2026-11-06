@@ -9,6 +9,7 @@ namespace InfoSystem
     public partial class NewMedicineModal : Window
     {
         public bool Success { get; set; }
+        public bool Cancelled { get; set; }
         internal Medicine? Result { get; set; } = null;
 
         public NewMedicineModal(Window parent)
@@ -20,7 +21,8 @@ namespace InfoSystem
             {
                 if (e.Key == System.Windows.Input.Key.Escape)
                 {
-                    Success = false;
+                    Success = true;
+                    Cancelled = true;
                     Close();
                 }
             };
@@ -33,7 +35,8 @@ namespace InfoSystem
 
         private void btnCansel_Click(object sender, RoutedEventArgs e)
         {
-            Success = false;
+            Success = true;
+            Cancelled = true;
             Close();
         }
 

@@ -17,7 +17,7 @@ namespace InfoSystem
 
         [Required]
         [FilterProperty]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         [NotMapped]
         [FilterProperty]
@@ -52,13 +52,13 @@ namespace InfoSystem
 
         [ForeignKey("Location")]
         public int? LocationId { get; set; }
-        [DeleteBehavior(DeleteBehavior.Restrict)]
+        [DeleteBehavior(DeleteBehavior.Cascade)]
         [FilterProperty]
         public virtual Location? Location { get; set; }
 
         [ForeignKey("Diagnosis")]
         public int? DiagnosisId { get; set; }
-        [DeleteBehavior(DeleteBehavior.Restrict)]
+        [DeleteBehavior(DeleteBehavior.Cascade)]
         [FilterProperty]
         public virtual Diagnosis? Diagnosis { get; set; }
 
@@ -91,13 +91,6 @@ namespace InfoSystem
                 }
                 return sb.ToString();
             }
-        }
-
-        public override string ToString()
-        {
-            var sb = new StringBuilder();
-            sb.AppendJoin(" | ", Name, DisplaySex, Age, Diagnosis?.Name, MedicineView, Location?.Name);
-            return sb.ToString();
         }
     }
 }

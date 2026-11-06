@@ -26,7 +26,8 @@ namespace InfoSystem
 
         public HistoryViewModel(int patientId)
         {
-            _history = new ObservableCollection<History>(DatabaseManager.GetPatientHistory(patientId).GetAwaiter().GetResult());
+            using var context = InfoContext.CreateDbContext();
+            _history = new ObservableCollection<History>(context.PatientsQueries.GetPatientHistoryAsync(patientId).GetAwaiter().GetResult());
         }
     }
 }

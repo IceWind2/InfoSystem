@@ -19,8 +19,9 @@ namespace InfoSystem
             _patient = patient;
             InitializeComponent();
 
+            using var context = InfoContext.CreateDbContext();
             var existingMedicine = patient.PatientMedicine!.Select(pm => pm.MedicineId);
-            MedicineSelect.ItemsList = DatabaseManager.GetAllMedicine().OrderBy(m => m.Name).Where(m => existingMedicine.Contains(m.Id) != addMode);
+            MedicineSelect.ItemsList = context.GetAllEntities<Medicine>().OrderBy(m => m.Name).Where(m => existingMedicine.Contains(m.Id) != addMode);
 
             if (!addMode)
             {

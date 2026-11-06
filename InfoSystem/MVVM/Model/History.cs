@@ -10,7 +10,7 @@ namespace InfoSystem
     public class History
     {
         [Required]
-        public string PatientData {  get; set; }
+        public int PatientId { get; set; }
 
         [Required]
         public DateTime Timestamp { get; set; }
@@ -23,9 +23,6 @@ namespace InfoSystem
                 return Timestamp.ToLocalTime();
             }
         }
-
-        [Required]
-        public int PatientId { get; set; }
 
         [Required]
         public string Change {  get; set; }
