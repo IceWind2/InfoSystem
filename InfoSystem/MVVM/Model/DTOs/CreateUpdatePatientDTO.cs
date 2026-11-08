@@ -12,7 +12,9 @@ namespace InfoSystem
 
         public Sex Sex { get; set; }
 
-        public int LocationId { get; set; }
+        public Location Location { get; set; }
+
+        public Diagnosis? Diagnosis { get; set; }
 
         public string? Note { get; set; }
     }

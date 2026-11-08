@@ -7,18 +7,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <DataGrid x:Name="HistoryTable" RowStyle="{DynamicResource DataGridRowStyle}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}" CellStyle="{DynamicResource DataGridCellStyle}" Style="{DynamicResource DataGridStyle}"
-              Grid.Row="1"
-              VerticalAlignment="Stretch"
-              Margin="0"
-              ItemsSource="{Binding History}">
-
+    <DataGrid x:Name="HistoryTable" ItemsSource="{Binding History}" Margin="24,16,24,20">
         <DataGrid.Columns>
-            <DataGridTextColumn Header="Дата" IsReadOnly="True" CanUserResize="False" Width="160" Binding="{Binding Path=LocalTime, StringFormat=HH:mm dd-MM-yyyy}"/>
-
-            <DataGridTextColumn Header="Действие" IsReadOnly="True" CanUserResize="False" Width="200" Binding="{Binding Path=Change}"/>
-            
-            <DataGridTextColumn Header="Заметки" IsReadOnly="True" CanUserResize="False" Width="30*" Binding="{Binding Path=Note}"/>
+            <DataGridTextColumn Header="Дата" Width="180"
+                                Binding="{Binding LocalTime, StringFormat=HH:mm dd-MM-yyyy}"/>
+            <DataGridTextColumn Header="Действие" Width="220" Binding="{Binding Change}"/>
+            <DataGridTextColumn Header="Заметки" Width="*" Binding="{Binding Note}"/>
         </DataGrid.Columns>
     </DataGrid>
 </UserControl>

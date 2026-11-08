@@ -11,6 +11,7 @@ namespace InfoSystem
         public int Id { get; set; }
 
         [Required]
+        [FilterProperty]
         public string Name { get; set; }
 
         public override string ToString()

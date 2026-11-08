@@ -65,22 +65,11 @@ namespace InfoSystem
                 Name = newPatient.Name.Trim(),
                 BirthDate = newPatient.BirthDate,
                 Sex = newPatient.Sex,
-                LocationId = newPatient.LocationId
+                LocationId = newPatient.Location.Id,
+                DiagnosisId = newPatient.Diagnosis?.Id,
             };
+
             _dbContext.Patients.Add(patient);
-
-            return patient;
-        }
-
-        public async Task<Patient> UpdatePatientAsync(CreateUpdatePatientDTO updatePatientDto)
-        {
-            var patient = await _dbContext.Patients
-                .FirstAsync(p => p.Id == updatePatientDto.Id);
-
-            patient.Name = updatePatientDto.Name;
-            patient.BirthDate = updatePatientDto.BirthDate;
-            patient.Sex = updatePatientDto.Sex;
-            patient.Location = await _dbContext.Locations.FirstAsync(l => l.Id == updatePatientDto.LocationId);
 
             return patient;
         }

@@ -6,20 +6,15 @@ namespace InfoSystem
     internal class NewMedicineViewModel : ObservableObject
     {
         private string _name = "";
-
         private string _nameError = "";
         private bool _submitted;
-        private bool _edit;
+        private readonly Medicine? _medicine;
 
         public NewMedicineViewModel(Medicine? medicine = null)
         {
-            if (medicine != null)
-            {
-                _edit = true;
-                _name = medicine.Name;
-            }
-
-            Title = _edit ? "Изменить лекарство" : "Новое лекарство";
+            _medicine = medicine;
+            _name = medicine?.Name ?? "";
+            Title = medicine == null ? "Новое лекарство" : "Изменить лекарство";
 
             SaveCommand = new RelayCommand(_ =>
             {
@@ -29,16 +24,16 @@ namespace InfoSystem
                     return;
                 }
 
-                if (_edit)
-                {
-                    medicine!.Name = Name.Trim();
-                }
-                else
+                if (_medicine == null)
                 {
                     Result = new Medicine
                     {
                         Name = Name.Trim()
                     };
+                }
+                else
+                {
+                    medicine!.Name = Name.Trim();
                 }
 
                 CloseRequested?.Invoke(true);

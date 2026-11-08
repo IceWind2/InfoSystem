@@ -10,7 +10,6 @@ namespace InfoSystem
         public Task ArchiveOldPatientsAsync();
 
         public Patient AddPatient(CreateUpdatePatientDTO newPatient);
-        public Task<Patient> UpdatePatientAsync(CreateUpdatePatientDTO patient);
 
         public Task<List<History>> GetPatientHistoryAsync(int patientId);
         public void WritePatientHistory(int patientId, string note, string changeNote);

@@ -3,48 +3,46 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:InfoSystem"
         mc:Ignorable="d"
         WindowStyle="None"
         WindowStartupLocation="CenterOwner"
-        Background="Transparent"
+        ResizeMode="NoResize" ShowInTaskbar="False"
+        Title="Адрес" Width="420" SizeToContent="Height"
         AllowsTransparency="True"
-        Title="NewLocationModal" Height="150" Width="400">
+        Background="Transparent"
+        Foreground="{StaticResource TextBrush}"
+        FontFamily="{StaticResource UiFont}" FontSize="14">
 
     <WindowChrome.WindowChrome>
         <WindowChrome ResizeBorderThickness="8" GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0"/>
     </WindowChrome.WindowChrome>
 
-    <Border Background="{StaticResource primaryCompColourBrush}"
-        BorderThickness="5" BorderBrush="{StaticResource contrastColourBrush}"
-        CornerRadius="20"
-        Padding="0,20,0,0">
-        <Grid Background="Transparent">
+    <Border CornerRadius="7" BorderBrush="{StaticResource LineBrush}"
+            Background="{StaticResource SurfaceBrush}" BorderThickness="1">
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Orientation="Vertical" Background="Transparent">
-                <local:FormTextBox x:Name="NameFieldBox" FieldName="Название" BorderColour="{StaticResource secondaryColourBrush}"/>
+            <TextBlock Margin="24,20,24,0" Text="{Binding Title}" Style="{StaticResource PageTitle}"/>
+
+            <StackPanel Grid.Row="1" Margin="24,20,24,24">
+                <TextBlock Text="Название адреса" Style="{StaticResource FieldLabel}"/>
+                <TextBox Style="{StaticResource FormBox}"
+                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" FontSize="16"/>
+                <TextBlock Style="{StaticResource FieldError}" Text="{Binding NameError}"/>
             </StackPanel>
 
-            <StackPanel Grid.Row="1"
-                    Orientation="Horizontal" FlowDirection="LeftToRight"
-                    HorizontalAlignment="Right"
-                    Margin="0,0,10,0">
-
-                <Button Style="{StaticResource ToolbarButtonStyle}" Margin="5 5"
-                    Width="80"
-                    Name="btnOk"
-                    Content="ОК"
-                    Click="btnOk_Click"/>
-                <Button Style="{StaticResource ToolbarButtonStyle}" Margin="5 5"
-                    Width="80"
-                    Content="Отмена"
-                    Name="btnCansel"
-                    Click="btnCansel_Click"/>
-            </StackPanel>
+            <Border Grid.Row="2" BorderBrush="{StaticResource LineBrush}" BorderThickness="0,1,0,0"
+                    Padding="24,12,24,20">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Отмена" IsCancel="True" Height="36" Padding="18,0" Margin="0,0,8,0"/>
+                    <Button Content="Сохранить" IsDefault="True" Style="{StaticResource PrimaryButton}"
+                            Height="36" Padding="18,0" Margin="0" Command="{Binding SaveCommand}"/>
+                </StackPanel>
+            </Border>
         </Grid>
     </Border>
 </Window>

@@ -1,73 +1,64 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
 namespace InfoSystem
 {
-    internal class ArchiveViewModel : ObservableObject
+    internal class ArchiveViewModel : TablePageViewModel
     {
-        private string _filter = "";
-        private ObservableCollection<ArchivedPatient> _patients;
-        private ICollectionView _patientsView;
+        private readonly ObservableCollection<ArchivedPatient> _patients;
+        private readonly ICollectionView _patientsView;
+        private readonly IDialogService _dialogService = new DialogService();
+        private ArchivedPatient? _selectedPatient;
 
-        private ArchivedPatient selectedPatient;
+        public ObservableCollection<ArchivedPatient> Patients => _patients;
 
-        public ObservableCollection<ArchivedPatient> Patients
+        public ArchivedPatient? SelectedPatient
         {
-            get
-            {
-                _patientsView = CollectionViewSource.GetDefaultView(_patients);
-                _patientsView.Filter = (x) => (x.ContainsFilter(_filter));
-                return _patients;
-            }
+            get => _selectedPatient;
+            set => SetProperty(ref _selectedPatient, value);
         }
 
-        public ArchivedPatient SelectedPatient
-        {
-            get { return selectedPatient; }
-            set
-            {
-                selectedPatient = value;
-                OnPropertyChanged();
-            }
-        }
-
-        // Context menu commands
-        public RelayCommand HistoryCommand { get; set; }
-
-        // Generic commands
-        public RelayCommand SearchCommand { get; set; }
-        public AsyncRelayCommand RemoveCommand { get; set; }
+        public RelayCommand HistoryCommand { get; }
 
         public ArchiveViewModel(Window mainWindow)
         {
-            using var context = InfoContext.CreateDbContext();
-            _patients = new ObservableCollection<ArchivedPatient>(context.PatientsQueries.GetArchivedPatientsListAsync().GetAwaiter().GetResult());
-
-            HistoryCommand = new RelayCommand(o =>
+            using (var context = InfoContext.CreateDbContext())
             {
-                if (o is ArchivedPatient archivedPatient)
-                {
-                    mainWindow.Opacity = 0.4;
-                    var newPatientModal = new HistoryModal(mainWindow, archivedPatient.PatientId);
-                    newPatientModal.ShowDialog();
-                    mainWindow.Opacity = 1;
-                }
+                _patients = new ObservableCollection<ArchivedPatient>(
+                    context.PatientsQueries.GetArchivedPatientsListAsync().GetAwaiter().GetResult());
+            }
+
+            _patientsView = CollectionViewSource.GetDefaultView(_patients);
+            _patientsView.Filter = item => item is ArchivedPatient patient && patient.ContainsFilter(SearchText);
+            UpdateTotalCount();
+
+            CanAdd = false;
+            CanEdit = false;
+            CanDelete = false;
+
+            FilterCommand = new RelayCommand(_ =>
+            {
+                _patientsView.Refresh();
+                UpdateTotalCount();
             });
 
-
-            SearchCommand = new RelayCommand(o =>
+            HistoryCommand = new RelayCommand(item =>
             {
-                _filter = (string)Application.Current.Properties["SearchBoxFilter"]!;
-                _patientsView!.Refresh();
+                if (item is ArchivedPatient archivedPatient)
+                {
+                    var viewModel = new HistoryViewModel(archivedPatient);
+                    _dialogService.ShowHistory(mainWindow, viewModel);
+                }
             });
         }
 
-        public void UpdateData()
+        private void UpdateTotalCount()
         {
-            using var context = InfoContext.CreateDbContext();
-            _patients = new ObservableCollection<ArchivedPatient>(context.PatientsQueries.GetArchivedPatientsListAsync().GetAwaiter().GetResult());
+            TotalCount = _patientsView.Cast<object>().Count();
+            OnPropertyChanged(nameof(TotalCount));
         }
     }
 }

@@ -21,6 +21,8 @@ namespace InfoSystem
             set => SetProperty(ref _selectedPatient, value);
         }
 
+        public RelayCommand HistoryCommand { get; }
+
         public PatientsViewModel(Window mainWindow)
         {
             using (var context = InfoContext.CreateDbContext())
@@ -38,11 +40,22 @@ namespace InfoSystem
                 UpdateTotalCount();
             });
 
+            HistoryCommand = new RelayCommand(item =>
+            {
+                if (item is Patient patient)
+                {
+                    var viewModel = new HistoryViewModel(patient);
+                    _dialogService.ShowHistory(mainWindow, viewModel);
+                }
+            });
+
             AddCommand = new AsyncRelayCommand(async _ =>
             {
                 using var context = await InfoContext.CreateDbContextWithTransactionAsync();
 
-                var viewModel = new NewPatientViewModel(context.GetAllEntities<Location>());
+                var viewModel = new NewPatientViewModel(
+                    context.GetAllEntities<Location>(),
+                    context.GetAllEntities<Diagnosis>());
                 bool? modalResult = _dialogService.ShowNewPatient(mainWindow, viewModel);
 
                 if (modalResult == null)
@@ -61,6 +74,8 @@ namespace InfoSystem
                 context.PatientsQueries.WritePatientHistory(newPatient.Id, string.Empty, HistoryChange.NewPatient);
                 await context.CommitAsync();
 
+                newPatient.Location = viewModel.Result!.Location;
+                newPatient.Diagnosis = viewModel.Result!.Diagnosis;
                 await context.Entry(newPatient).Collection(patient => patient.PatientMedicine!).LoadAsync();
 
                 Application.Current.Dispatcher.Invoke(() =>
@@ -81,7 +96,10 @@ namespace InfoSystem
                 using var context = InfoContext.CreateDbContext();
 
                 var currentSelectedPatient = SelectedPatient;
-                var viewModel = new NewPatientViewModel(context.GetAllEntities<Location>(), currentSelectedPatient);
+                var viewModel = new NewPatientViewModel(
+                    context.GetAllEntities<Location>(),
+                    context.GetAllEntities<Diagnosis>(),
+                    currentSelectedPatient);
                 bool? modalResult = _dialogService.ShowNewPatient(mainWindow, viewModel);
 
                 if (modalResult == null)

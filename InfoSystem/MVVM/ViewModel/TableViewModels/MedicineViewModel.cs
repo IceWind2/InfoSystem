@@ -55,9 +55,9 @@ namespace InfoSystem
                     return;
                 }
 
-                using var context = await InfoContext.CreateDbContextWithTransactionAsync();
+                using var context = InfoContext.CreateDbContext();
                 context.AddEntity(viewModel.Result!);
-                await context.CommitAsync();
+                await context.SaveChangesAsync();
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {

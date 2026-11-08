@@ -14,6 +14,28 @@
         <local:Toolbar DockPanel.Dock="Top" Margin="0,16"/>
 
         <DataGrid ItemsSource="{Binding Patients}" SelectedItem="{Binding SelectedPatient}" RowDetailsVisibilityMode="VisibleWhenSelected">
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type ScrollViewer}">
+                    <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                    <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+                </Style>
+                <ContextMenu x:Key="PatientRowMenu"
+                             DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                    <MenuItem Header="История"
+                              Command="{Binding PlacementTarget.Tag.HistoryCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                              CommandParameter="{Binding}">
+                        <MenuItem.Icon>
+                            <Icon:PackIconFontAwesome Kind="BookSolid" Width="15" Height="15" Margin="1,0,0,0"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </DataGrid.Resources>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                    <Setter Property="Tag" Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
+                    <Setter Property="ContextMenu" Value="{StaticResource PatientRowMenu}"/>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="#" Binding="{Binding Id}" Width="48"/>
                 <DataGridTextColumn Header="ФИО" Binding="{Binding Name}" Width="2*"/>

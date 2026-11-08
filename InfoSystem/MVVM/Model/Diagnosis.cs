@@ -10,6 +10,7 @@ namespace InfoSystem
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        [FilterProperty]
         public string Name { get; set; }
 
         public override string ToString()

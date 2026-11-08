@@ -334,19 +334,49 @@
         <Setter Property="BorderBrush" Value="{StaticResource LineBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Padding" Value="4"/>
+        <Setter Property="MinWidth" Value="150"/>
         <Setter Property="FontFamily" Value="{StaticResource UiFont}"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="HasDropShadow" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ContextMenu">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="7"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                        <ScrollViewer CanContentScroll="True">
+                            <ItemsPresenter/>
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
     <Style TargetType="MenuItem">
         <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
-        <Setter Property="Height" Value="34"/>
-        <Setter Property="Padding" Value="12,0"/>
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="Padding" Value="8,0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="MenuItem">
-                    <Border x:Name="Bd" CornerRadius="4" Background="Transparent" Padding="{TemplateBinding Padding}">
-                        <ContentPresenter ContentSource="Header" VerticalAlignment="Center"/>
+                    <Border x:Name="Bd" CornerRadius="4" Background="Transparent"
+                            Padding="{TemplateBinding Padding}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter Grid.Column="0" ContentSource="Icon"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"/>
+                            <ContentPresenter Grid.Column="1" ContentSource="Header"
+                                              RecognizesAccessKey="True"
+                                              VerticalAlignment="Center"
+                                              Margin="8,0,0,0"/>
+                        </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsHighlighted" Value="True">

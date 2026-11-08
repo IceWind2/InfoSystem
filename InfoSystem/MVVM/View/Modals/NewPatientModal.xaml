@@ -176,6 +176,21 @@
                          FontSize="18"/>
                 <TextBlock Style="{StaticResource FieldError}" Text="{Binding LocationsError}"/>
 
+                <Grid Margin="0,16,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Диагноз" Style="{StaticResource FieldLabel}" Margin="0"/>
+                    <Button Grid.Column="1" Content="Очистить" Height="26" Padding="10,0" Margin="0"
+                            Command="{Binding ClearDiagnosisCommand}"/>
+                </Grid>
+                <ListBox Style="{StaticResource LocationList}"
+                         Height="100"
+                         ItemsSource="{Binding Diagnoses}"
+                         SelectedItem="{Binding SelectedDiagnosis}"
+                         FontSize="18"/>
+
                 <TextBlock Text="Примечание" Style="{StaticResource FieldLabel}" Margin="0,16,0,6"/>
                 <TextBox Style="{StaticResource NoteBox}" Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}" FontSize="16"/>
             </StackPanel>
