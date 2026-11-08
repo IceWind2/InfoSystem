@@ -8,82 +8,45 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Styles/DataGridStyles.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
+    <DockPanel Background="{StaticResource BgBrush}">
+        <TextBlock DockPanel.Dock="Top" Text="Пациенты" Style="{StaticResource PageTitle}"/>
 
-    <Grid Background="Transparent">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.Resources>
-            <ContextMenu x:Key="RowMenu" DataContext="{Binding RelativeSource={RelativeSource Mode=Self}, Path=PlacementTarget}">
-                <MenuItem Header="История"
-                          Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.HistoryCommand}"
-                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.DataContext}">
-                    <MenuItem.Icon>
-                        <Icon:PackIconFontAwesome Kind="BookSolid" Width="15" Height="15" Margin="1 0 0 0"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="Добавить лекарство"
-                          Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.AddMedicineCommand}"
-                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.DataContext}">
-                    <MenuItem.Icon>
-                        <Icon:PackIconFontAwesome Kind="PrescriptionBottleMedicalSolid" Width="16" Height="16"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="Убрать лекарство"
-                          Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.RemoveMedicineCommand}"
-                          CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.DataContext}">
-                    <MenuItem.Icon>
-                        <Icon:PackIconFontAwesome Kind="XmarkSolid" Width="12" Height="12" Margin="2"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-            </ContextMenu>
-            <Style x:Key="PatientRowStyle" TargetType="DataGridRow" BasedOn="{StaticResource DataGridRowStyle}">
-                <Setter Property="ContextMenu" Value="{StaticResource RowMenu}"/>
-            </Style>
-        </Grid.Resources>
+        <local:Toolbar DockPanel.Dock="Top" Margin="0,16"/>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <local:Toolbar x:Name="ToolBar" Margin="0 0 100 0"/>
-            <local:PatientFilters x:Name="Filters"/>
-        </StackPanel>
-
-        <DataGrid RowStyle="{StaticResource PatientRowStyle}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle}" CellStyle="{DynamicResource DataGridCellStyle}" Style="{DynamicResource DataGridStyle}"
-                  Grid.Row="1"
-                  RowDetailsVisibilityMode="VisibleWhenSelected"
-                  VerticalAlignment="Stretch"
-                  Margin="0,30,10,0"
-                  ItemsSource="{Binding Patients}" SelectedItem="{Binding SelectedPatient}"
-                  MouseLeftButtonDown="DataGrid_MouseLeftButtonDown">
-
+        <DataGrid ItemsSource="{Binding Patients}" RowDetailsVisibilityMode="VisibleWhenSelected">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="#" IsReadOnly="True" CanUserResize="False" Width="50" Binding="{Binding Path=Id}"/>
-
-                <DataGridTextColumn Header="ФИО" IsReadOnly="True" CanUserResize="False" Width="25*" Binding="{Binding Path=Name}"/>
-
-                <DataGridTextColumn Header="Пол" IsReadOnly="True" CanUserResize="False" Width="55" Binding="{Binding Path=DisplaySex}"/>
-
-                <DataGridTextColumn Header="Возраст" IsReadOnly="True" CanUserResize="False" Width="85" Binding="{Binding Path=Age}"/>
-
-                <DataGridTextColumn Header="Диагноз" IsReadOnly="True" CanUserResize="False" Width="25*" Binding="{Binding Path=Diagnosis.Name}"/>
-
-                <DataGridTextColumn Header="Лекарства" IsReadOnly="True" CanUserResize="False" Width="25*" Binding="{Binding Path=MedicineView}"/>
-
-                <DataGridTextColumn Header="Адрес" IsReadOnly="True" CanUserResize="False" Width="25*" Binding="{Binding Path=Location.Name}"/>
+                <DataGridTextColumn Header="#" Binding="{Binding Id}" Width="48"/>
+                <DataGridTextColumn Header="ФИО" Binding="{Binding Name}" Width="2*"/>
+                <DataGridTextColumn Header="Пол" Binding="{Binding DisplaySex}" Width="60"/>
+                <DataGridTextColumn Header="Возраст" Binding="{Binding Age}" Width="80"/>
+                <DataGridTextColumn Header="Диагноз" Binding="{Binding Diagnosis.Name}" Width="2*"/>
+                <DataGridTemplateColumn Header="Лекарства" Width="2*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ItemsControl ItemsSource="{Binding TopMedicines}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Style="{StaticResource Chip}">
+                                            <TextBlock Text="{Binding Name}" FontSize="12"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Адрес" Binding="{Binding Location.Name}" Width="*"/>
             </DataGrid.Columns>
-
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Path=MedicineDetails}" Padding="10 10 0 0"/>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
         </DataGrid>
-    </Grid>
+    </DockPanel>
 </UserControl>

@@ -1,146 +1,34 @@
-﻿using System;
-using System.Linq;
-using System.Text;
+﻿using System.Globalization;
+using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace InfoSystem
 {
     public partial class NewPatientModal : Window
     {
-        public bool Success { get; set; }
-        public bool Cancelled { get; set; }
-        internal CreateUpdatePatientDTO? Result { get; set; } = null;
-
         public NewPatientModal(Window parent)
         {
+            CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
+            ci.DateTimeFormat.ShortDatePattern = "dd.MM.yyyy";
+            Thread.CurrentThread.CurrentCulture = ci;
+
             Owner = parent;
             InitializeComponent();
 
-            using var context = InfoContext.CreateDbContext();
-            LocationSelect.ItemsList = context.GetAllEntities<Location>();
-            FillSexFormRadio();
+            DataContextChanged += (_, e) =>
+            {
+                if (e.NewValue is NewPatientViewModel vm)
+                    vm.CloseRequested += ok => DialogResult = ok;
+            };
 
             PreviewKeyDown += (s, e) =>
             {
                 if (e.Key == System.Windows.Input.Key.Escape)
                 {
-                    Success = true;
-                    Cancelled = true;
+                    DialogResult = false;
                     Close();
                 }
             };
-        }
-
-        internal void SetData(Patient patient)
-        {
-            NameFieldBox.inpValue.Text = patient.Name;
-            BirthDateFieldBox.inpValue.Text = patient.BirthDate.Date.ToShortDateString();
-            LocationSelect.SelectedItems = LocationSelect.ItemsList.Where(l => ((Location)l).Id == patient.LocationId);
-            SexRadio.SelectValue(patient.Sex == Sex.Male ? "М" : "Ж");
-        }
-
-        private void btnCansel_Click(object sender, RoutedEventArgs e)
-        {
-            Success = true;
-            Cancelled = true;
-            Close();
-        }
-
-        private void btnOk_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var errorMessage = ValidateFields();
-
-                if (!string.IsNullOrEmpty(errorMessage))
-                {
-                    Success = false;
-                    MessageBox.Show(errorMessage, "Ошибка создания объекта", MessageBoxButton.OK);
-                    return;
-                }
-
-                Result = new CreateUpdatePatientDTO()
-                {
-                    Name = NameFieldBox.inpValue.Text,
-                    BirthDate = DateTime.Parse(BirthDateFieldBox.inpValue.Text),
-                    Sex = SexRadio.GetSelectedValue() == "М" ? Sex.Male : Sex.Female,
-                    LocationId = ((Location)LocationSelect.SelectedItems.First()).Id,
-                    Note = NoteTextField.inpValue.Text,
-                };
-
-                Success = true;
-                Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка создания объекта", MessageBoxButton.OK);
-                Success = false;
-            }
-        }
-
-        private string ValidateFields()
-        {
-            var errorMessage = new StringBuilder();
-
-            if (!string.IsNullOrEmpty(NameFieldBox.inpValue.Text))
-            {
-                NameFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["secondaryColourBrush"] as Brush;
-            }
-            else
-            {
-                errorMessage.AppendLine("Необходимо заполнить ФИО.");
-                NameFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["errorColourBrush"] as Brush;
-            }
-
-            if (DateTime.TryParse(BirthDateFieldBox.inpValue.Text, out var _))
-            {
-                BirthDateFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["secondaryColourBrush"] as Brush;
-            }
-            else
-            {
-                errorMessage.AppendLine("Неверный формат даты.");
-                BirthDateFieldBox.BorderColour = Application.Current.Resources.MergedDictionaries[0]["errorColourBrush"] as Brush;
-            }
-
-            if (SexRadio.GetSelectedValue() != null)
-            {
-                SexRadio.BorderColour = Application.Current.Resources.MergedDictionaries[0]["secondaryColourBrush"] as Brush;
-            }
-            else
-            {
-                errorMessage.AppendLine("Необходимо выбрать пол.");
-                SexRadio.BorderColour = Application.Current.Resources.MergedDictionaries[0]["errorColourBrush"] as Brush;
-            }
-
-            if (LocationSelect.SelectedItems.Any())
-            {
-                LocationSelect.BorderColour = Application.Current.Resources.MergedDictionaries[0]["secondaryColourBrush"] as Brush;
-            }
-            else
-            {
-                errorMessage.AppendLine("Необходимо выбрать район.");
-                LocationSelect.BorderColour = Application.Current.Resources.MergedDictionaries[0]["errorColourBrush"] as Brush;
-            }
-
-            return errorMessage.ToString();
-        }
-
-        private void FillSexFormRadio()
-        {
-            SexRadio.spRadio.Children.Add(new RadioButton
-            {
-                Content = "М",
-                IsChecked = false,
-                GroupName = "Sex",
-            });
-            SexRadio.spRadio.Children.Add(new RadioButton
-            {
-                Content = "Ж",
-                IsChecked = false,
-                GroupName = "Sex"
-            });
         }
     }
 }

@@ -1,105 +1,75 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace InfoSystem
 {
     internal class MainViewModel : ObservableObject
     {
-        private object _currentView;
+        public sealed record NavItem(string Title, string Icon, Func<object> Create);
 
-        public object CurrentView
+        private readonly Dictionary<NavItem, object> _pages = new();
+
+        private NavItem? _selectedNavItem;
+        private object? _currentViewModel;
+
+        public ObservableCollection<NavItem> NavItems { get; }
+
+        public NavItem? SelectedNavItem
         {
-            get
-            {
-                return _currentView;
-            }
-
+            get => _selectedNavItem;
             set
             {
-                _currentView = value;
+                _selectedNavItem = value;
+                OnPropertyChanged();
+                ShowPage(value);
+            }
+        }
+
+        public object? CurrentViewModel
+        {
+            get => _currentViewModel;
+            private set
+            {
+                _currentViewModel = value;
                 OnPropertyChanged();
             }
         }
 
-        public void UpdateView()
-        {
-            if (CurrentView is PatientsViewModel)
-            {
-                PatientsVM = new PatientsViewModel(_mainWindow);
-                CurrentView = PatientsVM;
-            }
-            if (CurrentView is MedicineViewModel)
-            {
-                MedicineVM = new MedicineViewModel(_mainWindow);
-                CurrentView = MedicineVM;
-            }
-            if (CurrentView is DiagnosisViewModel)
-            {
-                DiagnosisVM = new DiagnosisViewModel(_mainWindow);
-                CurrentView = DiagnosisVM;
-            }
-            if (CurrentView is LocationsViewModel)
-            {
-                LocationsVM = new LocationsViewModel(_mainWindow);
-                CurrentView = LocationsVM;
-            }
-            if (CurrentView is ArchiveViewModel)
-            {
-                ArchiveVM = new ArchiveViewModel(_mainWindow);
-                CurrentView = ArchiveVM;
-            }
-        }
-
-        public RelayCommand PatientsViewCommand {  get; set; }
-        public RelayCommand MedicineViewCommand {  get; set; }
-        public RelayCommand DiagnosisViewCommand {  get; set; }
-        public RelayCommand LocationsViewCommand {  get; set; }
-        public RelayCommand ArchiveViewCommand {  get; set; }
-
-        public PatientsViewModel PatientsVM { get; set; }
-        public MedicineViewModel MedicineVM { get; set; }
-        public DiagnosisViewModel DiagnosisVM { get; set; }
-        public LocationsViewModel LocationsVM { get; set; }
-        public ArchiveViewModel ArchiveVM { get; set; }
-
-        private Window _mainWindow;
-
         public MainViewModel(Window mainWindow)
         {
-            _mainWindow = mainWindow;
-            PatientsVM = new PatientsViewModel(mainWindow);
-            MedicineVM = new MedicineViewModel(mainWindow);
-            DiagnosisVM = new DiagnosisViewModel(mainWindow);
-            LocationsVM = new LocationsViewModel(mainWindow);
-            ArchiveVM = new ArchiveViewModel(mainWindow);
+            NavItems =
+            [
+                new("Пациенты",  "\uE77B", () => new PatientsViewModel(mainWindow)),
+                new("Лекарства", "\uE8F1", () => new MedicineViewModel(mainWindow)),
+                new("Диагнозы",  "\uE9D9", () => new DiagnosisViewModel(mainWindow)),
+                new("Адреса",    "\uE80F", () => new LocationsViewModel(mainWindow)),
+                new("Архив",     "\uE7B8", () => new ArchiveViewModel(mainWindow)),
+            ];
 
-            PatientsViewCommand = new RelayCommand(o =>
-            {
-                PatientsVM.UpdateData();
-                CurrentView = PatientsVM;
-            });
-            MedicineViewCommand = new RelayCommand(o =>
-            {
-                MedicineVM.UpdateData();
-                CurrentView = MedicineVM;
-            });
-            DiagnosisViewCommand = new RelayCommand(o =>
-            {
-                DiagnosisVM.UpdateData();
-                CurrentView = DiagnosisVM;
-            });
-            LocationsViewCommand = new RelayCommand(o =>
-            {
-                LocationsVM.UpdateData();
-                CurrentView = LocationsVM;
-            });
-            ArchiveViewCommand = new RelayCommand(o =>
-            {
-                ArchiveVM.UpdateData();
-                CurrentView = ArchiveVM;
-            });
+            SelectedNavItem = NavItems[0];
+        }
 
-            // Deafult view
-            CurrentView = PatientsVM;
+        public void UpdateView()
+        {
+            if (SelectedNavItem == null)
+            {
+                return;
+            }
+
+            _pages[SelectedNavItem] = SelectedNavItem.Create();
+            ShowPage(SelectedNavItem);
+        }
+
+        private void ShowPage(NavItem? item)
+        {
+            if (item is null) return;
+
+            if (!_pages.TryGetValue(item, out var page))
+                _pages[item] = page = item.Create();
+
+            CurrentViewModel = page;
         }
     }
 }

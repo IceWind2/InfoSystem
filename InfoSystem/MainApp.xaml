@@ -12,48 +12,45 @@
         WindowStyle="None"
         ResizeMode="CanResize"
         Background="Transparent"
+        Foreground="{StaticResource TextBrush}"
         AllowsTransparency="False">
 
     <WindowChrome.WindowChrome>
         <WindowChrome ResizeBorderThickness="8" GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0"/>
     </WindowChrome.WindowChrome>
 
-    <Border Background="{StaticResource primaryColourBrush}" UseLayoutRounding="True">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <!-- TitleBar -->
+        <!-- TitleBar -->
+        <Border Background="{StaticResource AccentBrush}"
+                MouseDown="StackPanel_MouseDown">
             <StackPanel Grid.Row="0"
-                        Background="{StaticResource contrastColourBrush}" HorizontalAlignment="Stretch"
-                        Orientation="Horizontal" FlowDirection="RightToLeft"
-                        MouseDown="StackPanel_MouseDown">
+                        HorizontalAlignment="Stretch"
+                        Orientation="Horizontal" FlowDirection="RightToLeft">
                 <Button Content="X" x:Name="btnClose" Click="btnClose_Click"
-                        Style="{StaticResource TitleBarButtonStyle}"/>
+                    Style="{StaticResource TitleBarButton}"/>
                 <Button Content="🗖" x:Name="btnMax" Click="btnMax_Click"
-                        Style="{StaticResource TitleBarButtonStyle}"/>
+                    Style="{StaticResource TitleBarButton}"/>
                 <Button Content="—" x:Name="btnMin" Click="btnMin_Click"
-                        Style="{StaticResource TitleBarButtonStyle}"/>
+                    Style="{StaticResource TitleBarButton}"/>
             </StackPanel>
+        </Border>
 
-            <!-- Window content -->
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="80*"/>
-                </Grid.ColumnDefinitions>
+        <!-- Window content -->
+        <Grid Grid.Row="1" Background="{StaticResource BgBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-                <local:MenuPanel Grid.Column="0" Background="Transparent"/>
+            <local:MenuPanel Grid.Column="0"/>
 
-                <Rectangle Grid.Column="1" Fill="Transparent"/>
-
-                <ContentControl Grid.Column="2"
-                                Content="{Binding CurrentView}"/>
-            </Grid>
+            <ContentControl Grid.Column="1" Content="{Binding CurrentViewModel}"
+                            Margin="28,24" IsTabStop="False"/>
         </Grid>
-
-    </Border>
+    </Grid>
 </Window>

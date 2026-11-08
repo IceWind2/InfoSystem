@@ -5,45 +5,37 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:local="clr-namespace:InfoSystem"
-             mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="480">
-    
-    <Border Grid.Row="0"
-            Background="{StaticResource secondaryHighlightColourBrush}"
-            CornerRadius="0,0,15,15"
-            Height="40" Width="480">
+             mc:Ignorable="d">
 
-        <StackPanel Background="Transparent"
-                    FlowDirection="LeftToRight" Orientation="Horizontal"
-                    Margin="20 0"
-                    MaxHeight="40">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
 
-            <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding RefreshCommand}">
-                <Icon:PackIconFontAwesome Kind="ArrowsRotateSolid"/>
-            </Button>
-            
-            <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding AddCommand}">
-                <Icon:PackIconFontAwesome Kind="PlusSolid"/>
-            </Button>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
 
-            <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding EditCommand}">
-                <Icon:PackIconFontAwesome Kind="PenToSquareSolid"/>
-            </Button>
+        <TextBox x:Name="SearchBox" Style="{StaticResource SearchBox}"
+                 Width="280"
+                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <Button Style="{StaticResource ToolbarButtonStyle}" Command="{Binding RemoveCommand}">
-                <Icon:PackIconFontAwesome Kind="TrashCanSolid"/>
-            </Button>
+        <Button Grid.Column="1" Content="Фильтр" Margin="8,0,0,0" Command="{Binding FilterCommand}"/>
 
-            <Separator Margin="10, 7, 20, 7" Background="{StaticResource contrastColourBrush}">
-                <Separator.RenderTransform>
-                    <ScaleTransform ScaleX="1.5"/>
-                </Separator.RenderTransform>
-                <Separator.LayoutTransform>
-                    <RotateTransform Angle="90"/>
-                </Separator.LayoutTransform>
-            </Separator>
+        <TextBlock Grid.Column="2" Style="{StaticResource Muted}" Margin="14,0,0,0" VerticalAlignment="Center"
+                   Text="{Binding TotalCount, StringFormat=Всего: {0}}"/>
 
-            <local:SearchBox x:Name="ToolbarSearchBox" Padding="0 7" Width="200"/>
+        <StackPanel Grid.Column="4" Orientation="Horizontal">
+            <Button Content="Изменить" Command="{Binding EditCommand}"
+              Visibility="{Binding CanEdit, Converter={StaticResource BoolToVis}}"/>
+            <Button Content="Удалить" Style="{StaticResource DangerButton}" Command="{Binding RemoveCommand}"
+              Visibility="{Binding CanDelete, Converter={StaticResource BoolToVis}}"/>
+            <Button Content="+ Добавить" Style="{StaticResource PrimaryButton}" Command="{Binding AddCommand}"
+              Visibility="{Binding CanAdd, Converter={StaticResource BoolToVis}}"/>
         </StackPanel>
-    </Border>
+    </Grid>
 </UserControl>
