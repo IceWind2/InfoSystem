@@ -6,7 +6,6 @@
         public int TotalCount { get; protected set; }
 
         public RelayCommand FilterCommand { get; set; } = null!;
-        public RelayCommand RefreshCommand { get; set; } = null!;
         public AsyncRelayCommand AddCommand { get; set; } = null!;
         public AsyncRelayCommand EditCommand { get; set; } = null!;
         public AsyncRelayCommand RemoveCommand { get; set; } = null!;

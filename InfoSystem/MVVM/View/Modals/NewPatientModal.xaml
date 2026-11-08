@@ -21,66 +21,6 @@
     <Window.Resources>
         <local:EnumToBoolConverter x:Key="sexTypeConverter"/>
 
-        <!-- Field label (12px, semibold, muted) -->
-        <Style x:Key="FieldLabel" TargetType="TextBlock" BasedOn="{StaticResource Muted}">
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Margin" Value="0,0,0,6"/>
-        </Style>
-
-        <!-- Validation message under a field; hidden while the bound string is empty -->
-        <Style x:Key="FieldError" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Foreground" Value="{StaticResource DangerBrush}"/>
-            <Setter Property="Margin" Value="0,4,0,0"/>
-            <Style.Triggers>
-                <Trigger Property="Text" Value="">
-                    <Setter Property="Visibility" Value="Collapsed"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <!-- Text input (single line) -->
-        <Style x:Key="FormBox" TargetType="TextBox">
-            <Setter Property="Height" Value="36"/>
-            <Setter Property="Padding" Value="5,0"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="TextBox">
-                        <Border x:Name="Bd" Background="{StaticResource SurfaceBrush}"
-                                BorderBrush="{StaticResource LineBrush}" BorderThickness="1" CornerRadius="6">
-                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
-                                <ScrollViewer.Resources>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="FontSize" Value="{Binding FontSize, RelativeSource={RelativeSource AncestorType=TextBox}}"/>
-                                    </Style>
-                                </ScrollViewer.Resources>
-                            </ScrollViewer>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsKeyboardFocused" Value="True">
-                                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
-                                <Setter TargetName="Bd" Property="BorderThickness" Value="2"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- Text input (multi-line)-->
-        <Style x:Key="NoteBox" TargetType="TextBox" BasedOn="{StaticResource FormBox}">
-            <Setter Property="Height" Value="84"/>
-            <Setter Property="Padding" Value="5,3"/>
-            <Setter Property="VerticalContentAlignment" Value="Top"/>
-            <Setter Property="AcceptsReturn" Value="True"/>
-            <Setter Property="TextWrapping" Value="Wrap"/>
-            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
-        </Style>
-
         <!-- Toggle button for sex -->
         <Style x:Key="ToggleOption" TargetType="RadioButton">
             <Setter Property="Height" Value="36"/>

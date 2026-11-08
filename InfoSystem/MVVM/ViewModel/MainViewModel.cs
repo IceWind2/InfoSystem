@@ -51,17 +51,6 @@ namespace InfoSystem
             SelectedNavItem = NavItems[0];
         }
 
-        public void UpdateView()
-        {
-            if (SelectedNavItem == null)
-            {
-                return;
-            }
-
-            _pages[SelectedNavItem] = SelectedNavItem.Create();
-            ShowPage(SelectedNavItem);
-        }
-
         private void ShowPage(NavItem? item)
         {
             if (item is null) return;

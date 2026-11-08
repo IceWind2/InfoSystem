@@ -12,6 +12,7 @@ namespace InfoSystem
         public int Id {  get; set; }
 
         [Required]
+        [FilterProperty]
         public string Name { get; set; }
 
         public virtual ICollection<Patient>? Patients{ get; set; }

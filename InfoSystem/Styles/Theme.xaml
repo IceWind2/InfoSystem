@@ -41,6 +41,66 @@
         <Setter Property="Foreground" Value="{StaticResource MutedBrush}"/>
     </Style>
 
+    <!-- Text input (single line) -->
+    <Style x:Key="FormBox" TargetType="TextBox">
+        <Setter Property="Height" Value="36"/>
+        <Setter Property="Padding" Value="5,0"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border x:Name="Bd" Background="{StaticResource SurfaceBrush}"
+                                BorderBrush="{StaticResource LineBrush}" BorderThickness="1" CornerRadius="6">
+                        <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <ScrollViewer.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontSize" Value="{Binding FontSize, RelativeSource={RelativeSource AncestorType=TextBox}}"/>
+                                </Style>
+                            </ScrollViewer.Resources>
+                        </ScrollViewer>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                            <Setter TargetName="Bd" Property="BorderThickness" Value="2"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Text input (multi-line)-->
+    <Style x:Key="NoteBox" TargetType="TextBox" BasedOn="{StaticResource FormBox}">
+        <Setter Property="Height" Value="84"/>
+        <Setter Property="Padding" Value="5,3"/>
+        <Setter Property="VerticalContentAlignment" Value="Top"/>
+        <Setter Property="AcceptsReturn" Value="True"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+    </Style>
+
+    <!-- Field label -->
+    <Style x:Key="FieldLabel" TargetType="TextBlock" BasedOn="{StaticResource Muted}">
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Margin" Value="0,0,0,6"/>
+    </Style>
+
+    <!-- Field error -->
+    <Style x:Key="FieldError" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="{StaticResource DangerBrush}"/>
+        <Setter Property="Margin" Value="0,4,0,0"/>
+        <Style.Triggers>
+            <Trigger Property="Text" Value="">
+                <Setter Property="Visibility" Value="Collapsed"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <!-- ===== Buttons: default, Primary, Danger ===== -->
     <Style TargetType="Button">
         <Setter Property="FontFamily" Value="{StaticResource UiFont}"/>
@@ -202,10 +262,10 @@
             <Setter.Value>
                 <ControlTemplate TargetType="DataGridRow">
                     <Border x:Name="Bd" Background="{TemplateBinding Background}"
-                  BorderBrush="{StaticResource LineBrush}" BorderThickness="0,0,0,1">
+                            BorderBrush="{StaticResource LineBrush}" BorderThickness="0,0,0,1">
                         <Grid>
                             <Border x:Name="Marker" Width="3" HorizontalAlignment="Left"
-                      Background="{StaticResource AccentBrush}" Visibility="Collapsed"/>
+                                    Background="{StaticResource AccentBrush}" Visibility="Collapsed"/>
                             <SelectiveScrollingGrid>
                                 <SelectiveScrollingGrid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -216,11 +276,11 @@
                                     <RowDefinition Height="Auto"/>
                                 </SelectiveScrollingGrid.RowDefinitions>
                                 <DataGridCellsPresenter Grid.Column="1" ItemsPanel="{TemplateBinding ItemsPanel}"
-                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                                 <!-- Inline detail (sub-table of medicines) via RowDetailsTemplate -->
                                 <DataGridDetailsPresenter Grid.Row="1" Grid.Column="1"
-                                          SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical"
-                                          Visibility="{TemplateBinding DetailsVisibility}"/>
+                                                          SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical"
+                                                          Visibility="{TemplateBinding DetailsVisibility}"/>
                             </SelectiveScrollingGrid>
                         </Grid>
                     </Border>
@@ -244,12 +304,20 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="DataGridCell">
-                    <Border Background="Transparent" Padding="14,0">
+                    <Border Background="Transparent"
+                            Padding="14,0"
+                            TextElement.Foreground="{TemplateBinding Foreground}">
                         <ContentPresenter VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource AccentBrush}"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <!-- Chip for medicine tags (use inside an ItemsControl in a cell template) -->

@@ -6,11 +6,6 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styles/Colours.xaml"/>
-                <ResourceDictionary Source="Styles/MenuButtonStyle.xaml"/>
-                <ResourceDictionary Source="Styles/TitleBarButtonStyle.xaml"/>
-                <ResourceDictionary Source="Styles/ToolbarButtonStyle.xaml"/>
-                <ResourceDictionary Source="Styles/DataGridStyles.xaml"/>
                 <ResourceDictionary Source="Styles/Theme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 

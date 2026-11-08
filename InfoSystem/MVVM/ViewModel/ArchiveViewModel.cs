@@ -38,7 +38,6 @@ namespace InfoSystem
 
         // Generic commands
         public RelayCommand SearchCommand { get; set; }
-        public RelayCommand RefreshCommand { get; set; }
         public AsyncRelayCommand RemoveCommand { get; set; }
 
         public ArchiveViewModel(Window mainWindow)
@@ -62,11 +61,6 @@ namespace InfoSystem
             {
                 _filter = (string)Application.Current.Properties["SearchBoxFilter"]!;
                 _patientsView!.Refresh();
-            });
-
-            RefreshCommand = new RelayCommand(o =>
-            {
-                ((MainViewModel)mainWindow.DataContext).UpdateView();
             });
         }
 

@@ -13,7 +13,7 @@
 
         <local:Toolbar DockPanel.Dock="Top" Margin="0,16"/>
 
-        <DataGrid ItemsSource="{Binding Patients}" RowDetailsVisibilityMode="VisibleWhenSelected">
+        <DataGrid ItemsSource="{Binding Patients}" SelectedItem="{Binding SelectedPatient}" RowDetailsVisibilityMode="VisibleWhenSelected">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="#" Binding="{Binding Id}" Width="48"/>
                 <DataGridTextColumn Header="ФИО" Binding="{Binding Name}" Width="2*"/>

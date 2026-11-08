@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 
 namespace InfoSystem
@@ -14,16 +15,40 @@ namespace InfoSystem
 
         private string _fullNameError = "", _birthDateError = "", _sexError = "", _locationsError = "";
         private bool _submitted;
+        private bool _edit;
 
-        public NewPatientViewModel(IEnumerable<Location> locations)
+        public NewPatientViewModel(IEnumerable<Location> locations, Patient? patient = null)
         {
             Locations = new List<Location>(locations);
+            
+            if (patient != null)
+            {
+                _edit = true;
+                _fullName = patient.Name;
+                _birthDate = patient.BirthDate;
+                _sex = patient.Sex;
+                SelectedLocation = Locations.First(l => l.Id == patient.LocationId);
+            }
+
             SaveCommand = new RelayCommand(o =>
             {
                 _submitted = true;
                 if (!Validate())
                 {
                     return;
+                }
+
+                if (_edit)
+                {
+                    patient!.Name = FullName.Trim();
+                    patient.BirthDate = BirthDate!.Value.Date;
+                    patient.Sex = Sex;
+                    patient.Location = SelectedLocation!;
+                    patient.LocationId = SelectedLocation!.Id;
+                    Result = new CreateUpdatePatientDTO
+                    {
+                        Note = string.IsNullOrWhiteSpace(Note) ? null : Note.Trim()
+                    };
                 }
 
                 Result = new CreateUpdatePatientDTO()
@@ -71,7 +96,7 @@ namespace InfoSystem
         }
 
         public string FullNameError
-        { 
+        {
             get => _fullNameError;
             private set => SetProperty(ref _fullNameError, value);
         }
@@ -93,7 +118,10 @@ namespace InfoSystem
 
         private void Revalidate()
         {
-            if (_submitted) Validate();
+            if (_submitted)
+            {
+                Validate();
+            }
         }
 
         private bool Validate()

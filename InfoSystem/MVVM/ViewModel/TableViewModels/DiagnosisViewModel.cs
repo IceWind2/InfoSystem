@@ -17,13 +17,12 @@ namespace InfoSystem
             get
             {
                 _diagnosesView = CollectionViewSource.GetDefaultView(_diagnoses);
-                _diagnosesView.Filter = (x) => (x.ContainsFilter(_filter));
+                _diagnosesView.Filter = (x) => x.ContainsFilter(_filter);
                 return _diagnoses;
             }
         }
 
         public RelayCommand SearchCommand { get; set; }
-        public RelayCommand RefreshCommand { get; set; }
         public AsyncRelayCommand AddCommand { get; set; }
         public AsyncRelayCommand EditCommand { get; set; }
         public AsyncRelayCommand RemoveCommand { get; set; }
@@ -37,11 +36,6 @@ namespace InfoSystem
             {
                 _filter = (string)Application.Current.Properties["SearchBoxFilter"]!;
                 _diagnosesView!.Refresh();
-            });
-
-            RefreshCommand = new RelayCommand(o =>
-            {
-                ((MainViewModel)mainWindow.DataContext).UpdateView();
             });
 
             AddCommand = new AsyncRelayCommand(async o =>

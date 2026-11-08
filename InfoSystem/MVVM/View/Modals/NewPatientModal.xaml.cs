@@ -17,8 +17,8 @@ namespace InfoSystem
 
             DataContextChanged += (_, e) =>
             {
-                if (e.NewValue is NewPatientViewModel vm)
-                    vm.CloseRequested += ok => DialogResult = ok;
+                if (e.NewValue is NewPatientViewModel viewModel)
+                    viewModel.CloseRequested += ok => DialogResult = ok;
             };
 
             PreviewKeyDown += (s, e) =>
