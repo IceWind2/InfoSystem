@@ -46,7 +46,7 @@ namespace InfoSystem
                 {
                     PatientId = patient.Id,
                     Name = patient.Name,
-                    MedicineView = patient.MedicineView,
+                    MedicineView = string.Join(", ", patient.PatientMedicine!.Select(pm => pm.Medicine)),
                     BirthDate = patient.BirthDate,
                     DisplaySex = patient.DisplaySex,
                     LocationView = patient.Location?.Name,
@@ -83,7 +83,7 @@ namespace InfoSystem
                 .ToListAsync();
         }
 
-        public void AddPatientMedicine(ChangePatientMedicineDTO patientMedicineDTO)
+        public void AddPatientMedicine(AddPatientMedicineDTO patientMedicineDTO)
         {
             var patientMedicine = new PatientMedicine()
             {
@@ -95,7 +95,7 @@ namespace InfoSystem
             _dbContext.PatientsMedicine.Add(patientMedicine);
         }
 
-        public void RemovePatientMedicine(ChangePatientMedicineDTO patientMedicineDTO)
+        public void RemovePatientMedicine(AddPatientMedicineDTO patientMedicineDTO)
         {
             var patientMedicine = new PatientMedicine
             {

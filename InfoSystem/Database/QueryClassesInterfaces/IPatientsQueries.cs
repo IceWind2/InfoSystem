@@ -14,7 +14,7 @@ namespace InfoSystem
         public Task<List<History>> GetPatientHistoryAsync(int patientId);
         public void WritePatientHistory(int patientId, string note, string changeNote);
 
-        public void AddPatientMedicine(ChangePatientMedicineDTO patientMedicineDTO);
-        public void RemovePatientMedicine(ChangePatientMedicineDTO patientMedicineDTO);
+        public void AddPatientMedicine(AddPatientMedicineDTO patientMedicineDTO);
+        public void RemovePatientMedicine(AddPatientMedicineDTO patientMedicineDTO);
     }
 }

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Collections.ObjectModel;
 
 namespace InfoSystem
 {
@@ -18,6 +19,38 @@ namespace InfoSystem
         [Required]
         [FilterProperty]
         public required string Name { get; set; }
+
+        public Sex Sex { get; set; }
+
+        public DateTime BirthDate { get; set; }
+
+        [ForeignKey("Location")]
+        public int? LocationId { get; set; }
+        [DeleteBehavior(DeleteBehavior.Cascade)]
+        [FilterProperty]
+        public virtual Location? Location { get; set; }
+
+        [ForeignKey("Diagnosis")]
+        public int? DiagnosisId { get; set; }
+        [DeleteBehavior(DeleteBehavior.Cascade)]
+        [FilterProperty]
+        public virtual Diagnosis? Diagnosis { get; set; }
+
+        public virtual ObservableCollection<PatientMedicine> PatientMedicine { get; set; } = new();
+
+        // Properties for views
+        [NotMapped]
+        [FilterProperty]
+        public int Age
+        {
+            get
+            {
+                var today = DateTime.Today;
+                var age = today.Year - BirthDate.Date.Year;
+                if (BirthDate.AddYears(age) > today) age--;
+                return age;
+            }
+        }
 
         [NotMapped]
         [FilterProperty]
@@ -33,64 +66,23 @@ namespace InfoSystem
                 };
             }
         }
-        public Sex Sex { get; set; }
-
-        public DateTime BirthDate { get; set; }
 
         [NotMapped]
         [FilterProperty]
-        public int Age
+        public Medicine[] TopMedicine
         {
             get
             {
-                var today = DateTime.Today;
-                var age = today.Year - BirthDate.Date.Year;
-                if (BirthDate.AddYears(age) > today) age--;
-                return age;
-            }
-        }
-
-        [ForeignKey("Location")]
-        public int? LocationId { get; set; }
-        [DeleteBehavior(DeleteBehavior.Cascade)]
-        [FilterProperty]
-        public virtual Location? Location { get; set; }
-
-        [ForeignKey("Diagnosis")]
-        public int? DiagnosisId { get; set; }
-        [DeleteBehavior(DeleteBehavior.Cascade)]
-        [FilterProperty]
-        public virtual Diagnosis? Diagnosis { get; set; }
-
-        [NotMapped]
-        public string MedicineView
-        {
-            get
-            {
-                var medicineList = string.Join(", ", PatientMedicine!.Select(pm => pm.Medicine!.Name).Order());
-                if (string.IsNullOrEmpty(medicineList))
+                if (PatientMedicine == null)
                 {
-                    medicineList = "---";
+                    return Enumerable.Empty<Medicine>().ToArray();
                 }
-                return medicineList;
+
+                return PatientMedicine.Select(pm => pm.Medicine!).Take(2).ToArray();
             }
         }
-
-        public virtual ICollection<PatientMedicine>? PatientMedicine { get; set; }
 
         [NotMapped]
-        [FilterProperty]
-        public string MedicineDetails
-        {
-            get
-            {
-                var sb = new StringBuilder();
-                foreach (var med in PatientMedicine!)
-                {
-                    sb.AppendLine($"{med.Medicine!.Name}  \u2014  {med.Prescription}");
-                }
-                return sb.ToString();
-            }
-        }
+        public int MoreMedicineCount => PatientMedicine == null || PatientMedicine.Count <= 2 ? 0 : PatientMedicine.Count - 2;
     }
 }

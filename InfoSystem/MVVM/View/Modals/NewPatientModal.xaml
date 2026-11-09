@@ -56,55 +56,6 @@
             </Setter>
         </Style>
 
-        <!-- Location list -->
-        <Style x:Key="LocationList" TargetType="ListBox">
-            <Setter Property="Height" Value="148"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListBox">
-                        <Border Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource LineBrush}"
-                                BorderThickness="1" CornerRadius="6" Padding="4">
-                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                                <ItemsPresenter/>
-                            </ScrollViewer>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="ItemContainerStyle">
-                <Setter.Value>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
-                        <Setter Property="Cursor" Value="Hand"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ListBoxItem">
-                                    <Border x:Name="Bd" CornerRadius="4" Padding="10,4" Background="Transparent">
-                                        <ContentPresenter VerticalAlignment="Center">
-                                            <ContentPresenter.Resources>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="FontSize" Value="{Binding FontSize, RelativeSource={RelativeSource AncestorType=ListBoxItem}}"/>
-                                                </Style>
-                                            </ContentPresenter.Resources>
-                                        </ContentPresenter>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource HoverBrush}"/>
-                                        </Trigger>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource TintBrush}"/>
-                                            <Setter Property="Foreground" Value="{StaticResource AccentBrush}"/>
-                                            <Setter Property="FontWeight" Value="SemiBold"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </Window.Resources>
 
     <Border CornerRadius="7"
@@ -170,7 +121,7 @@
                 <TextBlock Style="{StaticResource FieldLabel}" Margin="0,16,0,6">
                 <Run Text="Адрес"/>
                 </TextBlock>
-                <ListBox Style="{StaticResource LocationList}"
+                <ListBox Style="{StaticResource SelectionListBox}"
                          ItemsSource="{Binding Locations}"
                          SelectedItem="{Binding SelectedLocation}"
                          FontSize="18"/>
@@ -185,7 +136,7 @@
                     <Button Grid.Column="1" Content="Очистить" Height="26" Padding="10,0" Margin="0"
                             Command="{Binding ClearDiagnosisCommand}"/>
                 </Grid>
-                <ListBox Style="{StaticResource LocationList}"
+                <ListBox Style="{StaticResource SelectionListBox}"
                          Height="100"
                          ItemsSource="{Binding Diagnoses}"
                          SelectedItem="{Binding SelectedDiagnosis}"

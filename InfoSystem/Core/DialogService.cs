@@ -11,6 +11,7 @@ namespace InfoSystem
         public bool? ShowNewDiagnosis(Window mainWindow, NewDiagnosisViewModel vm);
         public bool? ShowNewLocation(Window mainWindow, NewLocationViewModel vm);
         public bool? ShowHistory(Window mainWindow, HistoryViewModel vm);
+        public bool? ShowPatientMedicine(Window mainWindow, PatientMedicineViewModel vm);
     }
 
     internal class DialogService : IDialogService
@@ -106,6 +107,28 @@ namespace InfoSystem
         public bool? ShowHistory(Window mainWindow, HistoryViewModel vm)
         {
             var modal = new HistoryModal(mainWindow);
+            modal.DataContext = vm;
+
+            var ownerOpacity = mainWindow.Opacity;
+            mainWindow.Opacity = 0.5;
+            try
+            {
+                return modal.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return null;
+            }
+            finally
+            {
+                mainWindow.Opacity = ownerOpacity;
+            }
+        }
+
+        public bool? ShowPatientMedicine(Window mainWindow, PatientMedicineViewModel vm)
+        {
+            var modal = new PatientMedicineModal(mainWindow);
             modal.DataContext = vm;
 
             var ownerOpacity = mainWindow.Opacity;
