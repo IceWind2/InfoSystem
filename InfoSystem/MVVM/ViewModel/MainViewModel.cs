@@ -7,9 +7,9 @@ namespace InfoSystem
 {
     internal class MainViewModel : ObservableObject
     {
-        public sealed record NavItem(string Title, string Icon, Func<object> Create);
+        public sealed record NavItem(string Title, string Icon, Func<TablePageViewModel> Create);
 
-        private readonly Dictionary<NavItem, object> _pages = new();
+        private readonly Dictionary<NavItem, TablePageViewModel> _pages = new();
 
         private NavItem? _selectedNavItem;
         private object? _currentViewModel;
@@ -58,6 +58,7 @@ namespace InfoSystem
             if (!_pages.TryGetValue(item, out var page))
                 _pages[item] = page = item.Create();
 
+            page.ApplySort();
             CurrentViewModel = page;
         }
     }

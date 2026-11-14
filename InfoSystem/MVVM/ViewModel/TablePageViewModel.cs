@@ -1,6 +1,6 @@
 ﻿namespace InfoSystem
 {
-    class TablePageViewModel : ObservableObject
+    internal abstract class TablePageViewModel : ObservableObject
     {
         public string SearchText { get; set; } = "";
         public int TotalCount { get; protected set; }
@@ -13,5 +13,7 @@
         public bool CanAdd { get; set; } = true;
         public bool CanEdit { get; set; } = true;
         public bool CanDelete { get; set; } = true;
+
+        public abstract void ApplySort();
     }
 }

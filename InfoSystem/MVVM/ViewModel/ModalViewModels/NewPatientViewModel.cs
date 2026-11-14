@@ -20,8 +20,8 @@ namespace InfoSystem
 
         public NewPatientViewModel(IEnumerable<Location> locations, IEnumerable<Diagnosis> diagnoses, Patient? patient = null)
         {
-            Locations = new List<Location>(locations);
-            Diagnoses = new List<Diagnosis>(diagnoses);
+            Locations = new List<Location>(locations.OrderBy(l => l.Name));
+            Diagnoses = new List<Diagnosis>(diagnoses.OrderBy(m => m.Name));
             
             if (patient != null)
             {

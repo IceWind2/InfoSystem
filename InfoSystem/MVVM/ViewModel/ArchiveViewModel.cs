@@ -23,6 +23,11 @@ namespace InfoSystem
 
         public RelayCommand HistoryCommand { get; }
 
+        public override void ApplySort()
+        {
+            _patientsView.SortDescriptions.Add(new SortDescription(nameof(Patient.Name), ListSortDirection.Ascending));
+        }
+
         public ArchiveViewModel(Window mainWindow)
         {
             using (var context = InfoContext.CreateDbContext())

@@ -22,6 +22,11 @@ namespace InfoSystem
             set => SetProperty(ref _selectedDiagnosis, value);
         }
 
+        public override void ApplySort()
+        {
+            _diagnosesView.SortDescriptions.Add(new SortDescription(nameof(Diagnosis.Name), ListSortDirection.Ascending));
+        }
+
         public DiagnosisViewModel(Window mainWindow)
         {
             using (var context = InfoContext.CreateDbContext())

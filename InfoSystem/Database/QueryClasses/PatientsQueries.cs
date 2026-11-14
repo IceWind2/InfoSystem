@@ -15,7 +15,6 @@ namespace InfoSystem
                 .Include(p => p.PatientMedicine!).ThenInclude(pm => pm.Medicine)
                 .Include(p => p.Location)
                 .Include(p => p.Diagnosis)
-                .OrderBy(p => p.Id)
                 .ToListAsync();
         }
 
@@ -89,7 +88,7 @@ namespace InfoSystem
             {
                 PatientId = patientMedicineDTO.PatientId,
                 MedicineId = patientMedicineDTO.MedicineId,
-                Prescription = patientMedicineDTO.Prescription
+                Prescription = patientMedicineDTO.Prescription,
             };
 
             _dbContext.PatientsMedicine.Add(patientMedicine);

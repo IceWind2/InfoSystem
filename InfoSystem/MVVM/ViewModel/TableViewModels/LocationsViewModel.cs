@@ -22,6 +22,11 @@ namespace InfoSystem
             set => SetProperty(ref _selectedLocation, value);
         }
 
+        public override void ApplySort()
+        {
+            _locationsView.SortDescriptions.Add(new SortDescription(nameof(Location.Name), ListSortDirection.Ascending));
+        }
+
         public LocationsViewModel(Window mainWindow)
         {
             using (var context = InfoContext.CreateDbContext())

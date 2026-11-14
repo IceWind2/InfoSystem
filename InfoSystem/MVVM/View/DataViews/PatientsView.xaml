@@ -103,6 +103,7 @@
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Лекарство" Binding="{Binding Medicine.Name}" Width="2*"/>
                                 <DataGridTextColumn Header="Дозировка" Binding="{Binding Prescription}" Width="3*"/>
+                                <DataGridTextColumn Header="Заметка" Binding="{Binding Note}" Width="3*"/>
                             </DataGrid.Columns>
                         </DataGrid>
                         <StackPanel Orientation="Horizontal" Margin="0,12,0,0">

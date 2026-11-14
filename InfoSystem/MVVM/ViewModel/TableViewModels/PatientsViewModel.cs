@@ -27,6 +27,11 @@ namespace InfoSystem
         public AsyncRelayCommand AddMedicineCommand { get; }
         public AsyncRelayCommand RemoveMedicineCommand { get; }
 
+        public override void ApplySort()
+        {
+            _patientsView.SortDescriptions.Add(new SortDescription(nameof(Patient.Name), ListSortDirection.Ascending));
+        }
+
         public PatientsViewModel(Window mainWindow)
         {
             using (var context = InfoContext.CreateDbContext())
@@ -36,6 +41,7 @@ namespace InfoSystem
 
             _patientsView = CollectionViewSource.GetDefaultView(_patients);
             _patientsView.Filter = item => item is Patient patient && patient.ContainsFilter(SearchText);
+            
             UpdateTotalCount();
 
             FilterCommand = new RelayCommand(_ =>
