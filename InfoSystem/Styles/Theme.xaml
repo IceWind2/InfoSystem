@@ -101,6 +101,72 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="AppCheckBox" TargetType="CheckBox">
+        <Setter Property="FontFamily" Value="{StaticResource UiFont}"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <Grid Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="18"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Border x:Name="Box"
+                                Width="18" Height="18"
+                                CornerRadius="4"
+                                Background="{StaticResource SurfaceBrush}"
+                                BorderBrush="{StaticResource LineBrush}"
+                                BorderThickness="1"
+                                VerticalAlignment="Center">
+                            <Path x:Name="CheckMark"
+                                  Width="18" Height="18"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Data="M 3,9 L 7,13 L 15,5"
+                                  Stroke="White"
+                                  StrokeThickness="2"
+                                  StrokeStartLineCap="Round"
+                                  StrokeEndLineCap="Round"
+                                  Stretch="None"
+                                  Visibility="Collapsed"/>
+                        </Border>
+                        <ContentPresenter Grid.Column="1"
+                                          Margin="9,0,0,0"
+                                          VerticalAlignment="Center"
+                                          RecognizesAccessKey="True"
+                                          ContentSource="Content"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Box" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Box" Property="Background" Value="{StaticResource AccentBrush}"/>
+                            <Setter TargetName="Box" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+                            <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="Box" Property="BorderThickness" Value="2"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.56"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DataGridCheckBox" TargetType="CheckBox" BasedOn="{StaticResource AppCheckBox}">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="IsHitTestVisible" Value="False"/>
+    </Style>
+
     <!-- Selection list box -->
     <Style x:Key="SelectionListBox" TargetType="ListBox">
         <Setter Property="Height" Value="148"/>

@@ -64,6 +64,7 @@ namespace InfoSystem
                 Name = newPatient.Name.Trim(),
                 BirthDate = newPatient.BirthDate,
                 Sex = newPatient.Sex,
+                Disabled = newPatient.Disabled,
                 LocationId = newPatient.Location.Id,
                 DiagnosisId = newPatient.Diagnosis?.Id,
             };
@@ -89,6 +90,7 @@ namespace InfoSystem
                 PatientId = patientMedicineDTO.PatientId,
                 MedicineId = patientMedicineDTO.MedicineId,
                 Prescription = patientMedicineDTO.Prescription,
+                Note = patientMedicineDTO.Note,
             };
 
             _dbContext.PatientsMedicine.Add(patientMedicine);

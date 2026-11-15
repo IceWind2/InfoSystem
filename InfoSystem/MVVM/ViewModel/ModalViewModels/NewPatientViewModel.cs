@@ -10,6 +10,7 @@ namespace InfoSystem
         private string _fullName = "";
         private DateTime? _birthDate;
         private Sex _sex;
+        private bool _disabled;
         private Location? _selectedLocation;
         private Diagnosis? _selectedDiagnosis;
         private string _note = "";
@@ -29,6 +30,7 @@ namespace InfoSystem
                 _fullName = patient.Name;
                 _birthDate = patient.BirthDate;
                 _sex = patient.Sex;
+                _disabled = patient.Disabled;
                 SelectedLocation = Locations.First(l => l.Id == patient.LocationId);
                 SelectedDiagnosis = Diagnoses.FirstOrDefault(diagnosis => diagnosis.Id == patient.DiagnosisId);
             }
@@ -50,6 +52,7 @@ namespace InfoSystem
                     patient!.Name = FullName.Trim();
                     patient.BirthDate = BirthDate!.Value.Date;
                     patient.Sex = Sex;
+                    patient.Disabled = Disabled;
                     patient.Location = SelectedLocation!;
                     patient.LocationId = SelectedLocation!.Id;
                     patient.Diagnosis = SelectedDiagnosis;
@@ -67,6 +70,7 @@ namespace InfoSystem
                         Name = FullName.Trim(),
                         BirthDate = BirthDate!.Value.Date,
                         Sex = Sex,
+                        Disabled = Disabled,
                         Location = SelectedLocation!,
                         Diagnosis = SelectedDiagnosis,
                         Note = string.IsNullOrWhiteSpace(Note) ? null : Note.Trim(),
@@ -99,6 +103,11 @@ namespace InfoSystem
         {
             get => _sex;
             set { if (SetProperty(ref _sex, value)) Revalidate(); }
+        }
+        public bool Disabled
+        {
+            get => _disabled;
+            set => SetProperty(ref _disabled, value);
         }
         public Location? SelectedLocation
         {

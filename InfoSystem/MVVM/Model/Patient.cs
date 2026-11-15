@@ -22,6 +22,9 @@ namespace InfoSystem
 
         public DateTime BirthDate { get; set; }
 
+        [Required]
+        public bool Disabled { get; set; }
+
         [ForeignKey("Location")]
         public int? LocationId { get; set; }
         [DeleteBehavior(DeleteBehavior.Cascade)]

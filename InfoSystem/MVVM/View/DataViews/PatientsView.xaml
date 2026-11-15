@@ -42,7 +42,10 @@
                 <DataGridTextColumn Header="#" Binding="{Binding Id}" Width="48"/>
                 <DataGridTextColumn Header="ФИО" Binding="{Binding Name}" Width="2*"/>
                 <DataGridTextColumn Header="Пол" Binding="{Binding DisplaySex}" Width="60"/>
+                <DataGridTextColumn Header="Дата рождения" Binding="{Binding BirthDate, StringFormat={}{0:dd.MM.yyyy}}" Width="110"/>
                 <DataGridTextColumn Header="Возраст" Binding="{Binding Age}" Width="80"/>
+                <DataGridCheckBoxColumn Header="Инвалидность" Binding="{Binding Disabled}" IsReadOnly="True"
+                                        ElementStyle="{StaticResource DataGridCheckBox}" Width="110"/>
                 <DataGridTextColumn Header="Диагноз" Binding="{Binding Diagnosis.Name}" Width="2*"/>
                 <DataGridTemplateColumn Header="Лекарства" Width="3*">
                     <DataGridTemplateColumn.CellTemplate>

@@ -12,6 +12,8 @@ namespace InfoSystem
 
         public Sex Sex { get; set; }
 
+        public bool Disabled { get; set; }
+
         public Location Location { get; set; }
 
         public Diagnosis? Diagnosis { get; set; }
