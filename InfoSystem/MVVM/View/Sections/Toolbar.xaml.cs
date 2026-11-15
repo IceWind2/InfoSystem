@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace InfoSystem
 {
@@ -8,5 +9,7 @@ namespace InfoSystem
         {
             InitializeComponent();
         }
+
+        public ToggleButton FilterMenuButton => FilterMenuToggle;
     }
 }

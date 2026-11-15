@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -10,12 +11,18 @@ namespace InfoSystem
 {
     internal class PatientsViewModel : TablePageViewModel
     {
-        private readonly ObservableCollection<Patient> _patients;
-        private readonly ICollectionView _patientsView;
         private Patient? _selectedPatient;
+        private Medicine? _filterMedicine;
+        private Diagnosis? _filterDiagnosis;
+        private Location? _filterLocation;
         private readonly IDialogService _dialogService = new DialogService();
 
-        public ObservableCollection<Patient> Patients => _patients;
+        public ObservableCollection<Patient> Patients { get; private set; }
+        public IReadOnlyList<Medicine> Medicines { get; }
+        public IReadOnlyList<Diagnosis> Diagnoses { get; }
+        public IReadOnlyList<Location> Locations { get; }
+        public bool HasSelectedFilters =>
+            FilterMedicine != null || FilterDiagnosis != null || FilterLocation != null;
 
         public Patient? SelectedPatient
         {
@@ -23,31 +30,83 @@ namespace InfoSystem
             set => SetProperty(ref _selectedPatient, value);
         }
 
+        public Medicine? FilterMedicine
+        {
+            get => _filterMedicine;
+            set
+            {
+                if (SetProperty(ref _filterMedicine, value))
+                {
+                    OnPropertyChanged(nameof(HasSelectedFilters));
+                    RefreshCollectionView();
+                }
+            }
+        }
+
+        public Diagnosis? FilterDiagnosis
+        {
+            get => _filterDiagnosis;
+            set
+            {
+                if (SetProperty(ref _filterDiagnosis, value))
+                {
+                    OnPropertyChanged(nameof(HasSelectedFilters));
+                    RefreshCollectionView();
+                }
+            }
+        }
+
+        public Location? FilterLocation
+        {
+            get => _filterLocation;
+            set
+            {
+                if (SetProperty(ref _filterLocation, value))
+                {
+                    OnPropertyChanged(nameof(HasSelectedFilters));
+                    RefreshCollectionView();
+                }
+            }
+        }
+
         public RelayCommand HistoryCommand { get; }
+        public RelayCommand ClearFiltersCommand { get; }
         public AsyncRelayCommand AddMedicineCommand { get; }
         public AsyncRelayCommand RemoveMedicineCommand { get; }
 
         public override void ApplySort()
         {
-            _patientsView.SortDescriptions.Add(new SortDescription(nameof(Patient.Name), ListSortDirection.Ascending));
+            _collectionView.SortDescriptions.Add(new SortDescription(nameof(Patient.Name), ListSortDirection.Ascending));
         }
 
         public PatientsViewModel(Window mainWindow)
         {
+            HasAdvancedFilters = true;
+
             using (var context = InfoContext.CreateDbContext())
             {
-                _patients = new ObservableCollection<Patient>(context.PatientsQueries.GetPatientsListAsync().GetAwaiter().GetResult());
+                Patients = new ObservableCollection<Patient>(context.PatientsQueries.GetPatientsListAsync().GetAwaiter().GetResult());
+                Medicines = context.GetAllEntities<Medicine>().OrderBy(medicine => medicine.Name).ToList();
+                Diagnoses = context.GetAllEntities<Diagnosis>().OrderBy(diagnosis => diagnosis.Name).ToList();
+                Locations = context.GetAllEntities<Location>().OrderBy(location => location.Name).ToList();
             }
 
-            _patientsView = CollectionViewSource.GetDefaultView(_patients);
-            _patientsView.Filter = item => item is Patient patient && patient.ContainsFilter(SearchText);
-            
-            UpdateTotalCount();
+            _collectionView = CollectionViewSource.GetDefaultView(Patients);
+            _collectionView.Filter = item => item is Patient patient
+                && patient.ContainsFilter(SearchText)
+                && (_filterMedicine == null || patient.PatientMedicine?.Any(
+                    patientMedicine => patientMedicine.MedicineId == _filterMedicine.Id) == true)
+                && (_filterDiagnosis == null || patient.DiagnosisId == _filterDiagnosis.Id)
+                && (_filterLocation == null || patient.LocationId == _filterLocation.Id);
 
-            FilterCommand = new RelayCommand(_ =>
+            RefreshCollectionView();
+
+            SearchCommand = new RelayCommand(_ => RefreshCollectionView());
+            ClearFiltersCommand = new RelayCommand(_ =>
             {
-                _patientsView.Refresh();
-                UpdateTotalCount();
+                FilterMedicine = null;
+                FilterDiagnosis = null;
+                FilterLocation = null;
             });
 
             HistoryCommand = new RelayCommand(item =>
@@ -102,7 +161,7 @@ namespace InfoSystem
                 }
 
                 using var context = InfoContext.CreateDbContext();
-                
+
                 context.PatientsQueries.RemovePatientMedicine(new AddPatientMedicineDTO
                 {
                     PatientId = patientMedicine.PatientId,
@@ -110,12 +169,12 @@ namespace InfoSystem
                     Prescription = patientMedicine.Prescription,
                     Note = null
                 });
-                
+
                 context.PatientsQueries.WritePatientHistory(
                     patientMedicine.PatientId,
                     string.Empty,
                     $"{HistoryChange.MedicineRemoved}: {patientMedicine.Medicine?.Name}");
-                
+
                 await context.SaveChangesAsync();
 
                 await RefreshPatientAsync(patientMedicine.PatientId, context);
@@ -152,9 +211,8 @@ namespace InfoSystem
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    _patients.Add(newPatient);
-                    _patientsView.Refresh();
-                    UpdateTotalCount();
+                    Patients.Add(newPatient);
+                    RefreshCollectionView();
                 });
             });
 
@@ -190,12 +248,11 @@ namespace InfoSystem
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    var index = _patients.IndexOf(currentSelectedPatient);
+                    var index = Patients.IndexOf(currentSelectedPatient);
                     if (index >= 0)
                     {
-                        _patients[index] = currentSelectedPatient;
-                        _patientsView.Refresh();
-                        UpdateTotalCount();
+                        Patients[index] = currentSelectedPatient;
+                        RefreshCollectionView();
                     }
                 });
             });
@@ -221,17 +278,10 @@ namespace InfoSystem
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     SelectedPatient = null;
-                    _patients.Remove(patientToRemove);
-                    _patientsView.Refresh();
-                    UpdateTotalCount();
+                    Patients.Remove(patientToRemove);
+                    RefreshCollectionView();
                 });
             });
-        }
-
-        private void UpdateTotalCount()
-        {
-            TotalCount = _patientsView.Cast<object>().Count();
-            OnPropertyChanged(nameof(TotalCount));
         }
 
         private async Task RefreshPatientAsync(int patientId, InfoContext infoContext)
@@ -243,7 +293,7 @@ namespace InfoSystem
 
             Application.Current.Dispatcher.Invoke(() =>
             {
-                var currentPatient = _patients.FirstOrDefault(patient => patient.Id == patientId);
+                var currentPatient = Patients.FirstOrDefault(patient => patient.Id == patientId);
                 if (currentPatient != null)
                 {
                     currentPatient.PatientMedicine.Clear();
@@ -252,7 +302,7 @@ namespace InfoSystem
                         currentPatient.PatientMedicine.Add(patientMedicine);
                     }
 
-                    _patientsView.Refresh();
+                    _collectionView.Refresh();
                 }
             });
         }

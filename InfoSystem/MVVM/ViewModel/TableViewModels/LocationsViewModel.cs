@@ -9,12 +9,10 @@ namespace InfoSystem
 {
     internal class LocationsViewModel : TablePageViewModel
     {
-        private readonly ObservableCollection<Location> _locations;
-        private readonly ICollectionView _locationsView;
         private readonly IDialogService _dialogService = new DialogService();
         private Location? _selectedLocation;
 
-        public ObservableCollection<Location> Locations => _locations;
+        public ObservableCollection<Location> Locations { get; private set; }
 
         public Location? SelectedLocation
         {
@@ -24,25 +22,21 @@ namespace InfoSystem
 
         public override void ApplySort()
         {
-            _locationsView.SortDescriptions.Add(new SortDescription(nameof(Location.Name), ListSortDirection.Ascending));
+            _collectionView.SortDescriptions.Add(new SortDescription(nameof(Location.Name), ListSortDirection.Ascending));
         }
 
         public LocationsViewModel(Window mainWindow)
         {
             using (var context = InfoContext.CreateDbContext())
             {
-                _locations = new ObservableCollection<Location>(context.GetAllEntities<Location>());
+                Locations = new ObservableCollection<Location>(context.GetAllEntities<Location>());
             }
 
-            _locationsView = CollectionViewSource.GetDefaultView(_locations);
-            _locationsView.Filter = item => item is Location location && location.ContainsFilter(SearchText);
-            UpdateTotalCount();
+            _collectionView = CollectionViewSource.GetDefaultView(Locations);
+            _collectionView.Filter = item => item is Location location && location.ContainsFilter(SearchText);
+            RefreshCollectionView();
 
-            FilterCommand = new RelayCommand(_ =>
-            {
-                _locationsView.Refresh();
-                UpdateTotalCount();
-            });
+            SearchCommand = new RelayCommand(_ => RefreshCollectionView());
 
             AddCommand = new AsyncRelayCommand(async _ =>
             {
@@ -66,9 +60,8 @@ namespace InfoSystem
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    _locations.Add(viewModel.Result!);
-                    _locationsView.Refresh();
-                    UpdateTotalCount();
+                    Locations.Add(viewModel.Result!);
+                    RefreshCollectionView();
                 });
             });
 
@@ -100,8 +93,7 @@ namespace InfoSystem
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    _locationsView.Refresh();
-                    UpdateTotalCount();
+                    RefreshCollectionView();
                 });
             });
 
@@ -138,32 +130,10 @@ namespace InfoSystem
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     SelectedLocation = null;
-                    _locations.Remove(locationToRemove);
-                    _locationsView.Refresh();
-                    UpdateTotalCount();
+                    Locations.Remove(locationToRemove);
+                    RefreshCollectionView();
                 });
             });
-        }
-
-        public void UpdateData()
-        {
-            using var context = InfoContext.CreateDbContext();
-            var locations = context.GetAllEntities<Location>();
-
-            _locations.Clear();
-            foreach (var location in locations)
-            {
-                _locations.Add(location);
-            }
-
-            _locationsView.Refresh();
-            UpdateTotalCount();
-        }
-
-        private void UpdateTotalCount()
-        {
-            TotalCount = _locationsView.Cast<object>().Count();
-            OnPropertyChanged(nameof(TotalCount));
         }
     }
 }

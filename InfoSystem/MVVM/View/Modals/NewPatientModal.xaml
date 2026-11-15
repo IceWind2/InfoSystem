@@ -77,7 +77,7 @@
                 <TextBlock Style="{StaticResource FieldLabel}">
                     <Run Text="ФИО"/>
                 </TextBlock>
-                <TextBox Style="{StaticResource FormBox}" Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}" FontSize="16"/>
+                <TextBox Style="{StaticResource FormBox}" Text="{Binding FullName, UpdateSourceTrigger=PropertyChanged}" FontSize="18"/>
                 <TextBlock Style="{StaticResource FieldError}" Text="{Binding FullNameError}"/>
 
                 <Grid Margin="0,16,0,0">
@@ -127,10 +127,11 @@
                 <TextBlock Style="{StaticResource FieldLabel}" Margin="0,16,0,6">
                 <Run Text="Адрес"/>
                 </TextBlock>
-                <ListBox Style="{StaticResource SelectionListBox}"
-                         ItemsSource="{Binding Locations}"
-                         SelectedItem="{Binding SelectedLocation}"
-                         FontSize="18"/>
+                <ComboBox Style="{StaticResource FormComboBox}"
+                          ItemsSource="{Binding Locations}"
+                          SelectedItem="{Binding SelectedLocation}"
+                          DisplayMemberPath="Name"
+                          FontSize="18"/>
                 <TextBlock Style="{StaticResource FieldError}" Text="{Binding LocationsError}"/>
 
                 <Grid Margin="0,16,0,6">
@@ -142,11 +143,11 @@
                     <Button Grid.Column="1" Content="Очистить" Height="26" Padding="10,0" Margin="0"
                             Command="{Binding ClearDiagnosisCommand}"/>
                 </Grid>
-                <ListBox Style="{StaticResource SelectionListBox}"
-                         Height="100"
-                         ItemsSource="{Binding Diagnoses}"
-                         SelectedItem="{Binding SelectedDiagnosis}"
-                         FontSize="18"/>
+                <ComboBox Style="{StaticResource FormComboBox}"
+                          ItemsSource="{Binding Diagnoses}"
+                          SelectedItem="{Binding SelectedDiagnosis}"
+                          DisplayMemberPath="Name"
+                          FontSize="18"/>
 
                 <TextBlock Text="Примечание" Style="{StaticResource FieldLabel}" Margin="0,16,0,6"/>
                 <TextBox Style="{StaticResource NoteBox}" Text="{Binding Note, UpdateSourceTrigger=PropertyChanged}" FontSize="16"/>

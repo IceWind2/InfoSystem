@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="InfoSystem.Toolbar"
+<UserControl x:Class="InfoSystem.Toolbar"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -20,11 +20,48 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
-        <TextBox x:Name="SearchBox" Style="{StaticResource SearchBox}"
-                 Width="280"
-                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+        <Grid Width="280">
+            <TextBox x:Name="SearchBox"
+                     Style="{StaticResource SearchBox}"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                </TextBox.InputBindings>
+            </TextBox>
+            <Button HorizontalAlignment="Right"
+                    Width="25"
+                    Height="25"
+                    Margin="0,0,4,0"
+                    Padding="1, 0, 2, 0"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    ToolTip="Очистить поиск"
+                    Command="{Binding ClearSearchCommand}">
+                <Icon:PackIconFontAwesome Kind="DeleteLeftSolid" Width="16" Height="16"/>
+            </Button>
+        </Grid>
 
-        <Button Grid.Column="1" Content="Фильтр" Margin="8,0,0,0" Command="{Binding FilterCommand}"/>
+        <ToggleButton x:Name="FilterMenuToggle"
+                      Grid.Column="1"
+                      Content="Фильтр"
+                      Margin="8,0,0,0"
+                      IsChecked="{Binding IsFilterMenuOpen, Mode=TwoWay}">
+            <ToggleButton.Style>
+                <Style TargetType="ToggleButton" BasedOn="{StaticResource ToolbarFilterToggleButton}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding HasSelectedFilters}" Value="True">
+                            <Setter Property="Background" Value="{StaticResource TintBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding HasAdvancedFilters}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ToggleButton.Style>
+        </ToggleButton>
 
         <TextBlock Grid.Column="2" Style="{StaticResource Muted}" Margin="14,0,0,0" VerticalAlignment="Center"
                    Text="{Binding TotalCount, StringFormat=Всего: {0}}"/>

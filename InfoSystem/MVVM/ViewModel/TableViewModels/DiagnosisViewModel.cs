@@ -9,12 +9,10 @@ namespace InfoSystem
 {
     internal class DiagnosisViewModel : TablePageViewModel
     {
-        private readonly ObservableCollection<Diagnosis> _diagnoses;
-        private readonly ICollectionView _diagnosesView;
         private readonly IDialogService _dialogService = new DialogService();
         private Diagnosis? _selectedDiagnosis;
 
-        public ObservableCollection<Diagnosis> Diagnoses => _diagnoses;
+        public ObservableCollection<Diagnosis> Diagnoses { get; private set; }
 
         public Diagnosis? SelectedDiagnosis
         {
@@ -24,25 +22,21 @@ namespace InfoSystem
 
         public override void ApplySort()
         {
-            _diagnosesView.SortDescriptions.Add(new SortDescription(nameof(Diagnosis.Name), ListSortDirection.Ascending));
+            _collectionView.SortDescriptions.Add(new SortDescription(nameof(Diagnosis.Name), ListSortDirection.Ascending));
         }
 
         public DiagnosisViewModel(Window mainWindow)
         {
             using (var context = InfoContext.CreateDbContext())
             {
-                _diagnoses = new ObservableCollection<Diagnosis>(context.GetAllEntities<Diagnosis>());
+                Diagnoses = new ObservableCollection<Diagnosis>(context.GetAllEntities<Diagnosis>());
             }
 
-            _diagnosesView = CollectionViewSource.GetDefaultView(_diagnoses);
-            _diagnosesView.Filter = item => item is Diagnosis diagnosis && diagnosis.ContainsFilter(SearchText);
-            UpdateTotalCount();
+            _collectionView = CollectionViewSource.GetDefaultView(Diagnoses);
+            _collectionView.Filter = item => item is Diagnosis diagnosis && diagnosis.ContainsFilter(SearchText);
+            RefreshCollectionView();
 
-            FilterCommand = new RelayCommand(_ =>
-            {
-                _diagnosesView.Refresh();
-                UpdateTotalCount();
-            });
+            SearchCommand = new RelayCommand(_ => RefreshCollectionView());
 
             AddCommand = new AsyncRelayCommand(async _ =>
             {
@@ -66,9 +60,8 @@ namespace InfoSystem
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    _diagnoses.Add(viewModel.Result!);
-                    _diagnosesView.Refresh();
-                    UpdateTotalCount();
+                    Diagnoses.Add(viewModel.Result!);
+                    RefreshCollectionView();
                 });
             });
 
@@ -100,8 +93,7 @@ namespace InfoSystem
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    _diagnosesView.Refresh();
-                    UpdateTotalCount();
+                    RefreshCollectionView();
                 });
             });
 
@@ -138,32 +130,10 @@ namespace InfoSystem
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     SelectedDiagnosis = null;
-                    _diagnoses.Remove(diagnosisToRemove);
-                    _diagnosesView.Refresh();
-                    UpdateTotalCount();
+                    Diagnoses.Remove(diagnosisToRemove);
+                    RefreshCollectionView();
                 });
             });
-        }
-
-        public void UpdateData()
-        {
-            using var context = InfoContext.CreateDbContext();
-            var diagnoses = context.GetAllEntities<Diagnosis>();
-
-            _diagnoses.Clear();
-            foreach (var diagnosis in diagnoses)
-            {
-                _diagnoses.Add(diagnosis);
-            }
-
-            _diagnosesView.Refresh();
-            UpdateTotalCount();
-        }
-
-        private void UpdateTotalCount()
-        {
-            TotalCount = _diagnosesView.Cast<object>().Count();
-            OnPropertyChanged(nameof(TotalCount));
         }
     }
 }

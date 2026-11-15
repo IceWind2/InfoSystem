@@ -9,12 +9,10 @@ namespace InfoSystem
 {
     internal class MedicineViewModel : TablePageViewModel
     {
-        private readonly ObservableCollection<Medicine> _medicines;
-        private readonly ICollectionView _medicinesView;
         private Medicine? _selectedMedicine;
         private readonly IDialogService _dialogService = new DialogService();
 
-        public ObservableCollection<Medicine> Medicines => _medicines;
+        public ObservableCollection<Medicine> Medicines {  get; private set; }
 
         public Medicine? SelectedMedicine
         {
@@ -24,25 +22,21 @@ namespace InfoSystem
 
         public override void ApplySort()
         {
-            _medicinesView.SortDescriptions.Add(new SortDescription(nameof(Medicine.Name), ListSortDirection.Ascending));
+            _collectionView.SortDescriptions.Add(new SortDescription(nameof(Medicine.Name), ListSortDirection.Ascending));
         }
 
         public MedicineViewModel(Window mainWindow)
         {
             using (var context = InfoContext.CreateDbContext())
             {
-                _medicines = new ObservableCollection<Medicine>(context.GetAllEntities<Medicine>());
+                Medicines = new ObservableCollection<Medicine>(context.GetAllEntities<Medicine>());
             }
 
-            _medicinesView = CollectionViewSource.GetDefaultView(_medicines);
-            _medicinesView.Filter = item => item is Medicine medicine && medicine.ContainsFilter(SearchText);
-            UpdateTotalCount();
+            _collectionView = CollectionViewSource.GetDefaultView(Medicines);
+            _collectionView.Filter = item => item is Medicine medicine && medicine.ContainsFilter(SearchText);
+            RefreshCollectionView();
 
-            FilterCommand = new RelayCommand(_ =>
-            {
-                _medicinesView.Refresh();
-                UpdateTotalCount();
-            });
+            SearchCommand = new RelayCommand(_ => RefreshCollectionView());
 
             AddCommand = new AsyncRelayCommand(async _ =>
             {
@@ -66,9 +60,8 @@ namespace InfoSystem
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    _medicines.Add(viewModel.Result!);
-                    _medicinesView.Refresh();
-                    UpdateTotalCount();
+                    Medicines.Add(viewModel.Result!);
+                    RefreshCollectionView();
                 });
             });
 
@@ -96,16 +89,15 @@ namespace InfoSystem
 
                 using var context = InfoContext.CreateDbContext();
                 context.UpdateEntity(currentSelectedMedicine);
-                await context.SaveChangesAsync(); 
+                await context.SaveChangesAsync();
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    var index = _medicines.IndexOf(currentSelectedMedicine);
+                    var index = Medicines.IndexOf(currentSelectedMedicine);
                     if (index >= 0)
                     {
-                        _medicines[index] = currentSelectedMedicine;
-                        _medicinesView.Refresh();
-                        UpdateTotalCount();
+                        Medicines[index] = currentSelectedMedicine;
+                        RefreshCollectionView();
                     }
                 });
             });
@@ -144,32 +136,10 @@ namespace InfoSystem
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     SelectedMedicine = null;
-                    _medicines.Remove(medicineToRemove);
-                    _medicinesView.Refresh();
-                    UpdateTotalCount();
+                    Medicines.Remove(medicineToRemove);
+                    RefreshCollectionView(); ;
                 });
             });
-        }
-
-        public void UpdateData()
-        {
-            using var context = InfoContext.CreateDbContext();
-            var medicines = context.GetAllEntities<Medicine>();
-
-            _medicines.Clear();
-            foreach (var medicine in medicines)
-            {
-                _medicines.Add(medicine);
-            }
-
-            _medicinesView.Refresh();
-            UpdateTotalCount();
-        }
-
-        private void UpdateTotalCount()
-        {
-            TotalCount = _medicinesView.Cast<object>().Count();
-            OnPropertyChanged(nameof(TotalCount));
         }
     }
 }

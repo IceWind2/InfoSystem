@@ -11,7 +11,50 @@
     <DockPanel Background="{StaticResource BgBrush}">
         <TextBlock DockPanel.Dock="Top" Text="Пациенты" Style="{StaticResource PageTitle}"/>
 
-        <local:Toolbar DockPanel.Dock="Top" Margin="0,16"/>
+        <Grid DockPanel.Dock="Top" Margin="0,16">
+            <local:Toolbar x:Name="PatientsToolbar"/>
+            <Popup x:Name="FilterMenuPopup"
+                   PlacementTarget="{Binding FilterMenuButton, ElementName=PatientsToolbar}"
+                   Placement="Bottom"
+                   StaysOpen="False"
+                   AllowsTransparency="True"
+                   IsOpen="{Binding IsFilterMenuOpen, Mode=TwoWay}"
+                   DataContext="{Binding DataContext, ElementName=PatientsToolbar}">
+                <Border Background="{StaticResource SurfaceBrush}"
+                        BorderBrush="{StaticResource LineBrush}"
+                        BorderThickness="2"
+                        CornerRadius="7"
+                        Padding="16"
+                        Width="320">
+                    <StackPanel>
+                        <TextBlock Text="Фильтры пациентов"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,12"/>
+                        <TextBlock Text="Лекарство" Style="{StaticResource FieldLabel}"/>
+                        <ComboBox Style="{StaticResource FormComboBox}"
+                                  ItemsSource="{Binding Medicines}"
+                                  SelectedItem="{Binding FilterMedicine}"
+                                  DisplayMemberPath="Name"
+                                  Margin="0,0,0,12"/>
+                        <TextBlock Text="Диагноз" Style="{StaticResource FieldLabel}"/>
+                        <ComboBox Style="{StaticResource FormComboBox}"
+                                  ItemsSource="{Binding Diagnoses}"
+                                  SelectedItem="{Binding FilterDiagnosis}"
+                                  DisplayMemberPath="Name"
+                                  Margin="0,0,0,12"/>
+                        <TextBlock Text="Адрес" Style="{StaticResource FieldLabel}"/>
+                        <ComboBox Style="{StaticResource FormComboBox}"
+                                  ItemsSource="{Binding Locations}"
+                                  SelectedItem="{Binding FilterLocation}"
+                                  DisplayMemberPath="Name"
+                                  Margin="0,0,0,12"/>
+                        <Button Content="Сбросить"
+                                HorizontalAlignment="Right"
+                                Command="{Binding ClearFiltersCommand}"/>
+                    </StackPanel>
+                </Border>
+            </Popup>
+        </Grid>
 
         <DataGrid ItemsSource="{Binding Patients}"
                   SelectedItem="{Binding SelectedPatient}"

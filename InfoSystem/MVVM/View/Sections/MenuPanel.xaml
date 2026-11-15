@@ -19,7 +19,7 @@
                         <Border x:Name="Bd" CornerRadius="6" Padding="12,9" Background="Transparent">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{Binding Icon}" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
-                                           Foreground="{TemplateBinding Foreground}" FontSize="16"
+                                           Foreground="{TemplateBinding Foreground}" FontSize="18"
                                            VerticalAlignment="Center" Width="24"/>
                                 <TextBlock Text="{Binding Title}" Foreground="{TemplateBinding Foreground}"
                                            FontWeight="{TemplateBinding FontWeight}" VerticalAlignment="Center"/>
@@ -33,7 +33,7 @@
                                 <Setter TargetName="Bd" Property="Background" Value="{StaticResource TintBrush}"/>
                                 <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
                                 <Setter TargetName="Bd" Property="BorderThickness" Value="1"/>
-                                <Setter Property="Foreground" Value="{StaticResource AccentBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
                                 <Setter Property="FontWeight" Value="SemiBold"/>
                             </Trigger>
                         </ControlTemplate.Triggers>

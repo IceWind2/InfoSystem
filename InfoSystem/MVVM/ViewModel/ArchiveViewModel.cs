@@ -44,7 +44,7 @@ namespace InfoSystem
             CanEdit = false;
             CanDelete = false;
 
-            FilterCommand = new RelayCommand(_ =>
+            SearchCommand = new RelayCommand(_ =>
             {
                 _patientsView.Refresh();
                 UpdateTotalCount();
