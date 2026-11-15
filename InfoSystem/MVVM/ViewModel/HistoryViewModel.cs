@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace InfoSystem
 {
@@ -19,6 +20,7 @@ namespace InfoSystem
         }
 
         public string Title { get; }
+        public AsyncRelayCommand RemoveHistoryCommand { get; }
 
         public HistoryViewModel(Patient patient)
             : this(patient.Id, patient.Name)
@@ -36,6 +38,26 @@ namespace InfoSystem
 
             using var context = InfoContext.CreateDbContext();
             _history = new ObservableCollection<History>(context.PatientsQueries.GetPatientHistoryAsync(patientId).GetAwaiter().GetResult());
+
+            RemoveHistoryCommand = new AsyncRelayCommand(async item =>
+            {
+                if (item is not History historyToRemove || !_history.Contains(historyToRemove))
+                {
+                    return;
+                }
+
+                var confirmation = MessageBox.Show("Вы уверены, что хотите удалить запись из истории?", "Подтвердите действие", MessageBoxButton.YesNo);
+                if (confirmation == MessageBoxResult.No)
+                {
+                    return;
+                }
+
+                using var context = InfoContext.CreateDbContext();
+                context.RemoveEntity(historyToRemove);
+                await context.SaveChangesAsync();
+
+                _history.Remove(historyToRemove);
+            });
         }
     }
 }

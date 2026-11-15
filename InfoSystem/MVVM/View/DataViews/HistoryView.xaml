@@ -13,6 +13,36 @@
                                 Binding="{Binding LocalTime, StringFormat=HH:mm dd-MM-yyyy}"/>
             <DataGridTextColumn Header="Действие" Width="220" Binding="{Binding Change}"/>
             <DataGridTextColumn Header="Заметки" Width="*" Binding="{Binding Note}"/>
+            <DataGridTemplateColumn Width="60" CanUserSort="False">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Button Width="20" Height="20" Padding="0" Margin="0"
+                                Background="Transparent" BorderThickness="0"
+                                ToolTip="Удалить запись"
+                                Command="{Binding DataContext.RemoveHistoryCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                CommandParameter="{Binding}">
+                            <Grid Width="20" Height="20">
+                                <Ellipse>
+                                    <Ellipse.Style>
+                                        <Style TargetType="{x:Type Ellipse}">
+                                            <Setter Property="Fill" Value="#FF3B40"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+                                                             Value="True">
+                                                    <Setter Property="Fill" Value="#D9262E"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Ellipse.Style>
+                                </Ellipse>
+                                <Path Data="M 6,6 L 14,14 M 14,6 L 6,14"
+                                      Stroke="White" StrokeThickness="2.2"
+                                      StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                            </Grid>
+                        </Button>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
         </DataGrid.Columns>
     </DataGrid>
 </UserControl>

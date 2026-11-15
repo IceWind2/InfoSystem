@@ -207,8 +207,8 @@ namespace InfoSystem
                     return;
                 }
 
-                var response = MessageBox.Show("Вы уверены, что хотите удалить пациента?", "Подтвердите действие", MessageBoxButton.YesNo);
-                if (response == MessageBoxResult.No)
+                var confirmation = MessageBox.Show("Вы уверены, что хотите удалить пациента?", "Подтвердите действие", MessageBoxButton.YesNo);
+                if (confirmation == MessageBoxResult.No)
                 {
                     return;
                 }
