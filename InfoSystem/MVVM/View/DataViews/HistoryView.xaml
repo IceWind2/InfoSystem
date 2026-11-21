@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="InfoSystem.HistoryView"
+<UserControl x:Class="InfoSystem.HistoryView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,13 +7,32 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <DataGrid x:Name="HistoryTable" ItemsSource="{Binding History}" Margin="24,16,24,20">
+    <DataGrid x:Name="HistoryTable"
+              ItemsSource="{Binding History}"
+              Margin="24,16,24,20"
+              RowHeight="64"
+              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+              ScrollViewer.VerticalScrollBarVisibility="Auto">
         <DataGrid.Columns>
-            <DataGridTextColumn Header="Дата" Width="180"
+            <DataGridTextColumn Header="Дата" Width="190" MinWidth="190"
                                 Binding="{Binding LocalTime, StringFormat=HH:mm dd-MM-yyyy}"/>
-            <DataGridTextColumn Header="Действие" Width="220" Binding="{Binding Change}"/>
-            <DataGridTextColumn Header="Заметки" Width="*" Binding="{Binding Note}"/>
-            <DataGridTemplateColumn Width="60" CanUserSort="False">
+            <DataGridTextColumn Header="Действие" Width="260" MinWidth="260" Binding="{Binding Change}">
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="TextWrapping" Value="Wrap"/>
+                        <Setter Property="TextTrimming" Value="None"/>
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
+            </DataGridTextColumn>
+            <DataGridTextColumn Header="Заметки" Width="2*" MinWidth="260" Binding="{Binding Note}">
+                <DataGridTextColumn.ElementStyle>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="TextWrapping" Value="Wrap"/>
+                        <Setter Property="TextTrimming" Value="None"/>
+                    </Style>
+                </DataGridTextColumn.ElementStyle>
+            </DataGridTextColumn>
+            <DataGridTemplateColumn Header="" Width="64" MinWidth="64" CanUserSort="False">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <Button Width="20" Height="20" Padding="0" Margin="0"

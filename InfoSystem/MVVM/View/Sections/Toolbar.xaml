@@ -63,7 +63,7 @@
             </ToggleButton.Style>
         </ToggleButton>
 
-        <TextBlock Grid.Column="2" Style="{StaticResource Muted}" Margin="14,0,0,0" VerticalAlignment="Center"
+        <TextBlock Grid.Column="2" Style="{StaticResource Muted}" Margin="14,0,0,0" VerticalAlignment="Center" FontSize="18"
                    Text="{Binding TotalCount, StringFormat=Всего: {0}}"/>
 
         <StackPanel Grid.Column="4" Orientation="Horizontal">

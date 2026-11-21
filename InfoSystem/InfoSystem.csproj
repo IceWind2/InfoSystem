@@ -5,6 +5,7 @@
     <TargetFramework>net8.0-windows10.0.22000.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+	<ApplicationIcon>Assets\app-icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,4 +36,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7" />
   </ItemGroup>
 
+  <ItemGroup>
+	<Resource Include="Assets\app-icon.png" />
+	<Resource Include="Assets\app-icon.ico" />
+   </ItemGroup>
 </Project>

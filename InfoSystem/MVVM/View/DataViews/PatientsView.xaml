@@ -62,7 +62,7 @@
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollViewer}">
                     <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
-                    <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+                    <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
                 </Style>
                 <ContextMenu x:Key="PatientRowMenu"
                              DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
@@ -79,16 +79,17 @@
                 <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
                     <Setter Property="Tag" Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
                     <Setter Property="ContextMenu" Value="{StaticResource PatientRowMenu}"/>
+                    <Setter Property="FontSize" Value="18"/>
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="#" Binding="{Binding Id}" Width="48"/>
                 <DataGridTextColumn Header="ФИО" Binding="{Binding Name}" Width="2*"/>
-                <DataGridTextColumn Header="Пол" Binding="{Binding DisplaySex}" Width="60"/>
-                <DataGridTextColumn Header="Дата рождения" Binding="{Binding BirthDate, StringFormat={}{0:dd.MM.yyyy}}" Width="110"/>
-                <DataGridTextColumn Header="Возраст" Binding="{Binding Age}" Width="80"/>
+                <DataGridTextColumn Header="Пол" Binding="{Binding DisplaySex}" Width="70"/>
+                <DataGridTextColumn Header="Дата рожд." Binding="{Binding BirthDate, StringFormat={}{0:dd.MM.yyyy}}" Width="140"/>
+                <DataGridTextColumn Header="Возраст" Binding="{Binding Age}" Width="100"/>
                 <DataGridCheckBoxColumn Header="Инвалидность" Binding="{Binding Disabled}" IsReadOnly="True"
-                                        ElementStyle="{StaticResource DataGridCheckBox}" Width="110"/>
+                                        ElementStyle="{StaticResource DataGridCheckBox}" Width="160"/>
                 <DataGridTextColumn Header="Диагноз" Binding="{Binding Diagnosis.Name}" Width="2*"/>
                 <DataGridTemplateColumn Header="Лекарства" Width="3*">
                     <DataGridTemplateColumn.CellTemplate>
@@ -124,7 +125,7 @@
                                         </Style>
                                     </Border.Style>
                                     <TextBlock Text="{Binding MoreMedicineCount, StringFormat=+{0}}"
-                                               FontSize="12"/>
+                                               FontSize="14"/>
                                 </Border>
                             </StackPanel>
                         </DataTemplate>
@@ -134,37 +135,102 @@
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
-                    <StackPanel Margin="48,4,12,16" MaxWidth="720" HorizontalAlignment="Left">
-                        <DataGrid x:Name="PatientMedicinesGrid"
+                    <Grid Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}">
+                        <StackPanel Margin="48,4,16,16">
+                            <DataGrid x:Name="PatientMedicinesGrid"
                                   ItemsSource="{Binding PatientMedicine}"
                                   AutoGenerateColumns="False"
                                   IsReadOnly="True"
                                   CanUserAddRows="False"
                                   CanUserResizeRows="False"
                                   HeadersVisibility="Column"
-                                  GridLinesVisibility="Horizontal"
+                                  GridLinesVisibility="None"
+                                  HorizontalScrollBarVisibility="Disabled"
                                   RowHeight="36"
                                   BorderBrush="{StaticResource LineBrush}"
-                                  Background="{StaticResource SurfaceBrush}">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="Лекарство" Binding="{Binding Medicine.Name}" Width="2*"/>
-                                <DataGridTextColumn Header="Дозировка" Binding="{Binding Prescription}" Width="3*"/>
-                                <DataGridTextColumn Header="Заметка" Binding="{Binding Note}" Width="3*"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                        <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
-                            <Button Content="+ Добавить лекарство"
-                                    Style="{StaticResource PrimaryButton}"
-                                    Margin="0,0,8,0"
-                                    FontSize="14"
-                                    Command="{Binding DataContext.AddMedicineCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                    CommandParameter="{Binding}"/>
-                            <Button Content="Удалить лекарство"
-                                    Style="{StaticResource DangerButton}"
-                                    Command="{Binding DataContext.RemoveMedicineCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                    CommandParameter="{Binding SelectedItem, ElementName=PatientMedicinesGrid}"/>
+                                  BorderThickness="1,1,1,0">
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="{x:Type DataGridColumnHeader}"
+                                           BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+                                        <Setter Property="ContentTemplate">
+                                            <Setter.Value>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding}"
+                                                               FontSize="16"
+                                                               TextWrapping="NoWrap"
+                                                               TextTrimming="None"
+                                                               VerticalAlignment="Center"/>
+                                                </DataTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Лекарство" Binding="{Binding Medicine.Name}" Width="2*"/>
+                                    <DataGridTextColumn Header="Дозировка" Binding="{Binding Prescription}" Width="3*"/>
+                                    <DataGridTextColumn Header="Заметка" Binding="{Binding Note}" Width="3*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                <StackPanel.Resources>
+                                    <Style x:Key="PatientMedicineTextButton"
+                                           TargetType="{x:Type Button}"
+                                           BasedOn="{StaticResource {x:Type Button}}">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="Padding" Value="10 0"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                    <Border x:Name="Bd"
+                                                            Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                            CornerRadius="6">
+                                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                          Margin="{TemplateBinding Padding}"
+                                                                          TextElement.FontSize="{TemplateBinding FontSize}">
+                                                            <ContentPresenter.Resources>
+                                                                <Style TargetType="{x:Type TextBlock}"
+                                                                       BasedOn="{StaticResource {x:Type TextBlock}}">
+                                                                    <Setter Property="FontSize"
+                                                                            Value="{Binding FontSize, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}}"/>
+                                                                </Style>
+                                                            </ContentPresenter.Resources>
+                                                        </ContentPresenter>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="Bd"
+                                                                    Property="Background"
+                                                                    Value="{StaticResource SurfaceBrush}"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </StackPanel.Resources>
+                                <Button Content="+ Добавить лекарство"
+                                        FontSize="16"
+                                        FontWeight="SemiBold"
+                                        Style="{StaticResource PatientMedicineTextButton}"
+                                        Foreground="{StaticResource AccentBrush}"
+                                        Margin="0,0,8,0"
+                                        Command="{Binding DataContext.AddMedicineCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                        CommandParameter="{Binding}"/>
+                                <Button Content="Удалить лекарство"
+                                        FontWeight="SemiBold"
+                                        FontSize="16"
+                                        Style="{StaticResource PatientMedicineTextButton}"
+                                        Foreground="{StaticResource DangerBrush}"
+                                        Command="{Binding DataContext.RemoveMedicineCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                        CommandParameter="{Binding SelectedItem, ElementName=PatientMedicinesGrid}"/>
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
+                    </Grid>
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
         </DataGrid>
